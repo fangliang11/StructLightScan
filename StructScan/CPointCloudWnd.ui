@@ -19,16 +19,11 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="QVTKOpenGLNativeWidget" name="vtkOpenGLWidget">
-   <property name="geometry">
-    <rect>
-     <x>-1</x>
-     <y>-1</y>
-     <width>691</width>
-     <height>541</height>
-    </rect>
-   </property>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QVTKOpenGLNativeWidget" name="vtkOpenGLWidget"/>
+   </item>
+  </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

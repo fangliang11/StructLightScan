@@ -36,7 +36,7 @@ public:
 private:
     Ui::StructScanClass ui;
 
-	QMdiArea *m_mdiArea = nullptr;
+	//QMdiArea *m_mdiArea = nullptr;
 	CPointCloudWnd *m_pcloudwnd = nullptr;
 	CImageWnd *m_pimagewnd1 = nullptr;
 	CImageWnd *m_pimagewnd2 = nullptr;

@@ -11,21 +11,22 @@ StructScan::StructScan(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
-	m_mdiArea = new QMdiArea(this);
-	if (m_mdiArea == nullptr) exit(1);
-	this->setCentralWidget(m_mdiArea);
+
+	this->setCentralWidget(ui.mdiArea);
+
+
+	//m_mdiArea = new QMdiArea(this);
+	//if (m_mdiArea == nullptr) exit(1);
+	//this->setCentralWidget(m_mdiArea);
 	//窗口级联模式
 	//m_mdiArea->cascadeSubWindows();
 	   	 
 	CreatePointCloudWnd();
-	CreateCameraDisplayWnd();
+	//CreateCameraDisplayWnd();
 
-	m_mdiArea->addSubWindow(m_pcloudwnd);
+	//m_mdiArea->addSubWindow(m_pcloudwnd);
 	//m_mdiArea->addSubWindow(m_pimagewnd1);
 	//m_mdiArea->addSubWindow(m_pimagewnd2);
-	//m_mdiArea->setAttribute(Qt::WA_DeleteOnClose);
-	m_mdiArea->show();
-	m_mdiArea->activeSubWindow();
 
 	//QHBoxLayout *pHBox = new QHBoxLayout();
 	//pHBox->addWidget(m_pimagewnd1);
@@ -62,6 +63,11 @@ void StructScan::CreatePointCloudWnd()
 	m_pcloudwnd->setFixedWidth((int)wid * 2 / 3);
 	m_pcloudwnd->setFixedHeight(hei);
 
+	ui.mdiArea->addSubWindow(m_pcloudwnd);
+	ui.mdiArea->setAttribute(Qt::WA_DeleteOnClose);
+	ui.mdiArea->show();
+	//m_mdiArea->activeSubWindow();
+
 }
 
 
@@ -72,10 +78,18 @@ void StructScan::CreateCameraDisplayWnd()
 		return;
 	m_pimagewnd1->setWindowTitle(QStringLiteral("相机"));
 
+	ui.mdiArea->addSubWindow(m_pimagewnd1);
+	ui.mdiArea->setAttribute(Qt::WA_DeleteOnClose);
+	ui.mdiArea->show();
+
 	m_pimagewnd2 = new CImageWnd(this);
 	if (m_pimagewnd2 == nullptr)
 		return;
 	m_pimagewnd2->setWindowTitle(QStringLiteral("投影"));
+
+	ui.mdiArea->addSubWindow(m_pimagewnd2);
+	ui.mdiArea->setAttribute(Qt::WA_DeleteOnClose);
+	ui.mdiArea->show();
 
 }
 
@@ -149,7 +163,7 @@ void StructScan::onActionProjectOpenCalibrationClicked()
 	if (!m_pcalibwnd) {
 		m_pcalibwnd = new CCalibrationWnd;
 		if (m_pcalibwnd == NULL) return;
-		m_mdiArea->addSubWindow(m_pcalibwnd);
+		ui.mdiArea->addSubWindow(m_pcalibwnd);
 		m_pcalibwnd->show();
 
 	}
@@ -205,6 +219,7 @@ void StructScan::onActionViewPlotClicked()
 {
 
 }
+
 void StructScan::onActionView2DClicked()
 {
 
