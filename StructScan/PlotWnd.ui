@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>plotwnd</class>
+ <widget class="QWidget" name="plotwnd">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>767</width>
+    <height>677</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>绘图</string>
+  </property>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

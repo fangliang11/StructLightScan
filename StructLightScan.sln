@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1145
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GenerateUI", "GenerateUI\GenerateUI.vcxproj", "{0BE3C1C0-CD9E-46C2-B7EE-0BB1B1A6CA81}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StructScan", "StructScan\StructScan.vcxproj", "{E362BAEF-C0CE-48E5-AD9E-1193EEFC08FF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CloudPointDisplayQt", "CloudPointDisplayQt\CloudPointDisplayQt.vcxproj", "{1B5968A9-E26D-4DB0-AB82-D6E9041357D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0BE3C1C0-CD9E-46C2-B7EE-0BB1B1A6CA81}.Debug|x64.ActiveCfg = Debug|x64
+		{0BE3C1C0-CD9E-46C2-B7EE-0BB1B1A6CA81}.Debug|x64.Build.0 = Debug|x64
+		{0BE3C1C0-CD9E-46C2-B7EE-0BB1B1A6CA81}.Release|x64.ActiveCfg = Release|x64
+		{0BE3C1C0-CD9E-46C2-B7EE-0BB1B1A6CA81}.Release|x64.Build.0 = Release|x64
+		{E362BAEF-C0CE-48E5-AD9E-1193EEFC08FF}.Debug|x64.ActiveCfg = Debug|x64
+		{E362BAEF-C0CE-48E5-AD9E-1193EEFC08FF}.Debug|x64.Build.0 = Debug|x64
+		{E362BAEF-C0CE-48E5-AD9E-1193EEFC08FF}.Release|x64.ActiveCfg = Release|x64
+		{E362BAEF-C0CE-48E5-AD9E-1193EEFC08FF}.Release|x64.Build.0 = Release|x64
+		{1B5968A9-E26D-4DB0-AB82-D6E9041357D3}.Debug|x64.ActiveCfg = Debug|x64
+		{1B5968A9-E26D-4DB0-AB82-D6E9041357D3}.Debug|x64.Build.0 = Debug|x64
+		{1B5968A9-E26D-4DB0-AB82-D6E9041357D3}.Release|x64.ActiveCfg = Release|x64
+		{1B5968A9-E26D-4DB0-AB82-D6E9041357D3}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {453E6682-C6F8-4C30-950B-712DE102C841}
+	EndGlobalSection
+EndGlobal
