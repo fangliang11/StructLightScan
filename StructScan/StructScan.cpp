@@ -11,21 +11,33 @@ StructScan::StructScan(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
-	m_mdiArea = new QMdiArea(this);
-	if (m_mdiArea == nullptr) exit(1);
-	this->setCentralWidget(m_mdiArea);
+
+	m_pCloud = new CPointCloudWnd(ui.vtkOpenGLWidget, this);
+	if (m_pCloud == nullptr)
+		return;
+
+	m_pimagewnd = new CImageWnd(this);
+	if (m_pimagewnd == nullptr)
+		return;
+	m_pimagewnd->move(305, 80);
+
+
+	//this->setCentralWidget(ui.mdiArea);
+
+
+	//m_mdiArea = new QMdiArea(this);
+	//if (m_mdiArea == nullptr) exit(1);
+	//this->setCentralWidget(m_mdiArea);
 	//窗口级联模式
 	//m_mdiArea->cascadeSubWindows();
 	   	 
-	CreatePointCloudWnd();
-	CreateCameraDisplayWnd();
+	//CreateCameraDisplayWnd();
+	//CreatePointCloudWnd();
+	//CreateCameraDisplayWnd();
 
-	m_mdiArea->addSubWindow(m_pcloudwnd);
+	//m_mdiArea->addSubWindow(m_pcloudwnd);
 	//m_mdiArea->addSubWindow(m_pimagewnd1);
 	//m_mdiArea->addSubWindow(m_pimagewnd2);
-	//m_mdiArea->setAttribute(Qt::WA_DeleteOnClose);
-	m_mdiArea->show();
-	m_mdiArea->activeSubWindow();
 
 	//QHBoxLayout *pHBox = new QHBoxLayout();
 	//pHBox->addWidget(m_pimagewnd1);
@@ -46,37 +58,7 @@ StructScan::~StructScan()
 
 void StructScan::InitialConnection()
 {
-	connect(this, &StructScan::signalOpenPCL, m_pcloudwnd, &CPointCloudWnd::signalOpenPCL);
-}
-
-//创建新的点云显示窗口
-void StructScan::CreatePointCloudWnd()
-{
-	m_pcloudwnd = new CPointCloudWnd();
-	if (m_pcloudwnd == nullptr)
-		return;
-
-	m_pcloudwnd->setWindowTitle(QStringLiteral("点云"));
-	int wid = this->width() - ui.dockProjectList->width();
-	int hei = this->height() - ui.mainToolBar->height() - ui.menuBar->height() - ui.statusBar->height();
-	m_pcloudwnd->setFixedWidth((int)wid * 2 / 3);
-	m_pcloudwnd->setFixedHeight(hei);
-
-}
-
-
-void StructScan::CreateCameraDisplayWnd()
-{
-	m_pimagewnd1 = new CImageWnd(this);
-	if (m_pimagewnd1 == nullptr)
-		return;
-	m_pimagewnd1->setWindowTitle(QStringLiteral("相机"));
-
-	m_pimagewnd2 = new CImageWnd(this);
-	if (m_pimagewnd2 == nullptr)
-		return;
-	m_pimagewnd2->setWindowTitle(QStringLiteral("投影"));
-
+	connect(this, &StructScan::signalOpenPCL, m_pCloud, &CPointCloudWnd::signalOpenPCL);
 }
 
 
@@ -128,6 +110,8 @@ void StructScan::onActionProjectNewClicked()
 	qDebug() << "new clicked";
 
 	//InitialConnection();
+	QImage img("s_logo.png");
+	m_pimagewnd->setFrame(QPixmap::fromImage(img));
 
 }
 
@@ -149,7 +133,7 @@ void StructScan::onActionProjectOpenCalibrationClicked()
 	if (!m_pcalibwnd) {
 		m_pcalibwnd = new CCalibrationWnd;
 		if (m_pcalibwnd == NULL) return;
-		m_mdiArea->addSubWindow(m_pcalibwnd);
+		//ui.mdiArea->addSubWindow(m_pcalibwnd);
 		m_pcalibwnd->show();
 
 	}
@@ -205,6 +189,7 @@ void StructScan::onActionViewPlotClicked()
 {
 
 }
+
 void StructScan::onActionView2DClicked()
 {
 

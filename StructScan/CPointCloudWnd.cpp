@@ -1,10 +1,10 @@
 
 #include "CPointCloudWnd.h"
 
-CPointCloudWnd::CPointCloudWnd(QWidget *parent)
-	: QWidget(parent)
+CPointCloudWnd::CPointCloudWnd(QVTKOpenGLNativeWidget *wnd, QWidget *parent)
+	: ui(wnd), QWidget(parent)
 {
-	ui.setupUi(this);
+	//ui.setupUi(this);
 
 	initialVtkWidget();
 
@@ -14,19 +14,6 @@ CPointCloudWnd::CPointCloudWnd(QWidget *parent)
 CPointCloudWnd::~CPointCloudWnd()
 {
 
-}
-
-void CPointCloudWnd::paintEvent(QPaintEvent *event)
-{
-	Q_UNUSED(event);
-
-	//QStyleOption opt;
-	//opt.init(this);
-	//QPainter *p = new QPainter(this);
-	//style()->drawPrimitive(QStyle::PE_Widget, &opt, p, this);
-	
-	
-	QWidget::paintEvent(event);
 }
 
 
@@ -39,14 +26,15 @@ void CPointCloudWnd::initialVtkWidget()
 
 	m_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
 	//绑定pcl可视化对象到vtk渲染窗口
-	m_viewer.reset(new pcl::visualization::PCLVisualizer(m_ren, m_renWnd, "viewer", false));
+	m_viewer.reset(new pcl::visualization::PCLVisualizer(m_ren, m_renWnd, "CloudPoint", false));
+	//添加点云
 	m_viewer->addPointCloud(m_cloud, "cloud");
 
 	//绑定渲染窗口，绑定事件交互
-	ui.vtkOpenGLWidget->SetRenderWindow(m_viewer->getRenderWindow());
-	m_viewer->setupInteractor(ui.vtkOpenGLWidget->GetInteractor(), ui.vtkOpenGLWidget->GetRenderWindow());
+	ui->SetRenderWindow(m_viewer->getRenderWindow());
+	m_viewer->setupInteractor(ui->GetInteractor(), ui->GetRenderWindow());
 
-	ui.vtkOpenGLWidget->update();
+	ui->update();
 }
 
 
@@ -82,6 +70,7 @@ void CPointCloudWnd::onOpenPCL()
 		m_viewer->updatePointCloud(m_cloud, "cloud");
 		m_viewer->addCoordinateSystem();
 		m_viewer->setBackgroundColor(0, 0, 0);
+		
 		m_viewer->resetCamera();
 		//ui.vtkOpenGLWidget->update();
 		m_renWnd->Render();

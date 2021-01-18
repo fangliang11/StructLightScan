@@ -9,24 +9,40 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StructScan", "StructScan\St
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CloudPointDisplayQt", "CloudPointDisplayQt\CloudPointDisplayQt.vcxproj", "{1B5968A9-E26D-4DB0-AB82-D6E9041357D3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CloudPointDisplayQtWidget", "CloudPointDisplayQtWidget\CloudPointDisplayQtWidget.vcxproj", "{3AD0B187-AB03-4BD1-A085-4ECE15AB144B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0BE3C1C0-CD9E-46C2-B7EE-0BB1B1A6CA81}.Debug|x64.ActiveCfg = Debug|x64
 		{0BE3C1C0-CD9E-46C2-B7EE-0BB1B1A6CA81}.Debug|x64.Build.0 = Debug|x64
+		{0BE3C1C0-CD9E-46C2-B7EE-0BB1B1A6CA81}.Debug|x86.ActiveCfg = Debug|x64
 		{0BE3C1C0-CD9E-46C2-B7EE-0BB1B1A6CA81}.Release|x64.ActiveCfg = Release|x64
 		{0BE3C1C0-CD9E-46C2-B7EE-0BB1B1A6CA81}.Release|x64.Build.0 = Release|x64
+		{0BE3C1C0-CD9E-46C2-B7EE-0BB1B1A6CA81}.Release|x86.ActiveCfg = Release|x64
 		{E362BAEF-C0CE-48E5-AD9E-1193EEFC08FF}.Debug|x64.ActiveCfg = Debug|x64
 		{E362BAEF-C0CE-48E5-AD9E-1193EEFC08FF}.Debug|x64.Build.0 = Debug|x64
+		{E362BAEF-C0CE-48E5-AD9E-1193EEFC08FF}.Debug|x86.ActiveCfg = Debug|x64
 		{E362BAEF-C0CE-48E5-AD9E-1193EEFC08FF}.Release|x64.ActiveCfg = Release|x64
 		{E362BAEF-C0CE-48E5-AD9E-1193EEFC08FF}.Release|x64.Build.0 = Release|x64
+		{E362BAEF-C0CE-48E5-AD9E-1193EEFC08FF}.Release|x86.ActiveCfg = Release|x64
 		{1B5968A9-E26D-4DB0-AB82-D6E9041357D3}.Debug|x64.ActiveCfg = Debug|x64
 		{1B5968A9-E26D-4DB0-AB82-D6E9041357D3}.Debug|x64.Build.0 = Debug|x64
+		{1B5968A9-E26D-4DB0-AB82-D6E9041357D3}.Debug|x86.ActiveCfg = Debug|x64
 		{1B5968A9-E26D-4DB0-AB82-D6E9041357D3}.Release|x64.ActiveCfg = Release|x64
 		{1B5968A9-E26D-4DB0-AB82-D6E9041357D3}.Release|x64.Build.0 = Release|x64
+		{1B5968A9-E26D-4DB0-AB82-D6E9041357D3}.Release|x86.ActiveCfg = Release|x64
+		{3AD0B187-AB03-4BD1-A085-4ECE15AB144B}.Debug|x64.ActiveCfg = Debug|x64
+		{3AD0B187-AB03-4BD1-A085-4ECE15AB144B}.Debug|x64.Build.0 = Debug|x64
+		{3AD0B187-AB03-4BD1-A085-4ECE15AB144B}.Debug|x86.ActiveCfg = Debug|x64
+		{3AD0B187-AB03-4BD1-A085-4ECE15AB144B}.Release|x64.ActiveCfg = Release|x64
+		{3AD0B187-AB03-4BD1-A085-4ECE15AB144B}.Release|x64.Build.0 = Release|x64
+		{3AD0B187-AB03-4BD1-A085-4ECE15AB144B}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

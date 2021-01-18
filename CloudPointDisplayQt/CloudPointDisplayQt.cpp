@@ -11,6 +11,11 @@ CloudPointDisplayQt::CloudPointDisplayQt(QWidget *parent)
 }
 
 
+CloudPointDisplayQt::~CloudPointDisplayQt()
+{
+
+}
+
 
 void CloudPointDisplayQt::initialVtkWidget()
 {
@@ -21,12 +26,20 @@ void CloudPointDisplayQt::initialVtkWidget()
 
 	m_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
 	//绑定pcl可视化对象到vtk渲染窗口
-	m_viewer.reset(new pcl::visualization::PCLVisualizer(m_ren, m_renWnd, "viewer", false));
+	m_viewer.reset(new pcl::visualization::PCLVisualizer(m_ren, m_renWnd, "viewer", false));	
 	m_viewer->addPointCloud(m_cloud, "cloud");
 
 	//绑定渲染窗口，绑定事件交互
 	ui.vtkOpenGLWidget->SetRenderWindow(m_viewer->getRenderWindow());
 	m_viewer->setupInteractor(ui.vtkOpenGLWidget->GetInteractor(), ui.vtkOpenGLWidget->GetRenderWindow());
+
+	/*{
+		m_viewer.reset(new pcl::visualization::PCLVisualizer("viewer", false));
+		vtkNew<vtkGenericOpenGLRenderWindow> window;
+		window->AddRenderer(m_viewer->getRendererCollection()->GetFirstRenderer());
+		ui.vtkOpenGLWidget->SetRenderWindow(window.Get());
+		m_viewer->setupInteractor(ui.vtkOpenGLWidget->GetInteractor(), ui.vtkOpenGLWidget->GetRenderWindow());
+	}*/
 
 	ui.vtkOpenGLWidget->update();
 }

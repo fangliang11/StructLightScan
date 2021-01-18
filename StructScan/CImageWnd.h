@@ -1,23 +1,26 @@
 #pragma once
 
-#include <QStyleOption>
+#include <QWidget>
+#include <QPixmap>
 
-#include "ui_ImageWnd.h"
 
 
 class CImageWnd :	public QWidget
 {
 	Q_OBJECT
 public:
-	CImageWnd(QWidget *parents = 0);
+	explicit CImageWnd(QWidget *parent = nullptr);
 	~CImageWnd();
 
 
+	void setFrame(const QPixmap &pixmap);
+
+	void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
 private:
-	Ui::ImageWnd ui;
+	QPixmap m_frame; 
 
 
-	void paintEvent(QPaintEvent *event);
 
 };
 
