@@ -3,6 +3,7 @@
 //  Qt
 #include <QWidget>
 #include <QFileDialog>
+#include <QOpenGLWidget>
 #include <QDebug>
 #include <QStyleOption>
 #include <QPainter>
@@ -15,6 +16,9 @@
 #include <vtkAutoInit.h>
 VTK_MODULE_INIT(vtkRenderingOpenGL2)
 VTK_MODULE_INIT(vtkInteractionStyle)
+VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
+VTK_MODULE_INIT(vtkRenderingFreeType);
+
 #include <vtkSmartPointer.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
@@ -33,18 +37,16 @@ VTK_MODULE_INIT(vtkInteractionStyle)
 #include <pcl/common/io.h>
 #include <pcl/visualization/pcl_visualizer.h>
 
-#include "ui_CPointCloudWnd.h"
 
 class CPointCloudWnd : public QWidget
 {
 	Q_OBJECT
 public:
-	explicit CPointCloudWnd(QWidget *parent = Q_NULLPTR);
+	explicit CPointCloudWnd(QVTKOpenGLNativeWidget *wnd, QWidget *parent = Q_NULLPTR);
 	~CPointCloudWnd();
 
 private:
-	Ui::CPointCloudWnd ui;
-
+	QVTKOpenGLNativeWidget *ui;
 
 	pcl::PointCloud<pcl::PointXYZ>::Ptr m_cloud;                       //pcl点云数据指针
 	std::shared_ptr<pcl::visualization::PCLVisualizer> m_viewer;       //pcl可视化对象，应使用共享智能指针否则窗口会独立
@@ -52,8 +54,6 @@ private:
 	vtkSmartPointer<vtkGenericOpenGLRenderWindow> m_renWnd;            //vtk渲染的窗口句柄
 	vtkSmartPointer<vtkRenderWindowInteractor> m_iren;                 //vtk交互的对象:鼠标、键盘
 
-
-	void paintEvent(QPaintEvent *event);
 
 	void initialVtkWidget();
 
