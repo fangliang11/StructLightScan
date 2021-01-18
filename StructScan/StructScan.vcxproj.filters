@@ -55,9 +55,6 @@
     <QtUic Include="CalibrationWnd.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="ImageWnd.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <QtUic Include="PlotWnd.ui">
       <Filter>Form Files</Filter>
     </QtUic>
@@ -65,9 +62,6 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="StructScan.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="CPointCloudWnd.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

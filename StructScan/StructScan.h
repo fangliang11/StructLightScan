@@ -35,11 +35,12 @@ public:
 
 private:
     Ui::StructScanClass ui;
+	QLabel *m_img;
 
 	//QMdiArea *m_mdiArea = nullptr;
-	CPointCloudWnd *m_pcloudwnd = nullptr;
-	CImageWnd *m_pimagewnd1 = nullptr;
-	CImageWnd *m_pimagewnd2 = nullptr;
+	CPointCloudWnd *m_pCloud = nullptr;
+	CImageWnd *m_pimagewnd = nullptr;
+
 	CCalibrationWnd *m_pcalibwnd = nullptr;
 
 

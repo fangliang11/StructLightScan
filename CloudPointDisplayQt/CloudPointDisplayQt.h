@@ -3,12 +3,16 @@
 #include <QtWidgets/QMainWindow>
 #include <QFileDialog>
 #include <QVTKOpenGLNativeWidget.h>
+//#include <QVTKOpenGLWidget.h>
 
 #include <memory>
 
 #include <vtkAutoInit.h>
-VTK_MODULE_INIT(vtkRenderingOpenGL2)
-VTK_MODULE_INIT(vtkInteractionStyle)
+VTK_MODULE_INIT(vtkRenderingOpenGL2);
+VTK_MODULE_INIT(vtkInteractionStyle);
+VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
+VTK_MODULE_INIT(vtkRenderingFreeType);
+
 #include <vtkSmartPointer.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
@@ -40,7 +44,7 @@ class CloudPointDisplayQt : public QMainWindow
 
 public:
     CloudPointDisplayQt(QWidget *parent = Q_NULLPTR);
-
+	~CloudPointDisplayQt();
 
 private:
 	void initialVtkWidget();
