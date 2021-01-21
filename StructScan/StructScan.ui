@@ -74,6 +74,7 @@
     </property>
     <addaction name="action_pointcloud_select"/>
     <addaction name="action_pointcloud_delete"/>
+    <addaction name="action_pointcloud_add"/>
     <addaction name="action_pointcloud_filter"/>
     <addaction name="separator"/>
     <addaction name="action_pointcloud_grid"/>
@@ -130,6 +131,7 @@
    <addaction name="separator"/>
    <addaction name="action_pointcloud_select"/>
    <addaction name="action_pointcloud_delete"/>
+   <addaction name="action_pointcloud_add"/>
    <addaction name="action_pointcloud_filter"/>
    <addaction name="action_pointcloud_grid"/>
    <addaction name="separator"/>
@@ -402,6 +404,15 @@
    </property>
    <property name="text">
     <string>关于</string>
+   </property>
+  </action>
+  <action name="action_pointcloud_add">
+   <property name="icon">
+    <iconset resource="StructScan.qrc">
+     <normaloff>:/StructScan/res/images/ccPlus.png</normaloff>:/StructScan/res/images/ccPlus.png</iconset>
+   </property>
+   <property name="text">
+    <string>添加</string>
    </property>
   </action>
   <zorder>dockProjectList</zorder>
@@ -771,6 +782,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>action_pointcloud_add</sender>
+   <signal>triggered()</signal>
+   <receiver>StructScanClass</receiver>
+   <slot>omActionPointCloudAddClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>531</x>
+     <y>361</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onActionProjectNewClicked()</slot>
@@ -795,5 +822,6 @@
   <slot>onActionViewRightClicked()</slot>
   <slot>onActionViewTopClicked()</slot>
   <slot>onActionViewBottomClicked()</slot>
+  <slot>omActionPointCloudAddClicked()</slot>
  </slots>
 </ui>

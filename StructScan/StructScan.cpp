@@ -59,6 +59,11 @@ StructScan::~StructScan()
 void StructScan::InitialConnection()
 {
 	connect(this, &StructScan::signalOpenPCL, m_pCloud, &CPointCloudWnd::signalOpenPCL);
+	connect(this, &StructScan::signalSelect, m_pCloud, &CPointCloudWnd::signalSelect);
+	connect(this, &StructScan::signalDelete, m_pCloud, &CPointCloudWnd::signalDelete);
+	connect(this, &StructScan::signalAdd, m_pCloud, &CPointCloudWnd::signalAdd);
+	connect(this, &StructScan::signalClear, m_pCloud, &CPointCloudWnd::signalClear);
+	connect(this, &StructScan::signalSurfaceRebuild, m_pCloud, &CPointCloudWnd::signalSurfaceRebuild);
 }
 
 
@@ -107,9 +112,6 @@ void StructScan::InitialTree()
 
 void StructScan::onActionProjectNewClicked()
 {
-	qDebug() << "new clicked";
-
-	//InitialConnection();
 	QImage img("s_logo.png");
 	m_pimagewnd->setFrame(QPixmap::fromImage(img));
 
@@ -117,15 +119,12 @@ void StructScan::onActionProjectNewClicked()
 
 void StructScan::onActionProjectSaveClicked()
 {
-	qDebug() << "save clicked";
-
-	emit signalOpenPCL();
 
 }
 
 void StructScan::onActionProjectOpenFileClicked()
 {
-
+	emit signalOpenPCL();
 }
 
 void StructScan::onActionProjectOpenCalibrationClicked()
@@ -167,22 +166,27 @@ void StructScan::onActionStopClicked()
 
 void StructScan::onActionPointCloudSelectClicked()
 {
-
+	emit signalSelect();
 }
 
 void StructScan::onActionPointCloudDeleteClicked()
 {
+	emit signalDelete();
+}
 
+void StructScan::onActionPointCloudAddClicked()
+{
+	emit signalAdd();
 }
 
 void StructScan::onActionPointCloudFilterClicked()
 {
-
+	
 }
 
 void StructScan::onActionPointCloudGridClicked()
 {
-
+	emit signalClear();
 }
 
 void StructScan::onActionViewPlotClicked()
@@ -192,7 +196,7 @@ void StructScan::onActionViewPlotClicked()
 
 void StructScan::onActionView2DClicked()
 {
-
+	emit signalSurfaceRebuild();
 }
 
 void StructScan::onActionView3DClicked()

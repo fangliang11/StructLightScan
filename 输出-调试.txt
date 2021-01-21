@@ -19,43 +19,414 @@ Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\ucrtbase.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\user32.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\bin\Qt5Cored.dll”。无法查找或打开 PDB 文件。
-“StructScan.exe”(Win32): 已加载“C:\Windows\System32\win32u.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\bin\Qt5Guid.dll”。无法查找或打开 PDB 文件。
-“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\bin\Qt5Widgetsd.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\win32u.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\gdi32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\bin\Qt5Widgetsd.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\gdi32full.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\ws2_32.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\ole32.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\ole32.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已卸载“C:\Windows\System32\ole32.dll”
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\combase.dll”。无法查找或打开 PDB 文件。
-“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_iod.dll”。已加载符号。
 “StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_commond.dll”。已加载符号。
-“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkCommonCore-8.2d.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_featuresd.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_iod.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_searchd.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_surfaced.dll”。已加载符号。
 “StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_visualizationd.dll”。已加载符号。
-“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkCommonMath-8.2d.dll”。已加载符号。
-“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkCommonDataModel-8.2d.dll”。已加载符号。
-“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkGUISupportQt-8.2d.dll”。已加载符号。
-“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkInteractionStyle-8.2d.dll”。已加载符号。
-“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingFreeType-8.2d.dll”。已加载符号。
-“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingOpenGL2-8.2d.dll”。已加载符号。
-“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingCore-8.2d.dll”。已加载符号。
-“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingVolumeOpenGL2-8.2d.dll”。已加载符号。
-“StructScan.exe”(Win32): 已加载“C:\Windows\System32\vcruntime140d.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkCommonExecutionModel-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkCommonDataModel-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkCommonCore-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkGUISupportQt-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkCommonMath-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkFiltersSources-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingFreeType-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkInteractionStyle-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingCore-8.2.dll”。已加载符号。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\msvcp140d.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\vcruntime140d.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingVolumeOpenGL2-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingOpenGL2-8.2.dll”。已加载符号。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\ucrtbased.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\mpr.dll”。无法查找或打开 PDB 文件。
-“StructScan.exe”(Win32): 已加载“C:\Windows\System32\version.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\userenv.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\version.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\netapi32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\dwmapi.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\uxtheme.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\winmm.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_kdtreed.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_filtersd.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_octreed.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_io_plyd.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkIOPLY-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\OpenNI2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkIOGeometry-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkIOCore-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkIOLegacy-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkImagingCore-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkIOImage-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkFiltersModeling-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkFiltersCore-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingContextOpenGL2-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkViewsContext2D-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingLOD-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingGL2PSOpenGL2-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkChartsCore-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingContext2D-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkInteractionWidgets-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingAnnotation-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkImagingSources-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkCommonColor-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkFiltersExtraction-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkFiltersGeneral-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkCommonTransforms-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkCommonMisc-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkCommonSystem-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtksys-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\psapi.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkfreetype-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkFiltersGeometry-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkCommonComputationalGeometry-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkImagingMath-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkglew-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkRenderingVolume-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\opengl32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\dbghelp.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_all_in_one_09\3rdParty\FLANN\bin\flann-gd.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_sample_consensusd.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\msvcr100.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkzlib-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtklz4-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtklzma-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkdoubleconversion-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkDICOMParser-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkpng-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkmetaio-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtktiff-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkjpeg-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkViewsCore-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkgl2ps-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkInfovisCore-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkFiltersHybrid-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkImagingGeneral-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkImagingHybrid-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkImagingColor-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkFiltersStatistics-8.2.dll”。已加载符号。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\glu32.dll”。无法查找或打开 PDB 文件。
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\srvcli.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\vcomp140d.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\wsock32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\netutils.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\cryptbase.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Program Files\VTK-8.2.0\VTK-build\bin\Debug\vtkImagingFourier-8.2.dll”。已加载符号。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\d3d11.dll”。无法查找或打开 PDB 文件。
 “StructScan.exe”(Win32): 已加载“C:\Windows\System32\dxgi.dll”。无法查找或打开 PDB 文件。
-“StructScan.exe”(Win32): 已加载“C:\Windows\System32\uxtheme.dll”。无法查找或打开 PDB 文件。
-“StructScan.exe”(Win32): 已加载“C:\Windows\System32\dwmapi.dll”。无法查找或打开 PDB 文件。
-“StructScan.exe”(Win32): 已加载“C:\Windows\System32\winmm.dll”。无法查找或打开 PDB 文件。
-“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\OpenNI2.dll”。已加载符号。
-“StructScan.exe”(Win32): 已加载“D:\Program Files\PCL_09\pcl_build\bin\pcl_io_plyd.dll”。已加载符号。
-线程 0x3f28 已退出，返回值为 -1073741515 (0xc0000135)。
-线程 0x8ec 已退出，返回值为 -1073741515 (0xc0000135)。
-线程 0x3c68 已退出，返回值为 -1073741515 (0xc0000135)。
-程序“[6836] StructScan.exe”已退出，返回值为 -1073741515 (0xc0000135) '未找到依赖 dll'。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\imm32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\SHCore.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\plugins\platforms\qwindowsd.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\oleaut32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\wtsapi32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\kernel.appcore.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\bcryptprimitives.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\windows.storage.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\wldp.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\shlwapi.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\profapi.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\powrprof.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\umpdc.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\plugins\styles\qwindowsvistastyled.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\plugins\imageformats\qgifd.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\plugins\imageformats\qicnsd.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\plugins\imageformats\qicod.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\plugins\imageformats\qjpegd.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\plugins\imageformats\qsvgd.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\bin\Qt5Svgd.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\plugins\imageformats\qtgad.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\plugins\imageformats\qtiffd.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\plugins\imageformats\qwbmpd.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\plugins\imageformats\qwebpd.dll”。无法查找或打开 PDB 文件。
+libpng warning: iCCP: known incorrect sRGB profile
+libpng warning: iCCP: known incorrect sRGB profile
+“StructScan.exe”(Win32): 已加载“D:\Qt\Qt5.14.2\5.14.2\msvc2017_64\plugins\iconengines\qsvgicond.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DWrite.dll”。无法查找或打开 PDB 文件。
+QObject::connect: No such slot StructScan::omActionPointCloudAddClicked() in e:\projects\visualstudioprojects\structlightscan\structscan\x64\debug\uic\ui_structscan.h:385
+QObject::connect:  (sender name:   'action_pointcloud_add')
+QObject::connect:  (receiver name: 'StructScanClass')
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\d3d9.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_95bdb3a23d6478de\nvldumdx.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\crypt32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\cryptnet.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\wintrust.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\msasn1.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\imagehlp.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\cryptsp.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\rsaenh.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\bcrypt.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_95bdb3a23d6478de\nvd3dumx.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_a086f01cc7be643a\igdumdim64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_a086f01cc7be643a\igd9dxva64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\setupapi.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\cfgmgr32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_a086f01cc7be643a\igdgmm64.dll”。无法查找或打开 PDB 文件。
+线程 0x3ddc 已退出，返回值为 0 (0x0)。
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_95bdb3a23d6478de\nvd3dumx.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_95bdb3a23d6478de\nvldumdx.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\setupapi.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\cfgmgr32.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_a086f01cc7be643a\igd9dxva64.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_a086f01cc7be643a\igdgmm64.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_a086f01cc7be643a\igdumdim64.dll”
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\msctf.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\clbcatq.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DataExchange.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\dcomp.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\twinapi.appcore.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_95bdb3a23d6478de\nvldumdx.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_95bdb3a23d6478de\nvd3dumx.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_a086f01cc7be643a\igdumdim64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_a086f01cc7be643a\igd9dxva64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\setupapi.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\cfgmgr32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_a086f01cc7be643a\igdgmm64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_95bdb3a23d6478de\nvldumdx.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\setupapi.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\cfgmgr32.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_a086f01cc7be643a\igd9dxva64.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_95bdb3a23d6478de\nvd3dumx.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_a086f01cc7be643a\igdgmm64.dll”
+线程 0x17f4 已退出，返回值为 0 (0x0)。
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\DriverStore\FileRepository\iigd_dch.inf_amd64_a086f01cc7be643a\igdumdim64.dll”
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\AppXDeploymentClient.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_95bdb3a23d6478de\nvoglv64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\setupapi.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\cfgmgr32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\devobj.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\ntmarta.dll”。无法查找或打开 PDB 文件。
+线程 0x3174 已退出，返回值为 0 (0x0)。
+线程 0x3ac8 已退出，返回值为 0 (0x0)。
+线程 0x2774 已退出，返回值为 0 (0x0)。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DXCore.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\nvspcap64.dll”。无法查找或打开 PDB 文件。
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\winsta.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\TextInputFramework.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\CoreUIComponents.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\CoreMessaging.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\WinTypes.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\WinTypes.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\WinTypes.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\WinTypes.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\WinTypes.dll”
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\comdlg32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_5.82.19041.488_none_4238de57f6b64d28\comctl32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\propsys.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\dui70.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.746_none_ca02b4b61b8320a4\comctl32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\duser.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Program Files\Common Files\microsoft shared\ink\tiptsf.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\TextShaping.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\edputil.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\ExplorerFrame.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\WindowsCodecs.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\thumbcache.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\policymanager.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\msvcp110_win.dll”。无法查找或打开 PDB 文件。
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\Windows.UI.FileExplorer.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\oleacc.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\ntshrui.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\sspicli.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\cscapi.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\xmllite.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\StructuredQuery.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\atlthunk.dll”。无法查找或打开 PDB 文件。
+线程 0x2a04 已退出，返回值为 0 (0x0)。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\Windows.FileExplorer.Common.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\Windows.StateRepositoryPS.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\iertutil.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\Windows.Storage.Search.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\IconCodecService.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\coml2.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\linkinfo.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\p9np.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\drprov.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\ntlanman.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\davclnt.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\davhlpr.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\wkscli.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\apphelp.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\dlnashext.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\PlayToDevice.dll”。无法查找或打开 PDB 文件。
+onecore\com\combase\dcomrem\security.cxx(3057)\combase.dll!00007FF8A5332C3C: (caller: 00007FF8984B823E) ReturnHr(1) tid(4014) 80010117 调用结束后，无法访问调用上下文。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\DevDispItemProvider.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\twinapi.dll”。无法查找或打开 PDB 文件。
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\provsvc.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\MMDevAPI.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\wpdshext.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\WinSxS\amd64_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.19041.746_none_faeda79b76159a72\GdiPlus.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\PortableDeviceApi.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\EhStorShell.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\EhStorAPI.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\actxprxy.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”
+onecore\com\combase\objact\dllcache.cxx(2132)\combase.dll!00007FF8A54235E8: (caller: 00007FF8A532DB3A) ReturnHr(2) tid(4580) 8007045A 动态链接库(DLL)初始化例程失败。
+“StructScan.exe”(Win32): 已加载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”
+onecore\com\combase\objact\dllcache.cxx(2132)\combase.dll!00007FF8A54235E8: (caller: 00007FF8A532DB3A) ReturnHr(3) tid(4580) 8007045A 动态链接库(DLL)初始化例程失败。
+“StructScan.exe”(Win32): 已加载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”
+onecore\com\combase\objact\dllcache.cxx(2132)\combase.dll!00007FF8A54235E8: (caller: 00007FF8A532DB3A) ReturnHr(4) tid(4580) 8007045A 动态链接库(DLL)初始化例程失败。
+“StructScan.exe”(Win32): 已加载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”
+onecore\com\combase\objact\dllcache.cxx(2132)\combase.dll!00007FF8A54235E8: (caller: 00007FF8A532DB3A) ReturnHr(5) tid(4580) 8007045A 动态链接库(DLL)初始化例程失败。
+“StructScan.exe”(Win32): 已加载“C:\Program Files\Microsoft Office\root\Office16\GROOVEEX.DLL”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Program Files\Microsoft Office\root\Office16\msvcp140.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Program Files\Microsoft Office\root\Office16\vcruntime140.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\msi.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Program Files\Microsoft Office\root\Office16\2052\GrooveIntlResource.dll”。模块已生成，不包含符号。
+“StructScan.exe”(Win32): 已卸载“C:\Program Files\Microsoft Office\root\Office16\2052\GrooveIntlResource.dll”
+“StructScan.exe”(Win32): 已加载“C:\Program Files\Microsoft Office\root\Office16\2052\GrooveIntlResource.dll”。模块已生成，不包含符号。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\AcSignIcon.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\mfc100u.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\msimg32.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\mfc100chs.dll”。模块已生成，不包含符号。
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\mfc100chs.dll”
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\mfc100chs.dll”。模块已生成，不包含符号。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\networkexplorer.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\cscui.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”
+onecore\com\combase\objact\dllcache.cxx(2132)\combase.dll!00007FF8A54235E8: (caller: 00007FF8A532DB3A) ReturnHr(6) tid(49f0) 8007045A 动态链接库(DLL)初始化例程失败。
+“StructScan.exe”(Win32): 已加载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”
+onecore\com\combase\objact\dllcache.cxx(2132)\combase.dll!00007FF8A54235E8: (caller: 00007FF8A532DB3A) ReturnHr(7) tid(49f0) 8007045A 动态链接库(DLL)初始化例程失败。
+“StructScan.exe”(Win32): 已加载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”
+onecore\com\combase\objact\dllcache.cxx(2132)\combase.dll!00007FF8A54235E8: (caller: 00007FF8A532DB3A) ReturnHr(8) tid(49f0) 8007045A 动态链接库(DLL)初始化例程失败。
+“StructScan.exe”(Win32): 已加载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”
+onecore\com\combase\objact\dllcache.cxx(2132)\combase.dll!00007FF8A54235E8: (caller: 00007FF8A532DB3A) ReturnHr(9) tid(49f0) 8007045A 动态链接库(DLL)初始化例程失败。
+“StructScan.exe”(Win32): 已加载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”
+onecore\com\combase\objact\dllcache.cxx(2132)\combase.dll!00007FF8A54235E8: (caller: 00007FF8A532DB3A) ReturnHr(10) tid(3740) 8007045A 动态链接库(DLL)初始化例程失败。
+“StructScan.exe”(Win32): 已加载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”
+onecore\com\combase\objact\dllcache.cxx(2132)\combase.dll!00007FF8A54235E8: (caller: 00007FF8A532DB3A) ReturnHr(11) tid(3740) 8007045A 动态链接库(DLL)初始化例程失败。
+“StructScan.exe”(Win32): 已加载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”
+onecore\com\combase\objact\dllcache.cxx(2132)\combase.dll!00007FF8A54235E8: (caller: 00007FF8A532DB3A) ReturnHr(12) tid(3740) 8007045A 动态链接库(DLL)初始化例程失败。
+“StructScan.exe”(Win32): 已加载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“D:\Program Files (x86)\DingDing\Shell\ShellExtension_x64.dll”
+onecore\com\combase\objact\dllcache.cxx(2132)\combase.dll!00007FF8A54235E8: (caller: 00007FF8A532DB3A) ReturnHr(13) tid(3740) 8007045A 动态链接库(DLL)初始化例程失败。
+“StructScan.exe”(Win32): 已加载“C:\Program Files\Autodesk\Inventor Fusion 2013\AcSignCore16.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已加载“C:\Windows\System32\msvcp100.dll”。无法查找或打开 PDB 文件。
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\xmllite.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\WinSxS\amd64_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.19041.746_none_faeda79b76159a72\GdiPlus.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\wpdshext.dll”
+线程 0x2554 已退出，返回值为 0 (0x0)。
+线程 0x2e44 已退出，返回值为 0 (0x0)。
+线程 0x4014 已退出，返回值为 0 (0x0)。
+线程 0x2d84 已退出，返回值为 0 (0x0)。
+线程 0x239c 已退出，返回值为 0 (0x0)。
+线程 0x13d0 已退出，返回值为 0 (0x0)。
+线程 0x64c 已退出，返回值为 0 (0x0)。
+线程 0x43d0 已退出，返回值为 0 (0x0)。
+线程 0x2734 已退出，返回值为 0 (0x0)。
+线程 0x4580 已退出，返回值为 0 (0x0)。
+线程 0x3740 已退出，返回值为 0 (0x0)。
+线程 0x40e4 已退出，返回值为 0 (0x0)。
+线程 0x49f0 已退出，返回值为 0 (0x0)。
+线程 0x43ec 已退出，返回值为 0 (0x0)。
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+Qt VS Tools: QML debug: Debugging project 'StructScan'...
+Qt VS Tools: QML debug: DISABLED: QML debugging disabled in Qt project settings
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\twinapi.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\oleacc.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\Windows.UI.FileExplorer.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\ExplorerFrame.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Program Files\Common Files\microsoft shared\ink\tiptsf.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\comdlg32.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\AppXDeploymentClient.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\networkexplorer.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\Windows.StateRepositoryPS.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\dcomp.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\twinapi.appcore.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\DataExchange.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\msvcp100.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Program Files\Autodesk\Inventor Fusion 2013\AcSignCore16.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\PortableDeviceApi.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\Windows.Storage.Search.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\thumbcache.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\MMDevAPI.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\actxprxy.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\provsvc.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\dlnashext.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\EhStorAPI.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\PlayToDevice.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\iertutil.dll”
+“StructScan.exe”(Win32): 已卸载“C:\Windows\System32\Windows.FileExplorer.Common.dll”
+线程 0x4804 已退出，返回值为 0 (0x0)。
+线程 0x430 已退出，返回值为 0 (0x0)。
+线程 0x3870 已退出，返回值为 0 (0x0)。
+线程 0x3988 已退出，返回值为 0 (0x0)。
+线程 0x25dc 已退出，返回值为 0 (0x0)。
+线程 0x3c08 已退出，返回值为 0 (0x0)。
+线程 0x3d78 已退出，返回值为 0 (0x0)。
+线程 0x850 已退出，返回值为 0 (0x0)。
+线程 0x36e8 已退出，返回值为 0 (0x0)。
+线程 0x42fc 已退出，返回值为 0 (0x0)。
+程序“[11940] StructScan.exe”已退出，返回值为 0 (0x0)。

@@ -53,6 +53,11 @@ private:
 	
 signals:
 	void signalOpenPCL();
+	void signalSelect();
+	void signalDelete();
+	void signalAdd();
+	void signalClear();
+	void signalSurfaceRebuild();
 
 private slots:
 	void onActionProjectNewClicked();
@@ -66,6 +71,7 @@ private slots:
 	void onActionStopClicked();
 	void onActionPointCloudSelectClicked();
 	void onActionPointCloudDeleteClicked();
+	void onActionPointCloudAddClicked();
 	void onActionPointCloudFilterClicked();
 	void onActionPointCloudGridClicked();
 	void onActionViewPlotClicked();
