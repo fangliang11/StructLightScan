@@ -55,6 +55,9 @@
     <Link>
       <AdditionalDependencies>D:\Program Files\VTK-8.2.0\VTK-install\plugins\designer\QVTKWidgetPlugind.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\Software\VSexternalLib\include\GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>Qt_V15_X64</QtInstall>

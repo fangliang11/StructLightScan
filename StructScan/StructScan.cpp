@@ -56,6 +56,14 @@ StructScan::~StructScan()
 }
 
 
+void StructScan::closeEvent(QCloseEvent *event)
+{
+	m_pCloud->DestroyThisWnd();
+
+
+}
+
+
 void StructScan::InitialConnection()
 {
 	connect(this, &StructScan::signalOpenPCL, m_pCloud, &CPointCloudWnd::signalOpenPCL);

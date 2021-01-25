@@ -2,11 +2,14 @@
 
 //  Qt
 #include <QWidget>
+#include <QGLWidget>
 #include <QFileDialog>
 #include <QOpenGLWidget>
 #include <QDebug>
 #include <QStyleOption>
 #include <QPainter>
+#include <QMouseEvent>
+#include <QKeyEvent>
 #include <QVTKOpenGLNativeWidget.h>
 
 //  std
@@ -19,8 +22,8 @@ VTK_MODULE_INIT(vtkRenderingOpenGL2)
 VTK_MODULE_INIT(vtkInteractionStyle)
 VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
 VTK_MODULE_INIT(vtkRenderingFreeType);
-
 #include <vtkSmartPointer.h>
+#include <vtkEventQtSlotConnect.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
@@ -28,6 +31,8 @@ VTK_MODULE_INIT(vtkRenderingFreeType);
 #include <vtkSphereSource.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkActor.h>
+#include <vtkCommand.h>
+#include <vtkPicker.h>
 //#include <vtkImageViewer2.h>
 //#include <vtkJPEGReader.h>
 //#include <vtkImageActor.h>
@@ -67,10 +72,12 @@ class CPointCloudWnd : public QWidget
 public:
 	explicit CPointCloudWnd(QVTKOpenGLNativeWidget *wnd, QWidget *parent = Q_NULLPTR);
 	~CPointCloudWnd();
+	void DestroyThisWnd();
 
 private:
 	QVTKOpenGLNativeWidget *ui;
 	std::thread *workThread;
+	volatile bool loopFlag;
 	void WorkingOnPointCloud();
 
 	pcl::PointCloud<pcl::PointXYZ>::Ptr m_monoCloud;                   //pcl单色点云数据指针
@@ -79,25 +86,34 @@ private:
 	vtkSmartPointer<vtkRenderer> m_ren;                                //vtk渲染对象：用于控制一个对象的渲染进程
 	vtkSmartPointer<vtkGenericOpenGLRenderWindow> m_renWnd;            //vtk渲染的窗口句柄
 	vtkSmartPointer<vtkRenderWindowInteractor> m_iren;                 //vtk交互的对象:鼠标、键盘
+	//vtkSmartPointer<vtkEventQtSlotConnect> m_vtkEventConnection;     //vtk与qt事件连接
 
-
-	unsigned red;
-	unsigned green;
-	unsigned blue;
-	unsigned size;
-
+	//void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+	//void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 	void initialVtkWidget();
-	void showPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr pointCloud);
-
-
-	void displayOnVTK1();
-	void displaySphere();
-
-	void RebuildTest();
 	void Draw();
+	bool ResponseSignals(int code);
+	void displaySelectPCD();
+	void displaySphere();
+	void displayPCDfile();
+	void RebuildTest();
+	void filteredCloud();
 
 
+
+	int m_actionCode;
+	//  接收到的指令
+	enum {
+		ACTION_NONE = 0,
+		ACTION_OPEN,
+		ACTION_SELECT,
+		ACTION_DELETE,
+		ACTION_ADD,
+		ACTION_CLEAR,
+		ACTION_REBUILD
+	};
 signals:
+	void signalUpdateCloudWnd();
 	void signalOpenPCL();
 	void signalSelect();
 	void signalDelete();
@@ -106,6 +122,8 @@ signals:
 	void signalSurfaceRebuild();
 
 private slots:
+	void onUpdateCloudWnd();
+	void onVtkOpenGLNativeWidgetMouseEvent(QMouseEvent *event);
 	void onOpenPCL();
 	void onSelect();
 	void onDelete();

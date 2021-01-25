@@ -12,6 +12,7 @@
 #include <QStandardItemModel>
 #include <QStyleFactory>
 #include <QDebug>
+#include <QCloseEvent>
 
 #include "ui_StructScan.h"
 
@@ -43,7 +44,7 @@ private:
 
 	CCalibrationWnd *m_pcalibwnd = nullptr;
 
-
+	void closeEvent(QCloseEvent *event);
 	void InitialConnection();
 	void CreatePointCloudWnd();
 	void CreateCameraDisplayWnd();
