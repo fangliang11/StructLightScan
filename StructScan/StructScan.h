@@ -57,7 +57,8 @@ signals:
 	void signalSelect();
 	void signalDelete();
 	void signalAdd();
-	void signalClear();
+	void signalFilter();
+	void signalMesh();
 	void signalSurfaceRebuild();
 
 private slots:
@@ -74,7 +75,7 @@ private slots:
 	void onActionPointCloudDeleteClicked();
 	void onActionPointCloudAddClicked();
 	void onActionPointCloudFilterClicked();
-	void onActionPointCloudGridClicked();
+	void onActionPointCloudMeshClicked();
 	void onActionViewPlotClicked();
 	void onActionView2DClicked();
 	void onActionView3DClicked();

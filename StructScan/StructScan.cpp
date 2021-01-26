@@ -70,7 +70,8 @@ void StructScan::InitialConnection()
 	connect(this, &StructScan::signalSelect, m_pCloud, &CPointCloudWnd::signalSelect);
 	connect(this, &StructScan::signalDelete, m_pCloud, &CPointCloudWnd::signalDelete);
 	connect(this, &StructScan::signalAdd, m_pCloud, &CPointCloudWnd::signalAdd);
-	connect(this, &StructScan::signalClear, m_pCloud, &CPointCloudWnd::signalClear);
+	connect(this, &StructScan::signalFilter, m_pCloud, &CPointCloudWnd::signalFilter);
+	connect(this, &StructScan::signalMesh, m_pCloud, &CPointCloudWnd::signalMesh);
 	connect(this, &StructScan::signalSurfaceRebuild, m_pCloud, &CPointCloudWnd::signalSurfaceRebuild);
 }
 
@@ -189,12 +190,12 @@ void StructScan::onActionPointCloudAddClicked()
 
 void StructScan::onActionPointCloudFilterClicked()
 {
-	
+	emit signalFilter();
 }
 
-void StructScan::onActionPointCloudGridClicked()
+void StructScan::onActionPointCloudMeshClicked()
 {
-	emit signalClear();
+	emit signalMesh();
 }
 
 void StructScan::onActionViewPlotClicked()

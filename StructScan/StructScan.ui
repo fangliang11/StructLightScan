@@ -77,7 +77,7 @@
     <addaction name="action_pointcloud_add"/>
     <addaction name="action_pointcloud_filter"/>
     <addaction name="separator"/>
-    <addaction name="action_pointcloud_grid"/>
+    <addaction name="action_pointcloud_mesh"/>
    </widget>
    <widget class="QMenu" name="menu_view">
     <property name="title">
@@ -133,7 +133,7 @@
    <addaction name="action_pointcloud_delete"/>
    <addaction name="action_pointcloud_add"/>
    <addaction name="action_pointcloud_filter"/>
-   <addaction name="action_pointcloud_grid"/>
+   <addaction name="action_pointcloud_mesh"/>
    <addaction name="separator"/>
    <addaction name="action_view_plot"/>
    <addaction name="action_view_2D"/>
@@ -319,16 +319,16 @@
   <action name="action_pointcloud_filter">
    <property name="icon">
     <iconset resource="StructScan.qrc">
-     <normaloff>:/StructScan/res/images/ccSampleCloud.png</normaloff>:/StructScan/res/images/ccSampleCloud.png</iconset>
+     <normaloff>:/StructScan/res/images/ccFilterByValue.png</normaloff>:/StructScan/res/images/ccFilterByValue.png</iconset>
    </property>
    <property name="text">
     <string>滤波</string>
    </property>
   </action>
-  <action name="action_pointcloud_grid">
+  <action name="action_pointcloud_mesh">
    <property name="icon">
     <iconset resource="StructScan.qrc">
-     <normaloff>:/StructScan/res/images/ccGrid.png</normaloff>:/StructScan/res/images/ccGrid.png</iconset>
+     <normaloff>:/StructScan/res/images/dbMeshSymbol.png</normaloff>:/StructScan/res/images/dbMeshSymbol.png</iconset>
    </property>
    <property name="text">
     <string>网格</string>
@@ -591,10 +591,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>action_pointcloud_grid</sender>
+   <sender>action_pointcloud_mesh</sender>
    <signal>triggered()</signal>
    <receiver>StructScanClass</receiver>
-   <slot>onActionPointCloudGridClicked()</slot>
+   <slot>onActionPointCloudMeshClicked()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -812,7 +812,7 @@
   <slot>onActionPointCloudSelectClicked()</slot>
   <slot>onActionPointCloudDeleteClicked()</slot>
   <slot>onActionPointCloudFilterClicked()</slot>
-  <slot>onActionPointCloudGridClicked()</slot>
+  <slot>onActionPointCloudMeshClicked()</slot>
   <slot>onActionViewPlotClicked()</slot>
   <slot>onActionView2DClicked()</slot>
   <slot>onActionView3DClicked()</slot>

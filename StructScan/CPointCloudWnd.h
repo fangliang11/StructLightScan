@@ -15,6 +15,7 @@
 //  std
 #include <memory>
 #include <thread>
+#include <string>
 
 //  vtk
 #include <vtkAutoInit.h>
@@ -31,6 +32,8 @@ VTK_MODULE_INIT(vtkRenderingFreeType);
 #include <vtkSphereSource.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkActor.h>
+#include <vtkCamera.h>
+#include <vtkLight.h>
 #include <vtkCommand.h>
 #include <vtkPicker.h>
 //#include <vtkImageViewer2.h>
@@ -49,7 +52,9 @@ VTK_MODULE_INIT(vtkRenderingFreeType);
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>
 #include <pcl/io/vtk_io.h>
+#include <pcl/filters/radius_outlier_removal.h>
 #include <pcl/filters/statistical_outlier_removal.h>
+#include <pcl/filters/conditional_removal.h>
 #include <pcl/filters/passthrough.h>
 #include <pcl/filters/extract_indices.h>
 #include <pcl/filters/voxel_grid.h>
@@ -80,25 +85,27 @@ private:
 	volatile bool loopFlag;
 	void WorkingOnPointCloud();
 
-	pcl::PointCloud<pcl::PointXYZ>::Ptr m_monoCloud;                   //pcl单色点云数据指针
-	pcl::PointCloud<pcl::PointXYZRGBA>::Ptr m_colorCloud;
+	pcl::PointCloud<pcl::PointXYZ>::Ptr m_cloud;                   //pcl单色点云数据指针
 	std::shared_ptr<pcl::visualization::PCLVisualizer> m_viewer;       //pcl可视化对象，应使用共享智能指针否则窗口会独立
 	vtkSmartPointer<vtkRenderer> m_ren;                                //vtk渲染对象：用于控制一个对象的渲染进程
 	vtkSmartPointer<vtkGenericOpenGLRenderWindow> m_renWnd;            //vtk渲染的窗口句柄
 	vtkSmartPointer<vtkRenderWindowInteractor> m_iren;                 //vtk交互的对象:鼠标、键盘
 	//vtkSmartPointer<vtkEventQtSlotConnect> m_vtkEventConnection;     //vtk与qt事件连接
+	
+	std::string m_pcdPath;
 
-	//void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
-	//void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+
 	void initialVtkWidget();
 	void Draw();
 	bool ResponseSignals(int code);
 	void displaySelectPCD();
 	void displaySphere();
-	void displayPCDfile();
+	void displayPCDfile(std::string file_name);
+	void deleteCloud();
 	void RebuildTest();
-	void filteredCloud();
-
+	void filteredCloud(int filtercode);
+	void buildMesh();
 
 
 	int m_actionCode;
@@ -109,7 +116,8 @@ private:
 		ACTION_SELECT,
 		ACTION_DELETE,
 		ACTION_ADD,
-		ACTION_CLEAR,
+		ACTION_FILTER,
+		ACTION_MESH, 
 		ACTION_REBUILD
 	};
 signals:
@@ -118,7 +126,8 @@ signals:
 	void signalSelect();
 	void signalDelete();
 	void signalAdd();
-	void signalClear();
+	void signalFilter();
+	void signalMesh();
 	void signalSurfaceRebuild();
 
 private slots:
@@ -128,7 +137,8 @@ private slots:
 	void onSelect();
 	void onDelete();
 	void onAdd();
-	void onClear();
+	void onFilter();
+	void onMesh();
 	void onSurfaceRebuild();
 
 };
