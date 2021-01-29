@@ -786,7 +786,7 @@
    <sender>action_pointcloud_add</sender>
    <signal>triggered()</signal>
    <receiver>StructScanClass</receiver>
-   <slot>omActionPointCloudAddClicked()</slot>
+   <slot>onActionPointCloudAddClicked()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -822,6 +822,6 @@
   <slot>onActionViewRightClicked()</slot>
   <slot>onActionViewTopClicked()</slot>
   <slot>onActionViewBottomClicked()</slot>
-  <slot>omActionPointCloudAddClicked()</slot>
+  <slot>onActionPointCloudAddClicked()</slot>
  </slots>
 </ui>

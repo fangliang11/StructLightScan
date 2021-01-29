@@ -16,6 +16,7 @@
 #include <memory>
 #include <thread>
 #include <string>
+#include <vector>
 
 //  vtk
 #include <vtkAutoInit.h>
@@ -36,6 +37,7 @@ VTK_MODULE_INIT(vtkRenderingFreeType);
 #include <vtkLight.h>
 #include <vtkCommand.h>
 #include <vtkPicker.h>
+#include <vtkAxesActor.h>
 //#include <vtkImageViewer2.h>
 //#include <vtkJPEGReader.h>
 //#include <vtkImageActor.h>
@@ -45,6 +47,8 @@ VTK_MODULE_INIT(vtkRenderingFreeType);
 #undef max 
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/visualization/cloud_viewer.h>
+#include <pcl/visualization/area_picking_event.h>
+#include <pcl/visualization/interactor_style.h>
 #include <pcl/console/parse.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -91,7 +95,15 @@ private:
 	vtkSmartPointer<vtkGenericOpenGLRenderWindow> m_renWnd;            //vtk渲染的窗口句柄
 	vtkSmartPointer<vtkRenderWindowInteractor> m_iren;                 //vtk交互的对象:鼠标、键盘
 	//vtkSmartPointer<vtkEventQtSlotConnect> m_vtkEventConnection;     //vtk与qt事件连接
-	
+	vtkSmartPointer<vtkCamera> m_renCamera;
+
+	struct callback_args
+	{
+		pcl::PointCloud<pcl::PointXYZ>::Ptr clicked_points_3d;
+		std::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
+	};
+	callback_args cb_args;
+
 	std::string m_pcdPath;
 
 
@@ -99,13 +111,20 @@ private:
 	void initialVtkWidget();
 	void Draw();
 	bool ResponseSignals(int code);
+	void AddCoordinateSystem();
+	void savePointCloudFile();
+	void saveMeshFile();
 	void displaySelectPCD();
 	void displaySphere();
 	void displayPCDfile(std::string file_name);
 	void deleteCloud();
 	void RebuildTest();
 	void filteredCloud(int filtercode);
-	void buildMesh();
+	void buildMesh(pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud);
+	void SmoothPointcloud();
+	void userSelect();
+	static void pointPickCallback(const pcl::visualization::AreaPickingEvent& event, void* args);
+
 
 
 	int m_actionCode;

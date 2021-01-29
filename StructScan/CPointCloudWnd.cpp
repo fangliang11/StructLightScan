@@ -1,6 +1,7 @@
 
 #include "CPointCloudWnd.h"
 
+
 CPointCloudWnd::CPointCloudWnd(QVTKOpenGLNativeWidget *wnd, QWidget *parent)
 	: ui(wnd), QWidget(parent), workThread(nullptr)
 	, loopFlag(false), m_actionCode(0)
@@ -40,11 +41,12 @@ void CPointCloudWnd::initialVtkWidget()
 	//light->SetPosition(100, 100, 100);
 	//light->SetFocalPoint(m_ren->GetActiveCamera()->GetFocalPoint());
 	m_ren->AddLight(light);
-	vtkSmartPointer<vtkCamera> camera = vtkSmartPointer<vtkCamera>::New();
-	camera->SetPosition(20, 20, 20);
-	m_ren->SetActiveCamera(camera);
+	m_renCamera = vtkSmartPointer<vtkCamera>::New();
+	m_renCamera->SetFocalPoint(0, 0, 0);
+	m_ren->SetActiveCamera(m_renCamera);
 	m_renWnd = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
 	m_renWnd->AddRenderer(m_ren);
+	
 	m_iren = vtkSmartPointer< vtkRenderWindowInteractor>::New();
 	m_iren->SetRenderWindow(m_renWnd);
 	//m_vtkEventConnection = vtkSmartPointer<vtkEventQtSlotConnect>::New();
@@ -54,12 +56,16 @@ void CPointCloudWnd::initialVtkWidget()
 	m_viewer.reset(new pcl::visualization::PCLVisualizer(m_ren, m_renWnd, "CloudPoint", false));
 	m_viewer->setupInteractor(m_iren, m_renWnd);
 	m_viewer->setBackgroundColor(0.01, 0.5, 0.6);
-	m_viewer->addCoordinateSystem(1);
+	//m_viewer->addCoordinateSystem(1);
 	m_viewer->addSphere(pcl::PointXYZ(0, 0, 0), 0.05, 0.3, 0.3, 0.0, "sphere");
 	m_viewer->addPointCloud(m_cloud, "cloud");
 	m_viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
 		1, "cloud");
+	cb_args.clicked_points_3d = m_cloud;
+	cb_args.viewer = m_viewer;
+	m_viewer->registerAreaPickingCallback(pointPickCallback, (void*)&cb_args);
 
+	
 
 	//绑定vtk渲染窗口至 ui 控件
 	ui->SetRenderWindow(m_renWnd);
@@ -104,22 +110,27 @@ bool CPointCloudWnd::ResponseSignals(int code)
 		break;
 	case ACTION_OPEN:
 		displayPCDfile(m_pcdPath);
+		//displaySphere();
 		state = true;
 		break;
 	case ACTION_SELECT:
+		//AddCoordinateSystem();
 		break;
 	case ACTION_DELETE:
 		deleteCloud();
 		state = true;
 		break;
 	case ACTION_ADD:
+		savePointCloudFile();
+		state = true;
 		break;
 	case ACTION_FILTER:
-		filteredCloud(1);
+		filteredCloud(3);
 		state = true;
 		break;
 	case ACTION_MESH:
-		buildMesh();
+		buildMesh(m_cloud);
+		//SmoothPointcloud();
 		state = true;
 		break;
 	case ACTION_REBUILD:
@@ -133,6 +144,45 @@ bool CPointCloudWnd::ResponseSignals(int code)
 	m_actionCode = ACTION_NONE;
 
 	return state;
+}
+
+
+void CPointCloudWnd::AddCoordinateSystem()
+{
+	// 屏幕坐标系 > 世界坐标系
+	double dispCoord[2] = { 10, 30 };
+	vtkSmartPointer<vtkCoordinate> pCoorPress = vtkSmartPointer<vtkCoordinate>::New();
+	pCoorPress->SetCoordinateSystemToDisplay();
+	pCoorPress->SetValue(dispCoord);
+	double *worldCoord = pCoorPress->GetComputedWorldValue(m_ren);
+	qDebug() << worldCoord[0] << worldCoord[1] << worldCoord[2];
+
+	// 添加坐标系
+	vtkSmartPointer<vtkAxesActor> actor2 = vtkSmartPointer<vtkAxesActor>::New();
+	actor2->SetPosition(worldCoord[0], worldCoord[1], worldCoord[2]);
+	actor2->SetTotalLength(0.5,0.5,0.5);
+	actor2->SetShaftType(0);
+	actor2->SetAxisLabels(0);
+	actor2->SetCylinderRadius(0.02);
+	m_ren->AddActor(actor2);
+}
+
+
+void CPointCloudWnd::savePointCloudFile()
+{
+	std::string filename("test_save.pcd");
+	pcl::PCDWriter writer;
+	if(!m_cloud->empty())
+		writer.write(filename, *m_cloud);
+}
+
+
+void CPointCloudWnd::saveMeshFile()
+{
+	std::string filename("test_save_mesh.ply");
+
+	//pcl::io::savePLYFile(filename, mesh);
+
 }
 
 
@@ -225,7 +275,7 @@ void CPointCloudWnd::displayPCDfile(std::string file_name)
 		pcl::PCDReader reader;
 		reader.read<pcl::PointXYZ>(file_name, *m_cloud);
 	}
-
+	
 	// 按照z字段进行深度渲染，不同深度不同颜色
 	pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> fildColor(m_cloud, "z");
 	m_viewer->updatePointCloud(m_cloud, fildColor, "cloud");
@@ -310,10 +360,11 @@ void CPointCloudWnd::RebuildTest()
 
 }
 
-
+//条件滤波、下采样、剔除离群点、平滑
 void CPointCloudWnd::filteredCloud(int filtercode)
 {
 	pcl::PointCloud<pcl::PointXYZ>::Ptr filtered(new pcl::PointCloud<pcl::PointXYZ>());
+	qDebug() << "before filtered: size " << m_cloud->size();
 
 	if (filtercode == 0) {
 		pcl::RadiusOutlierRemoval<pcl::PointXYZ> outrem;  //创建滤波器
@@ -340,49 +391,180 @@ void CPointCloudWnd::filteredCloud(int filtercode)
 		// 执行滤波
 		condrem.filter(*filtered);  //大于0.0小于0.8这两个条件用于建立滤波器
 	}
+	else if (filtercode == 2) {
+		pcl::search::KdTree<pcl::PointXYZ>::Ptr treeSampling(new
+			pcl::search::KdTree<pcl::PointXYZ>); // 创建用于最近邻搜索的KD-Tree
+		pcl::MovingLeastSquares<pcl::PointXYZ, pcl::PointXYZ> mls;  // 定义最小二乘实现的对象mls
+		mls.setSearchMethod(treeSampling);    // 设置KD-Tree作为搜索方法
+		mls.setComputeNormals(false);  //设置在最小二乘计算中是否需要存储计算的法线
+		mls.setInputCloud(m_cloud);        //设置待处理点云
+		mls.setPolynomialOrder(2);             // 拟合2阶多项式拟合
+		mls.setPolynomialFit(false);  // 设置为false可以 加速 smooth
+		mls.setSearchRadius(0.5); // 单位m.设置用于拟合的K近邻半径
+		mls.process(*filtered);        //输出
+	}
+	else if (filtercode == 3) {
+		pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_downSampled(new
+			pcl::PointCloud<pcl::PointXYZ>());
+		pcl::VoxelGrid<pcl::PointXYZ> downSampled;  //下采样滤波器
+		downSampled.setInputCloud(m_cloud);            //设置需要过滤的点云给滤波对象
+		downSampled.setLeafSize(0.01f, 0.01f, 0.01f);  //设置滤波时创建的体素体积为1cm的立方体
+		downSampled.filter(*cloud_downSampled);           //执行滤波处理，存储输出
+
+		pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_removed(new
+			pcl::PointCloud<pcl::PointXYZ>());
+		pcl::StatisticalOutlierRemoval<pcl::PointXYZ> sor;   //离群剔除滤波器
+		sor.setInputCloud(cloud_downSampled);                //设置待滤波的点云
+		sor.setMeanK(50);            //设置在进行统计时考虑的临近点个数
+		sor.setStddevMulThresh(1.0); //设置判断是否为离群点的阀值，用来倍乘标准差，也就是上面的std_mul
+		sor.filter(*cloud_removed);  //滤波结果存储到cloud_filtered
+
+		pcl::search::KdTree<pcl::PointXYZ>::Ptr treeSampling(new
+			pcl::search::KdTree<pcl::PointXYZ>); // mls平滑点云
+		pcl::MovingLeastSquares<pcl::PointXYZ, pcl::PointXYZ> mls;  // 定义最小二乘实现的对象mls
+		mls.setSearchMethod(treeSampling);    // 设置KD-Tree作为搜索方法
+		mls.setComputeNormals(false);  //设置在最小二乘计算中是否需要存储计算的法线
+		mls.setInputCloud(cloud_removed);        //设置待处理点云
+		mls.setPolynomialOrder(2);             // 拟合2阶多项式拟合
+		mls.setPolynomialFit(false);  // 设置为false可以 加速 smooth
+		mls.setSearchRadius(0.05); // 单位m.设置用于拟合的K近邻半径
+		mls.process(*filtered);        //输出
+	}
+
+	qDebug() << "success filtered, size: " << filtered->size();
 
 	m_cloud->clear();
 	m_viewer->updatePointCloud(m_cloud, "cloud");
-	//点云复制
 	pcl::copyPointCloud(*filtered, *m_cloud);
-	//pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZRGB> single_color(m_cloud,
-	//	232, 232, 232);
 	pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> fildColor(m_cloud, "z");
 	m_viewer->updatePointCloud(m_cloud, fildColor, "cloud");
 }
 
-
-void CPointCloudWnd::buildMesh()
+// 贪心三角化算法
+void CPointCloudWnd::buildMesh(pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud)
 {
 	pcl::PointCloud<pcl::PointNormal>::Ptr cloud_with_normals(new 
 		pcl::PointCloud<pcl::PointNormal>);
 	pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> n;//法线估计对象
-	pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);//存储估计的法线
+	pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);// 定义输出的点云法线
+	// 创建用于最近邻搜索的KD-Tree
 	pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
-	tree->setInputCloud(m_cloud);
-	n.setInputCloud(m_cloud);
+	tree->setInputCloud(cloud);
+	n.setInputCloud(cloud);
 	n.setSearchMethod(tree);
-	n.setKSearch(20);
+	// K近邻确定方法，使用k个最近点，或者确定一个以r为半径的圆内的点集来确定都可以，两者选1即可
+	n.setKSearch(20);   // 使用当前点周围最近的20个点
+	//n.setRadiusSearch(0.05);//对于每一个点都用半径为5cm的近邻搜索方式
 	n.compute(*normals);
-	pcl::concatenateFields(*m_cloud, *normals, *cloud_with_normals);
+	// 将点云位姿、颜色、法线信息连接到一起
+	pcl::concatenateFields(*cloud, *normals, *cloud_with_normals);
+	//定义搜索树对象
 	pcl::search::KdTree<pcl::PointNormal>::Ptr tree2(new pcl::search::KdTree<pcl::PointNormal>);
 	tree2->setInputCloud(cloud_with_normals);
+	// 定义三角化对象
 	pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;
 	pcl::PolygonMesh mesh; //存储最终三角化的网格模型
-	gp3.setSearchRadius(2);//这个参数需要更改
-	gp3.setMu(2.5);//设置样本点搜索其邻近点的最远距离为2.5 
-	gp3.setMaximumNearestNeighbors(100);//设置样本点搜索的邻域个数为100
-	gp3.setMaximumSurfaceAngle(M_PI / 3);//设置某点法线方向偏离样本点法线方向的最大角度为45度
-	gp3.setMinimumAngle(M_PI / 180);//设置三角化后得到的三角形内角最小角度为10度
+	//设置搜索时的半径，也就是KNN的球半径, 这个参数需要更改
+	gp3.setSearchRadius(2);
+	//设置样本点搜索其近邻点的最远距离为2.5倍（典型值2.5-3），这样使得算法自适应点云密度的变化
+	gp3.setMu(2.5);
+	//设置样本点最多可搜索的邻域个数，典型值是50-100
+	gp3.setMaximumNearestNeighbors(100);
+	// 设置某点法线方向偏离样本点法线的最大角度45°，如果超过，连接时不考虑该点
+	gp3.setMaximumSurfaceAngle(M_PI / 4);
+	// 设置三角化后得到的三角形内角的最小的角度为10°
+	gp3.setMinimumAngle(M_PI / 18);
+	// 设置三角化后得到的三角形内角的最大角度为120°
 	gp3.setMaximumAngle(2 * M_PI / 3);
-	gp3.setNormalConsistency(false);//设置该参数保证法线朝向一致
-	gp3.setInputCloud(cloud_with_normals);//设置输入点云为有向点云
-	gp3.setSearchMethod(tree2);//设置搜素方式为tree2
-	gp3.reconstruct(mesh);//重建提取三角化
+	//设置该参数保证法线朝向一致
+	gp3.setNormalConsistency(false);
+	//设置输入点云为有向点云
+	gp3.setInputCloud(cloud_with_normals);
+	//设置搜素方式为tree2
+	gp3.setSearchMethod(tree2);
+	//重建提取三角化
+	gp3.reconstruct(mesh);
 	
-	m_cloud->clear();
+	cloud->clear();
 	m_viewer->updatePointCloud(m_cloud, "cloud");
 	m_viewer->addPolygonMesh(mesh, "W");
+	//设置网格模型显示模式
+	//viewer->setRepresentationToSurfaceForAllActors(); //网格模型以面片形式显示  
+	//viewer->setRepresentationToPointsForAllActors(); //网格模型以点形式显示  
+	//viewer->setRepresentationToWireframeForAllActors();  //网格模型以线框图模式显示
+
+	pcl::io::savePLYFile("test_save_mesh.ply", mesh);
+}
+
+//重采样平滑点云
+void CPointCloudWnd::SmoothPointcloud()
+{
+	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_smooth(new pcl::PointCloud<pcl::PointXYZ>);
+	// 对点云重采样 
+	qDebug() << "begin smooth: size " << m_cloud->size();
+	pcl::search::KdTree<pcl::PointXYZ>::Ptr treeSampling(new 
+		pcl::search::KdTree<pcl::PointXYZ>); // 创建用于最近邻搜索的KD-Tree
+	pcl::MovingLeastSquares<pcl::PointXYZ, pcl::PointXYZ> mls;  // 定义最小二乘实现的对象mls
+	mls.setSearchMethod(treeSampling);    // 设置KD-Tree作为搜索方法
+	mls.setComputeNormals(false);  //设置在最小二乘计算中是否需要存储计算的法线
+	mls.setInputCloud(m_cloud);        //设置待处理点云
+	mls.setPolynomialOrder(2);             // 拟合2阶多项式拟合
+	mls.setPolynomialFit(false);  // 设置为false可以 加速 smooth
+	mls.setSearchRadius(0.05); // 单位m.设置用于拟合的K近邻半径
+	mls.process(*cloud_smooth);        //输出
+	qDebug() << "success smooth, size: " << cloud_smooth->size();
+
+	m_cloud->clear();
+	m_viewer->updatePointCloud(m_cloud, "cloud");
+	pcl::copyPointCloud(*cloud_smooth, *m_cloud);
+	pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> fildColor(m_cloud, "z");
+	m_viewer->updatePointCloud(m_cloud, fildColor, "cloud");
+
+}
+
+
+void CPointCloudWnd::userSelect()
+{
+
+}
+
+
+int num = 0;
+void CPointCloudWnd::pointPickCallback(const pcl::visualization::AreaPickingEvent& event, void* args)
+{
+	callback_args* data = (callback_args*)args;
+	pcl::PointCloud<pcl::PointXYZ>::Ptr clicked_cloud(new pcl::PointCloud<pcl::PointXYZ>());
+	std::vector< int > indices;
+	if (event.getPointsIndices(indices) == -1)
+		return;
+
+	pcl::PointCloud<pcl::PointXYZ>::Ptr p_obstacles(new pcl::PointCloud<pcl::PointXYZ>);
+	pcl::PointIndices::Ptr inliers(new pcl::PointIndices());
+	pcl::ExtractIndices<pcl::PointXYZ> extract;
+	std::vector<int>::iterator it;
+	for (it = indices.begin(); it != indices.end(); it++) {
+		//clicked_cloud->points.push_back(data->clicked_points_3d->points.at(*it));
+		inliers->indices.push_back(*it);
+	}
+	extract.setInputCloud(data->clicked_points_3d);
+	extract.setIndices(inliers);
+	extract.setNegative(true);
+	extract.filter(*p_obstacles);
+	data->clicked_points_3d->clear();
+	data->viewer->updatePointCloud(data->clicked_points_3d, "cloud");
+	pcl::copyPointCloud(*p_obstacles, *data->clicked_points_3d);
+	pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> fildColor(data->clicked_points_3d, "z");
+	data->viewer->updatePointCloud(data->clicked_points_3d, fildColor, "cloud");
+
+	//std::stringstream ss;
+	//std::string cloudName;
+	//ss << num++;
+	//ss >> cloudName;
+	//cloudName += "_cloudName";
+	//pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> red(clicked_cloud, 255, 0, 0);
+	//data->viewer->addPointCloud(clicked_cloud, red, cloudName);
+	//data->viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
+	//	5, cloudName);
 }
 
 //------------------------------------------------- SLOT -------------------------------//
@@ -390,11 +572,15 @@ void CPointCloudWnd::buildMesh()
 // 窗口刷新
 void CPointCloudWnd::onUpdateCloudWnd()
 {
-	//m_viewer->resetCamera();
-	//m_viewer->resetCameraViewpoint();
+	if (m_cloud->size() > 0) {
+		Eigen::Vector4f centroid;  //质心 
+		pcl::compute3DCentroid(*m_cloud, centroid); // 计算质心
+		m_renCamera->SetFocalPoint(centroid.x(), centroid.y(), centroid.z());
+	}
 
-	//m_ren->GetActiveCamera()->SetPosition(20, 20, 20);
-	m_renWnd->Render();
+
+	m_renWnd->Render();	
+
 }
 
 // 鼠标事件
