@@ -5,6 +5,7 @@
 CPointCloudWnd::CPointCloudWnd(QVTKOpenGLNativeWidget *wnd, QWidget *parent)
 	: ui(wnd), QWidget(parent), workThread(nullptr)
 	, loopFlag(false), m_actionCode(0)
+	, b_rubber_band_selection_mode(false)
 {
 
 	initialVtkWidget();
@@ -61,9 +62,7 @@ void CPointCloudWnd::initialVtkWidget()
 	m_viewer->addPointCloud(m_cloud, "cloud");
 	m_viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
 		1, "cloud");
-	cb_args.clicked_points_3d = m_cloud;
-	cb_args.viewer = m_viewer;
-	m_viewer->registerAreaPickingCallback(pointPickCallback, (void*)&cb_args);
+	m_viewer->registerAreaPickingCallback(areaPickCallback, this);
 
 	
 
@@ -114,7 +113,7 @@ bool CPointCloudWnd::ResponseSignals(int code)
 		state = true;
 		break;
 	case ACTION_SELECT:
-		//AddCoordinateSystem();
+		userSelect();
 		break;
 	case ACTION_DELETE:
 		deleteCloud();
@@ -522,23 +521,33 @@ void CPointCloudWnd::SmoothPointcloud()
 
 }
 
-
+// 激活 rubber_band_selection_mode 框选删除点云
 void CPointCloudWnd::userSelect()
 {
+	HKL	hcurkl;
+	hcurkl = GetKeyboardLayout(0);
+	//这里会切换为美式键盘的英文输入法
+	LoadKeyboardLayout(L"0x0409", KLF_ACTIVATE);
+
+	::keybd_event(0x58, 0, 0, 0);
+	Sleep(20);
+	::keybd_event(0x58, 0, KEYEVENTF_KEYUP, 0);  // x
+
+	b_rubber_band_selection_mode = !b_rubber_band_selection_mode;
 
 }
 
-
 int num = 0;
-void CPointCloudWnd::pointPickCallback(const pcl::visualization::AreaPickingEvent& event, void* args)
+void CPointCloudWnd::areaPickCallback(const pcl::visualization::AreaPickingEvent& event, void* args)
 {
-	callback_args* data = (callback_args*)args;
+	CPointCloudWnd *pThis = (CPointCloudWnd *)args;
+	if (!pThis->b_rubber_band_selection_mode)
+		return;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr clicked_cloud(new pcl::PointCloud<pcl::PointXYZ>());
 	std::vector< int > indices;
 	if (event.getPointsIndices(indices) == -1)
 		return;
 
-	pcl::PointCloud<pcl::PointXYZ>::Ptr p_obstacles(new pcl::PointCloud<pcl::PointXYZ>);
 	pcl::PointIndices::Ptr inliers(new pcl::PointIndices());
 	pcl::ExtractIndices<pcl::PointXYZ> extract;
 	std::vector<int>::iterator it;
@@ -546,15 +555,15 @@ void CPointCloudWnd::pointPickCallback(const pcl::visualization::AreaPickingEven
 		//clicked_cloud->points.push_back(data->clicked_points_3d->points.at(*it));
 		inliers->indices.push_back(*it);
 	}
-	extract.setInputCloud(data->clicked_points_3d);
+	extract.setInputCloud(pThis->m_cloud);
 	extract.setIndices(inliers);
 	extract.setNegative(true);
-	extract.filter(*p_obstacles);
-	data->clicked_points_3d->clear();
-	data->viewer->updatePointCloud(data->clicked_points_3d, "cloud");
-	pcl::copyPointCloud(*p_obstacles, *data->clicked_points_3d);
-	pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> fildColor(data->clicked_points_3d, "z");
-	data->viewer->updatePointCloud(data->clicked_points_3d, fildColor, "cloud");
+	extract.filter(*clicked_cloud);
+	pThis->m_cloud->clear();
+	pThis->m_viewer->updatePointCloud(pThis->m_cloud, "cloud");
+	pcl::copyPointCloud(*clicked_cloud, *pThis->m_cloud);
+	pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> fildColor(pThis->m_cloud, "z");
+	pThis->m_viewer->updatePointCloud(pThis->m_cloud, fildColor, "cloud");
 
 	//std::stringstream ss;
 	//std::string cloudName;

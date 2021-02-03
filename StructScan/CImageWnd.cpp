@@ -6,7 +6,7 @@
 
 
 
-CImageWnd::CImageWnd(QWidget *parent): QWidget(parent), m_frame("cameraDemo.png")
+CImageWnd::CImageWnd(QWidget *parent): QWidget(parent), m_frame("TestImageInitial.bmp")
 {
 	setAttribute(Qt::WA_OpaquePaintEvent);
 	setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint);

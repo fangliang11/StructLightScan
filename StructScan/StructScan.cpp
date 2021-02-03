@@ -4,6 +4,7 @@
 #include "CImageWnd.h"
 #include "CCalibrationWnd.h"
 #include "CPointCloudWnd.h"
+#include "CDBRoot.h"
 
 
 
@@ -22,7 +23,6 @@ StructScan::StructScan(QWidget *parent)
 	m_pimagewnd->move(305, 80);
 
 
-	//this->setCentralWidget(ui.mdiArea);
 
 
 	//m_mdiArea = new QMdiArea(this);
@@ -47,7 +47,8 @@ StructScan::StructScan(QWidget *parent)
 	InitialConnection();
 	InitialStatusBar();
 	InitialDockWidget(300);
-	
+	InitialProjectTree();
+	InitialPropertyTree();
 }
 
 StructScan::~StructScan()
@@ -99,29 +100,51 @@ void StructScan::InitialDockWidget(int width)
 
 }
 
-void StructScan::InitialTree()
+// 项目树
+void StructScan::InitialProjectTree()
 {
-	//QStandardItemModel* model = new QStandardItemModel(ui.treeView);
-	//QList<QStandardItem*> kind;
-	//QStandardItem *kindname1 = new QStandardItem(QStringLiteral("项目"));
-	//QStandardItem *kindname2 = new QStandardItem(QStringLiteral("结果"));
-	//kind.append(kindname1);
-	//kind.append(kindname2);
-	//model->appendColumn(kind);
+	QStandardItemModel* model = new QStandardItemModel(ui.treeViewProjects);
+	model->setHorizontalHeaderLabels(QStringList() << QStringLiteral("项目名称") << QStringLiteral("信息"));
+	QStandardItem* itemProject = new QStandardItem(QIcon(QStringLiteral("res/folder_image.ico")), QStringLiteral("三维测量测试"));
+	model->appendRow(itemProject);
+	QStandardItem *childItem1 = new QStandardItem(QStringLiteral("设备"));
+	QStandardItem *childItem2 = new QStandardItem(QStringLiteral("图像"));
+	QStandardItem *childItem3 = new QStandardItem(QStringLiteral("点云"));
+	QStandardItem *childItem4 = new QStandardItem(QStringLiteral("网格"));
+	itemProject->appendRow(childItem1);
+	itemProject->appendRow(childItem2);
+	itemProject->appendRow(childItem3);
+	itemProject->appendRow(childItem4);
+	QStandardItem *image1 = new QStandardItem(QStringLiteral("图像1"));
+	QStandardItem *image2 = new QStandardItem(QStringLiteral("图像2"));
+	QStandardItem *image3 = new QStandardItem(QStringLiteral("图像3"));
+	QStandardItem *image4 = new QStandardItem(QStringLiteral("图像4"));
+	QStandardItem *image5 = new QStandardItem(QStringLiteral("图像5"));
+	childItem2->appendRow(image1);
+	childItem2->appendRow(image2);
+	childItem2->appendRow(image3);
+	childItem2->appendRow(image4);
+	childItem2->appendRow(image5);
 
-	////设置虚线， 给QTreeView应用model
-	//ui.treeView->setStyle(QStyleFactory::create("windows"));
-	//ui.treeView->setModel(model);
+
+	//设置虚线， 给QTreeView应用model
+	ui.treeViewProjects->setStyle(QStyleFactory::create("windows"));
+	ui.treeViewProjects->setModel(model);
+	ui.treeViewProjects->expandAll();
 }
 
+// 属性
+void StructScan::InitialPropertyTree()
+{
+	m_dbroot = new CDBRoot(ui.treeViewProjects, ui.treeViewProperty, this);
 
-
+}
 
 //************************************SLOTS******************************//
 
 void StructScan::onActionProjectNewClicked()
 {
-	QImage img("s_logo.png");
+	QImage img("TestImage.bmp");
 	m_pimagewnd->setFrame(QPixmap::fromImage(img));
 
 }
@@ -165,7 +188,7 @@ void StructScan::onActionSetupProjectorClicked()
 
 void StructScan::onActionStartClicked()
 {
-
+	m_dbroot->updateObject();
 }
 
 void StructScan::onActionStopClicked()

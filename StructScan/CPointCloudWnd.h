@@ -97,15 +97,8 @@ private:
 	//vtkSmartPointer<vtkEventQtSlotConnect> m_vtkEventConnection;     //vtk与qt事件连接
 	vtkSmartPointer<vtkCamera> m_renCamera;
 
-	struct callback_args
-	{
-		pcl::PointCloud<pcl::PointXYZ>::Ptr clicked_points_3d;
-		std::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
-	};
-	callback_args cb_args;
-
 	std::string m_pcdPath;
-
+	bool b_rubber_band_selection_mode;
 
 
 	void initialVtkWidget();
@@ -123,7 +116,7 @@ private:
 	void buildMesh(pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud);
 	void SmoothPointcloud();
 	void userSelect();
-	static void pointPickCallback(const pcl::visualization::AreaPickingEvent& event, void* args);
+	static void areaPickCallback(const pcl::visualization::AreaPickingEvent& event, void* args);
 
 
 

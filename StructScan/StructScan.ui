@@ -166,9 +166,9 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidgetLog">
+  <widget class="QDockWidget" name="dockWidgetProperty">
    <property name="windowTitle">
-    <string>命令行</string>
+    <string>属性</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
@@ -176,7 +176,7 @@
    <widget class="QWidget" name="dockWidgetContents_2">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QListView" name="listViewLog"/>
+      <widget class="QTreeView" name="treeViewProperty"/>
      </item>
     </layout>
    </widget>
@@ -416,7 +416,7 @@
    </property>
   </action>
   <zorder>dockProjectList</zorder>
-  <zorder>dockWidgetLog</zorder>
+  <zorder>dockWidgetProperty</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
