@@ -37,10 +37,10 @@ CDBRoot::~CDBRoot()
 void CDBRoot::initModel()
 {
 	//QStandardItemModel类提供用于存储自定义数据的通用模型
-	m_propertiesModel = new QStandardItemModel(this);
+	m_propertiesModel = new QStandardItemModel(0, 2, this);
 
-	const int col_count = 2;
-	m_propertiesModel->setColumnCount(col_count);
+	//const int col_count = 2;
+	//m_propertiesModel->setColumnCount(col_count);
 	m_propertiesModel->setHeaderData(0, Qt::Horizontal, tr("Property"));
 	m_propertiesModel->setHeaderData(1, Qt::Horizontal, tr("State/Value"));
 
@@ -83,12 +83,13 @@ void CDBRoot::initView()
 {
 	QTreeView* tree = m_propertiesTreeWidget;
 	tree->header()->setSectionResizeMode(QHeaderView::Interactive);
-	//tree->setEnabled(false);
-	tree->setFocusPolicy(Qt::NoFocus);
 	tree->setRootIsDecorated(false);
-	tree->setStyle(QStyleFactory::create("windows"));
-	tree->setStyleSheet("QTreeView::item{border:1px solid black;}QTreeView::branch{image:none;}");
-	   
+	//tree->setStyle(QStyleFactory::create("windows"));
+	//tree->setStyleSheet("QTreeView::item{\
+	//	margin:8px;}\
+	//	QTreeView::branch{\
+	//	image:none;\
+	//	}");	   
 }
 
 

@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include <QDebug>
 #include <QStyledItemDelegate>
 #include <QStandardItem>
 #include <QStandardItemModel>
@@ -11,6 +12,7 @@
 #include <QComboBox>
 #include <QList>
 #include <QLabel>
+#include <QPalette>
 
 class QAbstractItemView;
 class QStandardItem;
@@ -27,8 +29,9 @@ public:
 	enum PROPERTY_CODE {
 		OBJECT_NO_PROPERTY = 0,
 		OBJECT_NAME,
+		OBJECT_INFO,
 		OBJECT_VISIBILITY,
-		OBJECT_CLOUD_NAME,
+		OBJECT_CLOUD_POINTS,
 		OBJECT_CLOUD_POINT_SIZE,
 		OBJECT_CLOUD_DISPLAY_COLOR,
 		OBJECT_CLOUD_COORDINATE,
@@ -45,11 +48,12 @@ public:
 		OBJECT_REBUILD_MAX_NEAREST_NEIGHBOR,
 		OBJECT_REBUILD_MAX_SURFACE_ANGLE,
 		OBJECT_REBUILD_MIN_ANGLE,
+		OBJECT_REBUILD_MAX_ANGLE,
 		OBJECT_REBUILD_NORMAL_CONSISTENCY,
 		OBJECT_MESH_NAME,
 		OBJECT_MESH_DISPLAY_TYPE,
 		OBJECT_MESH_DISPLAY_COLOR,
-
+		TREE_VIEW_HEADER,
 	};
 
 protected:
@@ -66,14 +70,14 @@ protected:
 public:
 	void updateDisplay();
 	void updateModel();
-	void updateItem();
+	void updateItem(QStandardItem * item);
 
 signals:
 	void signalObjectPropertiesChanged() const;
 	void signalObjectAppearanceChanged() const;
 private slots:
-	void cloudPointSizeChanged();
-
+	void cloudPointSizeChanged(int index);
+	void cloudColorChanged(int index);
 
 private:
 	QStandardItemModel* m_model;
@@ -84,18 +88,15 @@ private:
 	static const char* s_sfColor;
 	static const char* s_defaultPointSizeString;
 	static const char* s_defaultPolyWidthSizeString;
-
-
-
-	void initial();
+	   
 	void addSeparator(const QString& title);
 	void appendRow(QStandardItem* leftItem, QStandardItem* rightItem, bool openPersistentEditor/*=false*/);
-	void fillModel();
+	void fillModel(int object_code);
+	void fillModelWithObject();
 	void fillModelWithCloud();
 	void fillModelWithFiltered();
-	void fileModelWithRebuild();
-	void fileModelWithMesh();
-	void fileModelWithSelect();
+	void fillModelWithRebuild();
+	void fillModelWithMesh();
 
 
 };
