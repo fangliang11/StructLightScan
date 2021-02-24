@@ -9,18 +9,19 @@
 
 
 class CPropertyDelegate;
+class CPointCloudWnd;
 
 
 class CDBRoot :	public QWidget
 {
 	Q_OBJECT
 public:
-	CDBRoot(QTreeView* dbTreeWidget, QTreeView* propertiesTreeWidget, QWidget* parent = nullptr);
+	CDBRoot(CPointCloudWnd *wnd, QTreeView* dbTreeWidget, QTreeView* propertiesTreeWidget, QWidget* parent = nullptr);
 
 	~CDBRoot() override;
 
 
-	void updateObject();
+	void updateObjectProperty(int objectCode);
 	void redrawObject();
 
 private:
@@ -30,13 +31,15 @@ private:
 	void initOperate();
 
 private:
-
+	CPointCloudWnd* m_wnd;
 	QTreeView* m_dbTreeWidget;
 	QTreeView* m_propertiesTreeWidget;
 	QStandardItemModel* m_propertiesModel;
 	CPropertyDelegate* m_propertiesDelegate;
 
 
+private slots:
+	void slotDBselected(QModelIndex modelIndex);
 
 };
 

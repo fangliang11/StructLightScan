@@ -103,29 +103,30 @@ void StructScan::InitialDockWidget(int width)
 // ÏîÄ¿Ê÷
 void StructScan::InitialProjectTree()
 {
+	m_dbroot = new CDBRoot(m_pCloud, ui.treeViewProjects, ui.treeViewProperty, this);
+
 	QStandardItemModel* model = new QStandardItemModel(ui.treeViewProjects);
 	model->setHorizontalHeaderLabels(QStringList() << QStringLiteral("ÏîÄ¿Ãû³Æ") << QStringLiteral("ÐÅÏ¢"));
-	QStandardItem* itemProject = new QStandardItem(QIcon(QStringLiteral("res/folder_image.ico")), QStringLiteral("ÈýÎ¬²âÁ¿²âÊÔ"));
+	QStandardItem* itemProject = new QStandardItem(QIcon(QStringLiteral("res/folder_image.ico")), QStringLiteral("ÈýÎ¬²âÁ¿"));
 	model->appendRow(itemProject);
 	QStandardItem *childItem1 = new QStandardItem(QStringLiteral("Éè±¸"));
-	QStandardItem *childItem2 = new QStandardItem(QStringLiteral("Í¼Ïñ"));
+	//QStandardItem *childItem2 = new QStandardItem(QStringLiteral("Í¼Ïñ"));
 	QStandardItem *childItem3 = new QStandardItem(QStringLiteral("µãÔÆ"));
 	QStandardItem *childItem4 = new QStandardItem(QStringLiteral("Íø¸ñ"));
 	itemProject->appendRow(childItem1);
-	itemProject->appendRow(childItem2);
+	//itemProject->appendRow(childItem2);
 	itemProject->appendRow(childItem3);
 	itemProject->appendRow(childItem4);
-	QStandardItem *image1 = new QStandardItem(QStringLiteral("Í¼Ïñ1"));
-	QStandardItem *image2 = new QStandardItem(QStringLiteral("Í¼Ïñ2"));
-	QStandardItem *image3 = new QStandardItem(QStringLiteral("Í¼Ïñ3"));
-	QStandardItem *image4 = new QStandardItem(QStringLiteral("Í¼Ïñ4"));
-	QStandardItem *image5 = new QStandardItem(QStringLiteral("Í¼Ïñ5"));
-	childItem2->appendRow(image1);
-	childItem2->appendRow(image2);
-	childItem2->appendRow(image3);
-	childItem2->appendRow(image4);
-	childItem2->appendRow(image5);
-
+	//QStandardItem *image1 = new QStandardItem(QStringLiteral("Í¼Ïñ1"));
+	//QStandardItem *image2 = new QStandardItem(QStringLiteral("Í¼Ïñ2"));
+	//QStandardItem *image3 = new QStandardItem(QStringLiteral("Í¼Ïñ3"));
+	//QStandardItem *image4 = new QStandardItem(QStringLiteral("Í¼Ïñ4"));
+	//QStandardItem *image5 = new QStandardItem(QStringLiteral("Í¼Ïñ5"));
+	//childItem2->appendRow(image1);
+	//childItem2->appendRow(image2);
+	//childItem2->appendRow(image3);
+	//childItem2->appendRow(image4);
+	//childItem2->appendRow(image5);
 
 	//ÉèÖÃÐéÏß£¬ ¸øQTreeViewÓ¦ÓÃmodel
 	ui.treeViewProjects->setStyle(QStyleFactory::create("windows"));
@@ -136,7 +137,6 @@ void StructScan::InitialProjectTree()
 // ÊôÐÔ
 void StructScan::InitialPropertyTree()
 {
-	m_dbroot = new CDBRoot(ui.treeViewProjects, ui.treeViewProperty, this);
 
 }
 
@@ -188,7 +188,7 @@ void StructScan::onActionSetupProjectorClicked()
 
 void StructScan::onActionStartClicked()
 {
-	m_dbroot->updateObject();
+	//m_dbroot->updateObject();
 }
 
 void StructScan::onActionStopClicked()

@@ -3,16 +3,22 @@
 #include "CDBRoot.h"
 
 #include "CPropertyDelegate.h"
+#include "CPointCloudWnd.h"
 
 
-CDBRoot::CDBRoot(QTreeView* dbTreeWidget, QTreeView* propertiesTreeWidget, QWidget* parent)
+CDBRoot::CDBRoot(CPointCloudWnd *wnd, QTreeView* dbTreeWidget, QTreeView* propertiesTreeWidget, QWidget* parent)
 	: QWidget(parent)
 {
+	// window
+	assert(wnd);
+	m_wnd = wnd;
+
 	//DB Tree
 	assert(dbTreeWidget);
 	m_dbTreeWidget = dbTreeWidget;
 	//m_dbTreeWidget->setModel(this);
 	//m_dbTreeWidget->header()->hide();
+	connect(m_dbTreeWidget, SIGNAL(pressed(QModelIndex)), this, SLOT(slotDBselected(QModelIndex)));
 
 
 	//Properties Tree
@@ -33,6 +39,28 @@ CDBRoot::~CDBRoot()
 
 }
 
+// 选中DB 的某一行
+void CDBRoot::slotDBselected(QModelIndex modelIndex)
+{
+	m_dbTreeWidget->resizeColumnToContents(modelIndex.row());
+	QString selectedRowTxt = m_dbTreeWidget->model()->itemData(modelIndex).values()[0].toString();
+	//qDebug() << "pressed result = " << selectedRowTxt;
+
+	if (selectedRowTxt.compare(QStringLiteral("三维测量")) == 0) {
+		updateObjectProperty(0);
+	}
+	else if (selectedRowTxt.compare(QStringLiteral("设备")) == 0) {
+		updateObjectProperty(1);
+	}
+	else if (selectedRowTxt.compare(QStringLiteral("点云")) == 0) {
+		updateObjectProperty(2);
+	}
+	else if (selectedRowTxt.compare(QStringLiteral("网格")) == 0) {
+		updateObjectProperty(3);
+	}
+
+
+}
 
 void CDBRoot::initModel()
 {
@@ -41,27 +69,8 @@ void CDBRoot::initModel()
 
 	//const int col_count = 2;
 	//m_propertiesModel->setColumnCount(col_count);
-	m_propertiesModel->setHeaderData(0, Qt::Horizontal, tr("Property"));
-	m_propertiesModel->setHeaderData(1, Qt::Horizontal, tr("State/Value"));
-
-	//const int row_count = 5;
-	//m_propertiesModel->setRowCount(row_count);
-	//for (int row = 0; row < row_count; row++) {
-	//	for (int col = 0; col < col_count; col++) {
-	//		QStandardItem *item = new QStandardItem;
-	//		switch (col)
-	//		{
-	//		case 0:
-	//			item->setData(QString("NO:%1").arg(row + 1), Qt::DisplayRole);
-	//			break;
-	//		case 1:
-	//			item->setData(row * 3.1415926, Qt::DisplayRole);
-	//			break;
-	//		}
-	//		//m_propertiesModel->appendRow(item);
-	//		m_propertiesModel->setItem(row, col, item);
-	//	}
-	//}
+	m_propertiesModel->setHeaderData(0, Qt::Horizontal, QStringLiteral("属性"));
+	m_propertiesModel->setHeaderData(1, Qt::Horizontal, QStringLiteral("值"));
 
 	//view会根据model提供的数据来渲染
 	m_propertiesTreeWidget->setModel(m_propertiesModel);
@@ -71,10 +80,11 @@ void CDBRoot::initModel()
 void CDBRoot::initDelegate()
 {
 	m_propertiesDelegate = new CPropertyDelegate(m_propertiesModel, m_propertiesTreeWidget);
+	m_propertiesDelegate->m_wnd = this->m_wnd;
 	m_propertiesTreeWidget->setItemDelegate(m_propertiesDelegate);
 
-	connect(m_propertiesDelegate, &CPropertyDelegate::signalObjectPropertiesChanged, this, &CDBRoot::updateObject);
-	connect(m_propertiesDelegate, &CPropertyDelegate::signalObjectAppearanceChanged, this, &CDBRoot::redrawObject);
+	//connect(m_propertiesDelegate, &CPropertyDelegate::signalObjectPropertiesChanged, this, &CDBRoot::updateObject);
+	//connect(m_propertiesDelegate, &CPropertyDelegate::signalObjectAppearanceChanged, this, &CDBRoot::redrawObject);
 
 }
 
@@ -99,9 +109,10 @@ void CDBRoot::initOperate()
 }
 
 
-void CDBRoot::updateObject()
+void CDBRoot::updateObjectProperty(int objectCode)
 {
-	m_propertiesDelegate->updateModel();
+	m_propertiesDelegate->updateModel(objectCode);
+
 
 }
 

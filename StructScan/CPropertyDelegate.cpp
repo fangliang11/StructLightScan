@@ -1,4 +1,6 @@
+
 #include "CPropertyDelegate.h"
+#include "CPointCloudWnd.h"
 
 //System
 #include <cassert>
@@ -52,6 +54,14 @@ CPropertyDelegate::CPropertyDelegate(QStandardItemModel* _model, QAbstractItemVi
 	: m_model(_model), m_view(_view), QStyledItemDelegate(parent)
 {
 	assert(m_model && m_view);
+
+	m_nCurrentObject = NONE;
+	connect(this, &CPropertyDelegate::signalObjectVisibleState, this, &CPropertyDelegate::objectVisible);
+	connect(this, &CPropertyDelegate::signalCloudCoordinateDisplayState, this, &CPropertyDelegate::cloudCoordinateDisplay);
+	connect(this, &CPropertyDelegate::signalFilterEnable, this, &CPropertyDelegate::filterEnable);
+	connect(this, &CPropertyDelegate::signalRemoveOutlierEnable, this, &CPropertyDelegate::removeOutlierEnable);
+	connect(this, &CPropertyDelegate::signalSmoothEnable, this, &CPropertyDelegate::smoothEnable);
+
 }
 
 //析构函数
@@ -89,7 +99,7 @@ QWidget *CPropertyDelegate::createEditor(QWidget *parent, const QStyleOptionView
 	{
 	case OBJECT_CLOUD_POINT_SIZE: {
 		QComboBox *comboBox = new QComboBox(parent);
-		comboBox->addItem(tr(s_defaultPointSizeString));
+		//comboBox->addItem(tr(s_defaultPointSizeString));
 		for (int i = 1; i <= 15; i++) {
 			comboBox->addItem(QString::number(i));
 		}
@@ -104,7 +114,7 @@ QWidget *CPropertyDelegate::createEditor(QWidget *parent, const QStyleOptionView
 	}
 	case OBJECT_CLOUD_DISPLAY_COLOR: {
 		QComboBox *comboBox = new QComboBox(parent);
-		comboBox->addItem(tr(s_noneString));
+		comboBox->addItem(QString("Default"));
 		comboBox->addItem(QString("Gray"));
 		comboBox->addItem(QString("Blue"));
 		comboBox->addItem(QString("White"));
@@ -115,43 +125,81 @@ QWidget *CPropertyDelegate::createEditor(QWidget *parent, const QStyleOptionView
 	}
 	case OBJECT_FILTER_METHOD: {
 		QComboBox *comboBox = new QComboBox(parent);
-		comboBox->addItem(tr("Default"));
-		comboBox->addItem(QString("Method 1"));
-		comboBox->addItem(QString("Method 2"));
-		comboBox->addItem(QString("Method 3"));
+		comboBox->addItem(QStringLiteral("下采样"));
+		comboBox->addItem(QStringLiteral("均匀采样"));
+		comboBox->addItem(QStringLiteral("增采样"));
+		connect(comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &CPropertyDelegate::filterMethodChanged);
 		outputWidget = comboBox;
 		break;
 	}
-	case OBJECT_FILTER_SEARCH_RADIUS: {
+	case OBJECT_FILTER_PARAM1: {
 		QDoubleSpinBox* spinBox = new QDoubleSpinBox(parent);
 		spinBox->setDecimals(2);
 		spinBox->setRange(0.0, 100.0e2);
 		spinBox->setSingleStep(0.01);
+		connect(spinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &CPropertyDelegate::filterParam1Changed);
 		outputWidget = spinBox;
 		break;
 	}
-	case OBJECT_FILTER_LEAF_SIZE: {
+	case OBJECT_FILTER_PARAM2: {
 		QDoubleSpinBox *spinBox = new QDoubleSpinBox(parent);
 		spinBox->setDecimals(2);
-		spinBox->setRange(0.01, 100.0);
+		spinBox->setRange(0.01, 100.0e2);
 		spinBox->setSingleStep(0.01);
-		//connect(spinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-		//	this, &CPropertyDelegate::cloudPointSizeChanged);
+		connect(spinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &CPropertyDelegate::filterParam2Changed);
 		outputWidget = spinBox;
 		break;
 	}
-	case OBJECT_FILTER_MEAN_K: {
-		QSpinBox *spinBox = new QSpinBox(parent);
-		spinBox->setRange(1, 1000);
-		spinBox->setSingleStep(1);
-		outputWidget = spinBox;
-		break;
-	}
-	case OBJECT_FILTER_MULTY_THRESHOLD: {
+	case OBJECT_FILTER_PARAM3: {
 		QDoubleSpinBox *spinBox = new QDoubleSpinBox(parent);
 		spinBox->setDecimals(2);
-		spinBox->setRange(0.01, 10.0);
+		spinBox->setRange(0.01, 100.0e2);
 		spinBox->setSingleStep(0.01);
+		connect(spinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &CPropertyDelegate::filterParam3Changed);
+		outputWidget = spinBox;
+		break;
+	}
+	case OBJECT_REMOVE_OUTLIER_PARAM1: {
+		QDoubleSpinBox *spinBox = new QDoubleSpinBox(parent);
+		spinBox->setDecimals(2);
+		spinBox->setRange(0.01, 100.0e2);
+		spinBox->setSingleStep(0.01);
+		connect(spinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &CPropertyDelegate::removeOutlierParam1Changed);
+		outputWidget = spinBox;
+		break;
+	}
+	case OBJECT_REMOVE_OUTLIER_PARAM2: {
+		QDoubleSpinBox *spinBox = new QDoubleSpinBox(parent);
+		spinBox->setDecimals(2);
+		spinBox->setRange(0.01, 100.0e2);
+		spinBox->setSingleStep(0.01);
+		connect(spinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &CPropertyDelegate::removeOutlierParam2Changed);
+		outputWidget = spinBox;
+		break;
+	}
+	case OBJECT_SMOOTH_PARAM1: {
+		QDoubleSpinBox *spinBox = new QDoubleSpinBox(parent);
+		spinBox->setDecimals(2);
+		spinBox->setRange(0.01, 100.0e2);
+		spinBox->setSingleStep(0.01);
+		connect(spinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &CPropertyDelegate::smoothParam1Changed);
+		outputWidget = spinBox;
+		break;
+	}
+	case OBJECT_SMOOTH_PARAM2: {
+		QDoubleSpinBox *spinBox = new QDoubleSpinBox(parent);
+		spinBox->setDecimals(2);
+		spinBox->setRange(0.01, 100.0e2);
+		spinBox->setSingleStep(0.01);
+		connect(spinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &CPropertyDelegate::smoothParam2Changed);
 		outputWidget = spinBox;
 		break;
 	}
@@ -322,16 +370,25 @@ void CPropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index)
 	case OBJECT_FILTER_METHOD:
 		SetComboBoxIndex(editor, static_cast<int>(0));
 		break;
-	case OBJECT_FILTER_SEARCH_RADIUS:
-		SetDoubleSpinBoxValue(editor, static_cast<double>(2.5));
-		break;
-	case OBJECT_FILTER_LEAF_SIZE:
+	case OBJECT_FILTER_PARAM1:
 		SetDoubleSpinBoxValue(editor, static_cast<double>(0.01));
 		break;
-	case OBJECT_FILTER_MEAN_K:
-		SetSpinBoxValue(editor, static_cast<int>(50));
+	case OBJECT_FILTER_PARAM2:
+		SetDoubleSpinBoxValue(editor, static_cast<double>(0.5));
 		break;
-	case OBJECT_FILTER_MULTY_THRESHOLD:
+	case OBJECT_FILTER_PARAM3:
+		SetDoubleSpinBoxValue(editor, static_cast<double>(0.01));
+		break;
+	case OBJECT_REMOVE_OUTLIER_PARAM1:
+		SetDoubleSpinBoxValue(editor, static_cast<double>(50.0));
+		break;
+	case OBJECT_REMOVE_OUTLIER_PARAM2:
+		SetDoubleSpinBoxValue(editor, static_cast<double>(1.0));
+		break;
+	case OBJECT_SMOOTH_PARAM1:
+		SetDoubleSpinBoxValue(editor, static_cast<double>(0.05));
+		break;
+	case OBJECT_SMOOTH_PARAM2:
 		SetDoubleSpinBoxValue(editor, static_cast<double>(1.0));
 		break;
 	case OBJECT_REBUILD_METHOD:
@@ -429,26 +486,55 @@ void CPropertyDelegate::updateItem(QStandardItem * item)
 		//m_currentObject->setName(item->text());
 		//emit ccObjectPropertiesChanged(m_currentObject);
 		break;
-	case OBJECT_VISIBILITY: {
+	case OBJECT_VISIBILITY:	{
+		bool state = false;
 		if (item->checkState() == Qt::Checked)
-			qDebug() << "checked";
+			state = true;
 		else
-			qDebug() << "cancel check";
-		//emit ccObjectAppearanceChanged(m_currentObject);
+			state = false;
+		emit signalObjectVisibleState(state);
 		break;
 	}
-	case OBJECT_CLOUD_COORDINATE:
+	case OBJECT_CLOUD_COORDINATE: {
+		bool state = false;
 		if (item->checkState() == Qt::Checked)
-			qDebug() << "checked";
+			state = true;
 		else
-			qDebug() << "cancel check";
-		//emit ccObjectAppearanceChanged(m_currentObject);
+			state = false;
+		emit signalCloudCoordinateDisplayState(state);
 		break;
+	}
+	case OBJECT_FILTER_STATE: {
+		bool state = false;
+		if (item->checkState() == Qt::Checked)
+			state = true;
+		else
+			state = false;
+		emit signalFilterEnable(state);
+		break;
+	}	
+	case OBJECT_REMOVE_OUTLIER_STATE: {
+		bool state = false;
+		if (item->checkState() == Qt::Checked)
+			state = true;
+		else
+			state = false;
+		emit signalRemoveOutlierEnable(state);
+		break;
+	}
+	case OBJECT_SMOOTH_STATE: {
+		bool state = false;
+		if (item->checkState() == Qt::Checked)
+			state = true;
+		else
+			state = false;
+		emit signalSmoothEnable(state);
+		break;
+	}
 	default:break;
 	}
 
-	if (redraw)
-	{
+	if (redraw)	{
 		updateDisplay();
 	}
 }
@@ -460,9 +546,11 @@ void CPropertyDelegate::updateDisplay()
 }
 
 
-void CPropertyDelegate::updateModel()
+void CPropertyDelegate::updateModel(int objectCode)
 {
-	fillModel(1);
+	m_nCurrentObject = objectCode;
+
+	fillModel();
 }
 
 
@@ -498,25 +586,39 @@ void CPropertyDelegate::appendRow(QStandardItem* leftItem, QStandardItem* rightI
 	}
 }
 
-void CPropertyDelegate::fillModel(int object_code)
+void CPropertyDelegate::clearModel()
 {
 	assert(m_model);
 
-	switch (object_code)
+	//m_model->clear();
+	for (;;) {
+		if (m_model->rowCount() > 0)
+			m_model->removeRow(0);
+		else
+			break;
+	}
+}
+
+void CPropertyDelegate::fillModel()
+{
+	assert(m_model);
+
+	clearModel();
+	switch (m_nCurrentObject)
 	{
-	case 0:
+	case NONE:
+		break;
+	case DEVICE:
 		fillModelWithObject();
 		break;
-	case 1:
+	case CLOUD:
 		fillModelWithCloud();
-		break;
-	case 2:
 		fillModelWithFiltered();
+		fillModelWithCloudRemoveOutlier();
+		fillModelWithCloudSmooth();
 		break;
-	case 3:
+	case MESH:
 		fillModelWithRebuild();
-		break;
-	case 4:
 		fillModelWithMesh();
 		break;
 	default:break;
@@ -531,7 +633,7 @@ void CPropertyDelegate::fillModelWithObject()
 {
 	assert(m_model);
 
-	addSeparator("object property");
+	addSeparator(QStringLiteral("设备"));
 
 	appendRow(ITEM(tr("Name")), ITEM(tr("test object name"), Qt::ItemIsEditable, OBJECT_NAME));
 
@@ -545,45 +647,63 @@ void CPropertyDelegate::fillModelWithCloud()
 {
 	assert(m_model);
 
-	fillModelWithObject();
+	addSeparator(QStringLiteral("点云"));
 
-	addSeparator("Cloud");
-
-	appendRow(ITEM(tr("Points")), ITEM(tr("99999"), Qt::ItemIsEditable, OBJECT_CLOUD_POINTS));
+	unsigned number = 0;
+	assert(m_wnd);
+	m_wnd->getCloudPointNumbers(number);
+	appendRow(ITEM(tr("Points")), ITEM(QString::number(number), Qt::ItemIsEditable, OBJECT_CLOUD_POINTS));
 
 	appendRow(ITEM(tr("Point size")), PERSISTENT_EDITOR(OBJECT_CLOUD_POINT_SIZE), true);
 
 	appendRow(ITEM(tr("Color")), PERSISTENT_EDITOR(OBJECT_CLOUD_DISPLAY_COLOR), true);
 
-	appendRow(ITEM(tr("Coordinate")), CHECKABLE_ITEM(true, OBJECT_CLOUD_COORDINATE));
+	appendRow(ITEM(tr("Coordinate")), CHECKABLE_ITEM(false, OBJECT_CLOUD_COORDINATE));
 }
 
 void CPropertyDelegate::fillModelWithFiltered()
 {
 	assert(m_model);
 
-	fillModelWithCloud();
+	addSeparator(QStringLiteral("点云滤波"));
 
-	addSeparator("Filter");
+	appendRow(ITEM(tr("Enable")), CHECKABLE_ITEM(false, OBJECT_FILTER_STATE));
 
 	appendRow(ITEM(tr("Method")), PERSISTENT_EDITOR(OBJECT_FILTER_METHOD), true);
 
-	appendRow(ITEM(tr("Search Radius")), PERSISTENT_EDITOR(OBJECT_FILTER_SEARCH_RADIUS), true);
+	appendRow(ITEM(tr("Parament1")), PERSISTENT_EDITOR(OBJECT_FILTER_PARAM1), true);
 
-	appendRow(ITEM(tr("Leaf Size")), PERSISTENT_EDITOR(OBJECT_FILTER_LEAF_SIZE), false);
+	appendRow(ITEM(tr("Parament2")), PERSISTENT_EDITOR(OBJECT_FILTER_PARAM2), true);
 
-	appendRow(ITEM(tr("Mean K")), PERSISTENT_EDITOR(OBJECT_FILTER_MEAN_K), false);
-
-	appendRow(ITEM(tr("Multy Threshold")), PERSISTENT_EDITOR(OBJECT_FILTER_MULTY_THRESHOLD), false);
-
-	appendRow(ITEM(tr("Polynomial Fit")), CHECKABLE_ITEM(true, OBJECT_FILTER_POLYNOMIAL_FIT));
+	appendRow(ITEM(tr("Parament3")), PERSISTENT_EDITOR(OBJECT_FILTER_PARAM3), true);
 }
+
+void CPropertyDelegate::fillModelWithCloudRemoveOutlier()
+{
+	assert(m_model);
+	addSeparator(QStringLiteral("点云移除离群点"));
+	appendRow(ITEM(tr("Enable")), CHECKABLE_ITEM(false, OBJECT_REMOVE_OUTLIER_STATE));
+	appendRow(ITEM(tr("Mean K")), PERSISTENT_EDITOR(OBJECT_REMOVE_OUTLIER_PARAM1), true);
+	appendRow(ITEM(tr("Standard Deviation")), PERSISTENT_EDITOR(OBJECT_REMOVE_OUTLIER_PARAM2), true);
+
+}
+
+void CPropertyDelegate::fillModelWithCloudSmooth()
+{
+	assert(m_model);
+	addSeparator(QStringLiteral("点云平滑"));
+	appendRow(ITEM(tr("Enable")), CHECKABLE_ITEM(false, OBJECT_SMOOTH_STATE));
+	appendRow(ITEM(tr("Search Radius")), PERSISTENT_EDITOR(OBJECT_SMOOTH_PARAM1), true);
+	appendRow(ITEM(tr("Parament2")), PERSISTENT_EDITOR(OBJECT_SMOOTH_PARAM2), true);
+
+}
+
 
 void CPropertyDelegate::fillModelWithRebuild()
 {
 	assert(m_model);
 
-	addSeparator("Rebuild");
+	addSeparator(QStringLiteral("三维重建"));
 
 	appendRow(ITEM(tr("Method")), PERSISTENT_EDITOR(OBJECT_REBUILD_METHOD), true);
 
@@ -610,7 +730,7 @@ void CPropertyDelegate::fillModelWithMesh()
 {
 	assert(m_model);
 
-	addSeparator("Mesh");
+	addSeparator(QStringLiteral("网格"));
 
 	appendRow(ITEM(tr("Name")), ITEM(tr("mesh name"), Qt::ItemIsEditable, OBJECT_MESH_NAME));
 
@@ -621,15 +741,152 @@ void CPropertyDelegate::fillModelWithMesh()
 }
 
 //*****************************************************SLOT******************************//
+void CPropertyDelegate::objectVisible(bool state)
+{
+
+}
 
 void CPropertyDelegate::cloudPointSizeChanged(int index)
 {
-	qDebug() << QString("selected point size = %1").append(index);
-}
+	//qDebug() << "pointsize change to " << index + 1;
+	if (m_nCurrentObject == NONE)
+		return;
 
+	double point_size = 0.0;
+	m_wnd->getCloudPointSize(point_size);
+	if (point_size != 0 && (int)point_size != index + 1) {
+		m_wnd->setCloudPointSize(index + 1);
+	}
+
+}
 
 void CPropertyDelegate::cloudColorChanged(int index)
 {
-	qDebug() << QString("selected color = %1").append(index);
+	if (m_nCurrentObject == NONE)
+		return;
 
+	assert(m_wnd);
+	m_wnd->setCloudPointColor(index);
 }
+
+void CPropertyDelegate::cloudCoordinateDisplay(bool state)
+{
+	if (m_nCurrentObject == NONE)
+		return;
+	m_wnd->displayCoordinate(state);
+}
+
+void CPropertyDelegate::filterEnable(bool state)
+{
+	if (m_nCurrentObject == NONE)
+		return;
+	m_wnd->filterEnable(state);
+}
+
+void CPropertyDelegate::filterMethodChanged(int index)
+{
+	qDebug() << "filter method = " << index;
+	if (m_nCurrentObject == NONE)
+		return;
+	m_wnd->filterMethod(index);
+}
+
+void CPropertyDelegate::filterParam1Changed(double value)
+{
+	qDebug() << "filter param1 = " << value;
+	if (m_nCurrentObject == NONE)
+		return;
+
+	float param1 = 0.0f, param2 = 0.0f, param3 = 0.0f;
+	m_wnd->getFilterParams(param1, param2, param3);
+	if (value != (double)param1)
+		m_wnd->setFilterParams((float)value, param2, param3);
+}
+
+void CPropertyDelegate::filterParam2Changed(double value)
+{
+	qDebug() << "filter param2 = " << value;
+	if (m_nCurrentObject == NONE)
+		return;
+
+	float param1 = 0.0f, param2 = 0.0f, param3 = 0.0f;
+	m_wnd->getFilterParams(param1, param2, param3);
+	if (value != (double)param2)
+		m_wnd->setFilterParams(param1, (float)value, param3);
+}
+
+void CPropertyDelegate::filterParam3Changed(double value)
+{
+	qDebug() << "filter param3 = " << value;
+	if (m_nCurrentObject == NONE)
+		return;
+
+	float param1 = 0.0f, param2 = 0.0f, param3 = 0.0f;
+	m_wnd->getFilterParams(param1, param2, param3);
+	if (value != (double)param3)
+		m_wnd->setFilterParams(param1, param2, (float)value);
+}
+
+void CPropertyDelegate::removeOutlierEnable(bool state)
+{
+	qDebug() << "remove Outlier enable = " << state;
+	if (m_nCurrentObject == NONE)
+		return;
+	m_wnd->removeOutlierEnable(state);
+}
+
+void CPropertyDelegate::removeOutlierParam1Changed(double value)
+{
+	qDebug() << "remove Outlier param1 = " << value;
+	if (m_nCurrentObject == NONE)
+		return;
+	float param1 = 0.0f, param2 = 0.0f;
+	m_wnd->getRemoveOutlierParams(param1, param2);
+	if (value != (double)param1)
+		m_wnd->setRemoveOutlierParams((float)value, param2);
+}
+
+void CPropertyDelegate::removeOutlierParam2Changed(double value) 
+{
+	qDebug() << "remove Outlier param2 = " << value;
+	if (m_nCurrentObject == NONE)
+		return;
+
+	float param1 = 0.0f, param2 = 0.0f;
+	m_wnd->getRemoveOutlierParams(param1, param2);
+	if (value != (double)param2)
+		m_wnd->setRemoveOutlierParams(param1, (float)value);
+}
+
+void CPropertyDelegate::smoothEnable(bool state) 
+{
+	qDebug() << "smooth enable = " << state;
+	if (m_nCurrentObject == NONE)
+		return;
+	m_wnd->smoothEnable(state);
+}
+
+void CPropertyDelegate::smoothParam1Changed(double value) 
+{
+	qDebug() << "smooth param1 = " << value;
+	if (m_nCurrentObject == NONE)
+		return;
+
+	float param1 = 0.0f, param2 = 0.0f;
+	m_wnd->getSmoothParams(param1, param2);
+	if (value != (double)param1)
+		m_wnd->setSmoothParams((float)value, param2);
+}
+
+void CPropertyDelegate::smoothParam2Changed(double value)
+{
+	qDebug() << "smooth param2 = " << value;
+	if (m_nCurrentObject == NONE)
+		return;
+
+	float param1 = 0.0f, param2 = 0.0f;
+	m_wnd->getSmoothParams(param1, param2);
+	if (value != (double)param2)
+		m_wnd->setSmoothParams(param1, (float)value);
+}
+
