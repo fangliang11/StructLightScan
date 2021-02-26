@@ -70,6 +70,7 @@ VTK_MODULE_INIT(vtkRenderingFreeType);
 #include <pcl/features/normal_3d.h>
 #include <pcl/surface/mls.h>
 #include <pcl/surface/gp3.h>
+#include <pcl/surface/processing.h>
 #include <pcl/surface/poisson.h>
 #include <pcl/surface/marching_cubes_hoppe.h>
 #include <pcl/surface/marching_cubes_rbf.h>
@@ -118,7 +119,9 @@ private:
 	vtkSmartPointer<vtkGenericOpenGLRenderWindow> m_renWnd;            //vtk渲染的窗口句柄
 	vtkSmartPointer<vtkRenderWindowInteractor> m_iren;                 //vtk交互的对象:鼠标、键盘
 	//vtkSmartPointer<vtkEventQtSlotConnect> m_vtkEventConnection;     //vtk与qt事件连接
-	vtkSmartPointer<vtkCamera> m_renCamera;
+	vtkSmartPointer<vtkLight> light_front;
+	vtkSmartPointer<vtkLight> light_back;
+	vtkSmartPointer<vtkCamera> camera;
 
 	std::string m_pcdPath;
 	bool b_rubber_band_selection_mode;
@@ -133,18 +136,21 @@ private:
 	bool m_bsmoothEnable;
 	float m_fsmoothParam1;
 	float m_fsmoothParam2;
+	int m_nRebuildMethod;
+	int m_nmeshSearchK;
+	float m_fmeshSearchRadius;
+	int m_nmeshMaxNeighbors;
 
 
 	void initialVtkWidget();
 	bool ResponseSignals(int code);
 	void AddCoordinateSystem();
 	void savePointCloudFile();
-	void saveMeshFile();
+	void importCloudPoint();
 	void displaySelectPCD();
 	void displaySphereVTK();
 	void displayPCDfile(std::string file_name);
 	void clearDisplayCloud();
-	void RebuildTest();
 	void filteredCloud(int method, pcl::PointCloud<pcl::PointXYZ>::Ptr *cloudIn, 
 		pcl::PointCloud<pcl::PointXYZ>::Ptr *cloudOut,
 		float param1, float param2, float param3);
@@ -154,12 +160,18 @@ private:
 	void smoothCloudPoints(pcl::PointCloud<pcl::PointXYZ>::Ptr *cloudIn,
 		pcl::PointCloud<pcl::PointXYZ>::Ptr *cloudOut,
 		float param1, float param2);
-	void buildMesh(pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud);
+	void calculatePointNormal(pcl::PointCloud<pcl::PointXYZ>::Ptr &cloudIn,
+		pcl::PointCloud<pcl::PointNormal>::Ptr &cloudNormal, int searchK);
+	void greedyProjectionTriangula(pcl::PointCloud<pcl::PointNormal>::Ptr &cloudNormal,
+		pcl::PolygonMesh &mesh, float searchRadius, int maxNeighbors);
+	void poissonRebuild(pcl::PointCloud<pcl::PointNormal>::Ptr &cloudNormal, pcl::PolygonMesh &mesh);
+	void buildMesh(pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud, pcl::PolygonMesh &mesh);
+	void saveMeshToPLY(const char* filename, pcl::PolygonMesh mesh);
 	void userSelect();
-	static void areaPickCallback(const pcl::visualization::AreaPickingEvent& event, void* args);
+	static void areaPickCallback(const pcl::visualization::AreaPickingEvent &event, void* args);
+	static void pointPickCallback(const pcl::visualization::PointPickingEvent &event, void *args);
 
 public:
-
 	void setProperties(int property, double value, const std::string &id);
 	void getCloudPointNumbers(unsigned &number);
 	void setCloudPointSize(int size);
@@ -176,6 +188,11 @@ public:
 	void smoothEnable(bool state);
 	void setSmoothParams(float param1, float param2);
 	void getSmoothParams(float &param1, float &param2);
+	void rebuildMethod(int index);
+	void setRebuildParams(int param1, float param2, int param3);
+	void getRebuildParams(int &param1, float &param2, int &param3);
+	void meshDisplayModel(int index);
+	void setMeshColor(int index);
 
 signals:
 	void signalUpdateCloudWnd();

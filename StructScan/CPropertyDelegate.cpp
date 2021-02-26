@@ -5,27 +5,13 @@
 //System
 #include <cassert>
 
-// 全局变量及函数
-
-// Default 'None' string
-const char* CPropertyDelegate::s_noneString = QT_TR_NOOP("None");
-// Default color sources string
-const char* CPropertyDelegate::s_rgbColor = "RGB";
-const char* CPropertyDelegate::s_sfColor = QT_TR_NOOP("Scalar field");
-// Other strings
-const char* CPropertyDelegate::s_defaultPointSizeString = QT_TR_NOOP("Default");
-const char* CPropertyDelegate::s_defaultPolyWidthSizeString = QT_TR_NOOP("Default Width");
-// Default separator colors
 constexpr const char* SEPARATOR_STYLESHEET = "QLabel { background-color : darkGray; color : white; }";
 
-//Shortcut to create a delegate item
 static QStandardItem* ITEM(const QString& name, Qt::ItemFlag additionalFlags = Qt::NoItemFlags,
 	CPropertyDelegate::PROPERTY_CODE role = CPropertyDelegate::OBJECT_NO_PROPERTY)
 {
 	QStandardItem* item = new QStandardItem(name);
-	//flags
 	item->setFlags(Qt::ItemIsEnabled | additionalFlags);
-	//role (if any)
 	if (role != CPropertyDelegate::OBJECT_NO_PROPERTY) {
 		item->setData(role);
 	}
@@ -33,17 +19,14 @@ static QStandardItem* ITEM(const QString& name, Qt::ItemFlag additionalFlags = Q
 	return item;
 }
 
-//Shortcut to create a checkable delegate item
 static QStandardItem* CHECKABLE_ITEM(bool checkState, CPropertyDelegate::PROPERTY_CODE role)
 {
 	QStandardItem* item = ITEM("", Qt::ItemIsUserCheckable, role);
-	//check state
 	item->setCheckState(checkState ? Qt::Checked : Qt::Unchecked);
 
 	return item;
 }
 
-//Shortcut to create a persistent editor item
 static QStandardItem* PERSISTENT_EDITOR(CPropertyDelegate::PROPERTY_CODE role)
 {
 	return ITEM(QString(), Qt::ItemIsEditable, role);
@@ -56,6 +39,27 @@ CPropertyDelegate::CPropertyDelegate(QStandardItemModel* _model, QAbstractItemVi
 	assert(m_model && m_view);
 
 	m_nCurrentObject = NONE;
+	m_nCloudPointSize = 0;
+	m_nCloudColor = 0;
+	m_bCloudCoordinate = false;
+	m_bFilterEnable = false;
+	m_nFilterMethod = 0;
+	m_fFilterParam1 = 0.01f;
+	m_fFilterParam2 = 0.01f;
+	m_fFilterParam3 = 0.01f;
+	m_bremoveOutlierEnable = false;
+	m_fremoveOutlierParam1 = 50.0f;
+	m_fremoveOutlierParam2 = 1.0f;
+	m_bsmoothEnable = false;
+	m_fsmoothParam1 = 0.05f;
+	m_fsmoothParam2 = 1.0f;
+	m_nrebuildMethod = 0;
+	m_nmeshSearchK = 20;
+	m_fmeshSearchRadius = 2.0f;
+	m_nmeshMaxNeighbors = 100;
+	m_nmeshDisplayModel = 0;
+	m_nmeshDisplayColor = 0;
+
 	connect(this, &CPropertyDelegate::signalObjectVisibleState, this, &CPropertyDelegate::objectVisible);
 	connect(this, &CPropertyDelegate::signalCloudCoordinateDisplayState, this, &CPropertyDelegate::cloudCoordinateDisplay);
 	connect(this, &CPropertyDelegate::signalFilterEnable, this, &CPropertyDelegate::filterEnable);
@@ -90,7 +94,6 @@ QWidget *CPropertyDelegate::createEditor(QWidget *parent, const QStyleOptionView
 
 	int itemData = item->data().toInt();
 	if (item->column() == 0) {
-		//on the first column, only editors spanning on 2 columns are allowed
 		return nullptr;
 	}
 
@@ -205,17 +208,20 @@ QWidget *CPropertyDelegate::createEditor(QWidget *parent, const QStyleOptionView
 	}
 	case OBJECT_REBUILD_METHOD: {
 		QComboBox *comboBox = new QComboBox(parent);
-		comboBox->addItem(tr("Default"));
-		comboBox->addItem(QString("Method 1"));
-		comboBox->addItem(QString("Method 2"));
-		comboBox->addItem(QString("Method 3"));
+		comboBox->addItem(QStringLiteral("GreedyProjectionTriangulation"));
+		comboBox->addItem(QStringLiteral("Poisson"));
+		comboBox->addItem(QStringLiteral("Method 3"));
+		connect(comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &CPropertyDelegate::meshBuildMethod);
 		outputWidget = comboBox;
 		break;
 	}
-	case OBJECT_REBUILD_NEAREST_K: {
+	case OBJECT_REBUILD_SEARCH_K: {
 		QSpinBox *spinBox = new QSpinBox(parent);
 		spinBox->setRange(1, 1000);
-		spinBox->setSingleStep(10);
+		spinBox->setSingleStep(1);
+		connect(spinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+			this, &CPropertyDelegate::meshSearchKChanged);
 		outputWidget = spinBox;
 		break;
 	}
@@ -224,67 +230,38 @@ QWidget *CPropertyDelegate::createEditor(QWidget *parent, const QStyleOptionView
 		spinBox->setDecimals(2);
 		spinBox->setRange(0.0, 100.0e2);
 		spinBox->setSingleStep(0.01);
+		connect(spinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &CPropertyDelegate::meshSearchRadiusChanged);
 		outputWidget = spinBox;
 		break;
 	}
-	case OBJECT_REBUILD_DISTANCE_MU: {
-		QDoubleSpinBox *spinBox = new QDoubleSpinBox(parent);
-		spinBox->setDecimals(1);
-		spinBox->setRange(0.1, 10.0);
-		spinBox->setSingleStep(0.1);
-		outputWidget = spinBox;
-		break;
-	}
-	case OBJECT_REBUILD_MAX_NEAREST_NEIGHBOR: {
+	case OBJECT_REBUILD_MAX_NEIGHBORS: {
 		QSpinBox *spinBox = new QSpinBox(parent);
 		spinBox->setRange(1, 1000);
-		spinBox->setSingleStep(10);
-		outputWidget = spinBox;
-		break;
-	}
-	case OBJECT_REBUILD_MAX_SURFACE_ANGLE: {
-		QSpinBox *spinBox = new QSpinBox(parent);
-		spinBox->setRange(0, 180);
-		spinBox->setSingleStep(5);
-		outputWidget = spinBox;
-		break;
-	}
-	case OBJECT_REBUILD_MIN_ANGLE: {
-		QSpinBox *spinBox = new QSpinBox(parent);
-		spinBox->setRange(0, 180);
-		spinBox->setSingleStep(5);
-		outputWidget = spinBox;
-		break;
-	}
-	case OBJECT_REBUILD_MAX_ANGLE: {
-		QSpinBox *spinBox = new QSpinBox(parent);
-		spinBox->setRange(0, 360);
-		spinBox->setSingleStep(5);
-		outputWidget = spinBox;
-		break;
-	}
-	case OBJECT_REBUILD_NORMAL_CONSISTENCY: {
-		QSpinBox *spinBox = new QSpinBox(parent);
-		spinBox->setRange(0, 360);
-		spinBox->setSingleStep(5);
+		spinBox->setSingleStep(2);
+		connect(spinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+			this, &CPropertyDelegate::meshMaxNeighbors);
 		outputWidget = spinBox;
 		break;
 	}
 	case OBJECT_MESH_DISPLAY_TYPE: {
 		QComboBox *comboBox = new QComboBox(parent);
-		comboBox->addItem(tr(s_noneString));
 		comboBox->addItem(QString("Surface"));
-		comboBox->addItem(QString("WireFrame"));
 		comboBox->addItem(QString("Point"));
+		comboBox->addItem(QString("WireFrame"));
+		connect(comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &CPropertyDelegate::meshDisplayModel);
 		outputWidget = comboBox;
 		break;
 	}
 	case OBJECT_MESH_DISPLAY_COLOR: {
 		QComboBox *comboBox = new QComboBox(parent);
-		comboBox->addItem(tr(s_noneString));
-		comboBox->addItem(QString("Gray"));
+		comboBox->addItem(QString("Default"));
+		comboBox->addItem(QString("Red"));
+		comboBox->addItem(QString("Green"));
 		comboBox->addItem(QString("Blue"));
-		comboBox->addItem(QString("White"));
+		connect(comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &CPropertyDelegate::meshColor);
 		outputWidget = comboBox;
 		break;
 	}
@@ -296,7 +273,6 @@ QWidget *CPropertyDelegate::createEditor(QWidget *parent, const QStyleOptionView
 		//headerLabel->setAutoFillBackground(true);
 		//headerLabel->setPalette(palette);
 
-		//no signal connection, it's a display-only widget
 		outputWidget = headerLabel;
 		break;
 	}
@@ -354,72 +330,53 @@ void CPropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index)
 
 	switch (item->data().toInt())
 	{
-	case OBJECT_CLOUD_POINT_SIZE: {
-		//ccGenericPointCloud* cloud = ccHObjectCaster::ToGenericPointCloud(m_currentObject);
-		//assert(cloud);
-		//if (!cloud){
-		//	return;
-		//}
-		//SetComboBoxIndex(editor, static_cast<int>(cloud->getPointSize()));
-		SetComboBoxIndex(editor, static_cast<int>(0));
+	case OBJECT_CLOUD_POINT_SIZE: 
+		SetComboBoxIndex(editor, static_cast<int>(m_nCloudPointSize));
 		break;
-	}
 	case OBJECT_CLOUD_DISPLAY_COLOR:
-		SetComboBoxIndex(editor, static_cast<int>(0));
+		SetComboBoxIndex(editor, static_cast<int>(m_nCloudColor));
 		break;
 	case OBJECT_FILTER_METHOD:
-		SetComboBoxIndex(editor, static_cast<int>(0));
+		SetComboBoxIndex(editor, static_cast<int>(m_nFilterMethod));
 		break;
 	case OBJECT_FILTER_PARAM1:
-		SetDoubleSpinBoxValue(editor, static_cast<double>(0.01));
+		SetDoubleSpinBoxValue(editor, static_cast<double>(m_fFilterParam1));
 		break;
 	case OBJECT_FILTER_PARAM2:
-		SetDoubleSpinBoxValue(editor, static_cast<double>(0.5));
+		SetDoubleSpinBoxValue(editor, static_cast<double>(m_fFilterParam2));
 		break;
 	case OBJECT_FILTER_PARAM3:
-		SetDoubleSpinBoxValue(editor, static_cast<double>(0.01));
+		SetDoubleSpinBoxValue(editor, static_cast<double>(m_fFilterParam3));
 		break;
 	case OBJECT_REMOVE_OUTLIER_PARAM1:
-		SetDoubleSpinBoxValue(editor, static_cast<double>(50.0));
+		SetDoubleSpinBoxValue(editor, static_cast<double>(m_fremoveOutlierParam1));
 		break;
 	case OBJECT_REMOVE_OUTLIER_PARAM2:
-		SetDoubleSpinBoxValue(editor, static_cast<double>(1.0));
+		SetDoubleSpinBoxValue(editor, static_cast<double>(m_fremoveOutlierParam2));
 		break;
 	case OBJECT_SMOOTH_PARAM1:
-		SetDoubleSpinBoxValue(editor, static_cast<double>(0.05));
+		SetDoubleSpinBoxValue(editor, static_cast<double>(m_fsmoothParam1));
 		break;
 	case OBJECT_SMOOTH_PARAM2:
-		SetDoubleSpinBoxValue(editor, static_cast<double>(1.0));
+		SetDoubleSpinBoxValue(editor, static_cast<double>(m_fsmoothParam2));
 		break;
 	case OBJECT_REBUILD_METHOD:
-		SetComboBoxIndex(editor, static_cast<int>(0));
+		SetComboBoxIndex(editor, static_cast<int>(m_nrebuildMethod));
 		break;
-	case OBJECT_REBUILD_NEAREST_K:
-		SetSpinBoxValue(editor, static_cast<int>(20));
+	case OBJECT_REBUILD_SEARCH_K:
+		SetSpinBoxValue(editor, static_cast<int>(m_nmeshSearchK));
 		break;
 	case OBJECT_REBUILD_SEARCH_RADIUS:
-		SetDoubleSpinBoxValue(editor, static_cast<double>(2.0));
+		SetDoubleSpinBoxValue(editor, static_cast<double>(m_fmeshSearchRadius));
 		break;
-	case OBJECT_REBUILD_DISTANCE_MU:
-		SetDoubleSpinBoxValue(editor, static_cast<double>(2.5));
-		break;
-	case OBJECT_REBUILD_MAX_NEAREST_NEIGHBOR:
-		SetSpinBoxValue(editor, static_cast<int>(100));
-		break;
-	case OBJECT_REBUILD_MAX_SURFACE_ANGLE:
-		SetSpinBoxValue(editor, static_cast<int>(45));
-		break;
-	case OBJECT_REBUILD_MIN_ANGLE:
-		SetSpinBoxValue(editor, static_cast<int>(10));
-		break;
-	case OBJECT_REBUILD_MAX_ANGLE:
-		SetSpinBoxValue(editor, static_cast<int>(120));
+	case OBJECT_REBUILD_MAX_NEIGHBORS:
+		SetSpinBoxValue(editor, static_cast<int>(m_nmeshMaxNeighbors));
 		break;
 	case OBJECT_MESH_DISPLAY_TYPE:
-		SetComboBoxIndex(editor, static_cast<int>(0));
+		SetComboBoxIndex(editor, static_cast<int>(m_nmeshDisplayModel));
 		break;
 	case OBJECT_MESH_DISPLAY_COLOR:
-		SetComboBoxIndex(editor, static_cast<int>(0));
+		SetComboBoxIndex(editor, static_cast<int>(m_nmeshDisplayColor));
 		break;
 	case TREE_VIEW_HEADER: {
 		QLabel* label = qobject_cast<QLabel*>(editor);
@@ -568,7 +525,6 @@ void CPropertyDelegate::addSeparator(const QString& title)
 	}
 }
 
-
 void CPropertyDelegate::appendRow(QStandardItem* leftItem, QStandardItem* rightItem, bool openPersistentEditor = false)
 {
 	assert(leftItem && rightItem);
@@ -584,6 +540,7 @@ void CPropertyDelegate::appendRow(QStandardItem* leftItem, QStandardItem* rightI
 			m_view->openPersistentEditor(m_model->index(m_model->rowCount() - 1, 1));
 		}
 	}
+
 }
 
 void CPropertyDelegate::clearModel()
@@ -635,9 +592,9 @@ void CPropertyDelegate::fillModelWithObject()
 
 	addSeparator(QStringLiteral("设备"));
 
-	appendRow(ITEM(tr("Name")), ITEM(tr("test object name"), Qt::ItemIsEditable, OBJECT_NAME));
+	appendRow(ITEM(tr("Camera")), ITEM(tr("test object name"), Qt::ItemIsEditable, OBJECT_NAME));
 
-	appendRow(ITEM(tr("Info")), ITEM(tr("Information of object"), Qt::ItemIsEditable, OBJECT_INFO));
+	appendRow(ITEM(tr("Projection")), ITEM(tr("Information of object"), Qt::ItemIsEditable, OBJECT_INFO));
 
 	//appendRow(ITEM(tr("Visible")), PERSISTENT_EDITOR(OBJECT_VISIBILITY), false);
 	appendRow(ITEM(tr("Visible")), CHECKABLE_ITEM(true, OBJECT_VISIBILITY));
@@ -658,7 +615,7 @@ void CPropertyDelegate::fillModelWithCloud()
 
 	appendRow(ITEM(tr("Color")), PERSISTENT_EDITOR(OBJECT_CLOUD_DISPLAY_COLOR), true);
 
-	appendRow(ITEM(tr("Coordinate")), CHECKABLE_ITEM(false, OBJECT_CLOUD_COORDINATE));
+	appendRow(ITEM(tr("Coordinate")), CHECKABLE_ITEM(m_bCloudCoordinate, OBJECT_CLOUD_COORDINATE));
 }
 
 void CPropertyDelegate::fillModelWithFiltered()
@@ -667,7 +624,7 @@ void CPropertyDelegate::fillModelWithFiltered()
 
 	addSeparator(QStringLiteral("点云滤波"));
 
-	appendRow(ITEM(tr("Enable")), CHECKABLE_ITEM(false, OBJECT_FILTER_STATE));
+	appendRow(ITEM(tr("Enable")), CHECKABLE_ITEM(m_bFilterEnable, OBJECT_FILTER_STATE));
 
 	appendRow(ITEM(tr("Method")), PERSISTENT_EDITOR(OBJECT_FILTER_METHOD), true);
 
@@ -682,7 +639,7 @@ void CPropertyDelegate::fillModelWithCloudRemoveOutlier()
 {
 	assert(m_model);
 	addSeparator(QStringLiteral("点云移除离群点"));
-	appendRow(ITEM(tr("Enable")), CHECKABLE_ITEM(false, OBJECT_REMOVE_OUTLIER_STATE));
+	appendRow(ITEM(tr("Enable")), CHECKABLE_ITEM(m_bremoveOutlierEnable, OBJECT_REMOVE_OUTLIER_STATE));
 	appendRow(ITEM(tr("Mean K")), PERSISTENT_EDITOR(OBJECT_REMOVE_OUTLIER_PARAM1), true);
 	appendRow(ITEM(tr("Standard Deviation")), PERSISTENT_EDITOR(OBJECT_REMOVE_OUTLIER_PARAM2), true);
 
@@ -692,38 +649,20 @@ void CPropertyDelegate::fillModelWithCloudSmooth()
 {
 	assert(m_model);
 	addSeparator(QStringLiteral("点云平滑"));
-	appendRow(ITEM(tr("Enable")), CHECKABLE_ITEM(false, OBJECT_SMOOTH_STATE));
+	appendRow(ITEM(tr("Enable")), CHECKABLE_ITEM(m_bsmoothEnable, OBJECT_SMOOTH_STATE));
 	appendRow(ITEM(tr("Search Radius")), PERSISTENT_EDITOR(OBJECT_SMOOTH_PARAM1), true);
 	appendRow(ITEM(tr("Parament2")), PERSISTENT_EDITOR(OBJECT_SMOOTH_PARAM2), true);
 
 }
 
-
 void CPropertyDelegate::fillModelWithRebuild()
 {
 	assert(m_model);
-
 	addSeparator(QStringLiteral("三维重建"));
-
 	appendRow(ITEM(tr("Method")), PERSISTENT_EDITOR(OBJECT_REBUILD_METHOD), true);
-
-	appendRow(ITEM(tr("Nearest K")), PERSISTENT_EDITOR(OBJECT_REBUILD_NEAREST_K), false);
-
-	appendRow(ITEM(tr("Search Radius")), PERSISTENT_EDITOR(OBJECT_REBUILD_SEARCH_RADIUS), false);
-
-	appendRow(ITEM(tr("Distance Mu")), PERSISTENT_EDITOR(OBJECT_REBUILD_DISTANCE_MU), false);
-
-	appendRow(ITEM(tr("Max NearestNeighbor")), PERSISTENT_EDITOR(OBJECT_REBUILD_MAX_NEAREST_NEIGHBOR), false);
-
-	appendRow(ITEM(tr("Max Surface angle")), PERSISTENT_EDITOR(OBJECT_REBUILD_MAX_SURFACE_ANGLE), false);
-
-	appendRow(ITEM(tr("Min angle")), PERSISTENT_EDITOR(OBJECT_REBUILD_MIN_ANGLE), false);
-
-	appendRow(ITEM(tr("Max angle")), PERSISTENT_EDITOR(OBJECT_REBUILD_MAX_ANGLE), false);
-
-
-	appendRow(ITEM(tr("Normal Consistency")), CHECKABLE_ITEM(false, OBJECT_REBUILD_NORMAL_CONSISTENCY));
-
+	appendRow(ITEM(tr("Search K")), PERSISTENT_EDITOR(OBJECT_REBUILD_SEARCH_K), true);
+	appendRow(ITEM(tr("Search Radius")), PERSISTENT_EDITOR(OBJECT_REBUILD_SEARCH_RADIUS), true);
+	appendRow(ITEM(tr("Max NearestNeighbor")), PERSISTENT_EDITOR(OBJECT_REBUILD_MAX_NEIGHBORS), true);
 }
 
 void CPropertyDelegate::fillModelWithMesh()
@@ -751,21 +690,19 @@ void CPropertyDelegate::cloudPointSizeChanged(int index)
 	//qDebug() << "pointsize change to " << index + 1;
 	if (m_nCurrentObject == NONE)
 		return;
-
+	m_nCloudPointSize = index;
 	double point_size = 0.0;
 	m_wnd->getCloudPointSize(point_size);
 	if (point_size != 0 && (int)point_size != index + 1) {
 		m_wnd->setCloudPointSize(index + 1);
 	}
-
 }
 
 void CPropertyDelegate::cloudColorChanged(int index)
 {
 	if (m_nCurrentObject == NONE)
 		return;
-
-	assert(m_wnd);
+	m_nCloudColor = index;
 	m_wnd->setCloudPointColor(index);
 }
 
@@ -773,6 +710,7 @@ void CPropertyDelegate::cloudCoordinateDisplay(bool state)
 {
 	if (m_nCurrentObject == NONE)
 		return;
+	m_bCloudCoordinate = state;
 	m_wnd->displayCoordinate(state);
 }
 
@@ -780,23 +718,25 @@ void CPropertyDelegate::filterEnable(bool state)
 {
 	if (m_nCurrentObject == NONE)
 		return;
+	m_bFilterEnable = state;
 	m_wnd->filterEnable(state);
 }
 
 void CPropertyDelegate::filterMethodChanged(int index)
 {
-	qDebug() << "filter method = " << index;
+	//qDebug() << "filter method = " << index;
 	if (m_nCurrentObject == NONE)
 		return;
+	m_nFilterMethod = index;
 	m_wnd->filterMethod(index);
 }
 
 void CPropertyDelegate::filterParam1Changed(double value)
 {
-	qDebug() << "filter param1 = " << value;
+	//qDebug() << "filter param1 = " << value;
 	if (m_nCurrentObject == NONE)
 		return;
-
+	m_fFilterParam1 = value;
 	float param1 = 0.0f, param2 = 0.0f, param3 = 0.0f;
 	m_wnd->getFilterParams(param1, param2, param3);
 	if (value != (double)param1)
@@ -805,10 +745,10 @@ void CPropertyDelegate::filterParam1Changed(double value)
 
 void CPropertyDelegate::filterParam2Changed(double value)
 {
-	qDebug() << "filter param2 = " << value;
+	//qDebug() << "filter param2 = " << value;
 	if (m_nCurrentObject == NONE)
 		return;
-
+	m_fFilterParam2 = value;
 	float param1 = 0.0f, param2 = 0.0f, param3 = 0.0f;
 	m_wnd->getFilterParams(param1, param2, param3);
 	if (value != (double)param2)
@@ -817,10 +757,10 @@ void CPropertyDelegate::filterParam2Changed(double value)
 
 void CPropertyDelegate::filterParam3Changed(double value)
 {
-	qDebug() << "filter param3 = " << value;
+	//qDebug() << "filter param3 = " << value;
 	if (m_nCurrentObject == NONE)
 		return;
-
+	m_fFilterParam3 = value;
 	float param1 = 0.0f, param2 = 0.0f, param3 = 0.0f;
 	m_wnd->getFilterParams(param1, param2, param3);
 	if (value != (double)param3)
@@ -829,17 +769,19 @@ void CPropertyDelegate::filterParam3Changed(double value)
 
 void CPropertyDelegate::removeOutlierEnable(bool state)
 {
-	qDebug() << "remove Outlier enable = " << state;
+	//qDebug() << "remove Outlier enable = " << state;
 	if (m_nCurrentObject == NONE)
 		return;
+	m_bremoveOutlierEnable = state;
 	m_wnd->removeOutlierEnable(state);
 }
 
 void CPropertyDelegate::removeOutlierParam1Changed(double value)
 {
-	qDebug() << "remove Outlier param1 = " << value;
+	//qDebug() << "remove Outlier param1 = " << value;
 	if (m_nCurrentObject == NONE)
 		return;
+	m_fremoveOutlierParam1 = value;
 	float param1 = 0.0f, param2 = 0.0f;
 	m_wnd->getRemoveOutlierParams(param1, param2);
 	if (value != (double)param1)
@@ -848,10 +790,10 @@ void CPropertyDelegate::removeOutlierParam1Changed(double value)
 
 void CPropertyDelegate::removeOutlierParam2Changed(double value) 
 {
-	qDebug() << "remove Outlier param2 = " << value;
+	//qDebug() << "remove Outlier param2 = " << value;
 	if (m_nCurrentObject == NONE)
 		return;
-
+	m_fremoveOutlierParam2 = value;
 	float param1 = 0.0f, param2 = 0.0f;
 	m_wnd->getRemoveOutlierParams(param1, param2);
 	if (value != (double)param2)
@@ -860,18 +802,19 @@ void CPropertyDelegate::removeOutlierParam2Changed(double value)
 
 void CPropertyDelegate::smoothEnable(bool state) 
 {
-	qDebug() << "smooth enable = " << state;
+	//qDebug() << "smooth enable = " << state;
 	if (m_nCurrentObject == NONE)
 		return;
+	m_bsmoothEnable = state;
 	m_wnd->smoothEnable(state);
 }
 
 void CPropertyDelegate::smoothParam1Changed(double value) 
 {
-	qDebug() << "smooth param1 = " << value;
+	//qDebug() << "smooth param1 = " << value;
 	if (m_nCurrentObject == NONE)
 		return;
-
+	m_fsmoothParam1 = value;
 	float param1 = 0.0f, param2 = 0.0f;
 	m_wnd->getSmoothParams(param1, param2);
 	if (value != (double)param1)
@@ -880,13 +823,76 @@ void CPropertyDelegate::smoothParam1Changed(double value)
 
 void CPropertyDelegate::smoothParam2Changed(double value)
 {
-	qDebug() << "smooth param2 = " << value;
+	//qDebug() << "smooth param2 = " << value;
 	if (m_nCurrentObject == NONE)
 		return;
-
+	m_fsmoothParam2 = value;
 	float param1 = 0.0f, param2 = 0.0f;
 	m_wnd->getSmoothParams(param1, param2);
 	if (value != (double)param2)
 		m_wnd->setSmoothParams(param1, (float)value);
 }
 
+void CPropertyDelegate::meshBuildMethod(int index)
+{
+	//qDebug() << "mesh method = " << index;
+	m_nrebuildMethod = index;
+	m_wnd->rebuildMethod(index);
+}
+
+void CPropertyDelegate::meshSearchKChanged(int value)
+{
+	//qDebug() << "mesh search k = " << value;
+	if (m_nCurrentObject == NONE)
+		return;
+	m_nmeshSearchK = value;
+	int k = 0, maxneigh = 0;
+	float radius = 0.0f;
+	m_wnd->getRebuildParams(k, radius, maxneigh);
+	if (value != k)
+		m_wnd->setRebuildParams(value, radius, maxneigh);
+}
+
+void CPropertyDelegate::meshSearchRadiusChanged(float value)
+{
+	//qDebug() << "mesh search radius = " << value;
+	if (m_nCurrentObject == NONE)
+		return;
+	m_fmeshSearchRadius = value;
+	int k = 0, maxneigh = 0;
+	float radius = 0.0f;
+	m_wnd->getRebuildParams(k, radius, maxneigh);
+	if (value != radius)
+		m_wnd->setRebuildParams(k, value, maxneigh);
+}
+
+void CPropertyDelegate::meshMaxNeighbors(int value)
+{
+	//qDebug() << "mesh max neighbors = " << value;
+	if (m_nCurrentObject == NONE)
+		return;
+	m_nmeshMaxNeighbors = value;
+	int k = 0, maxneigh = 0;
+	float radius = 0.0f;
+	m_wnd->getRebuildParams(k, radius, maxneigh);
+	if (value != maxneigh)
+		m_wnd->setRebuildParams(k, radius, value);
+}
+
+void CPropertyDelegate::meshDisplayModel(int index)
+{
+	//qDebug() << "mesh display model = " << index;
+	if (m_nCurrentObject == NONE)
+		return;
+	m_nmeshDisplayModel = index;
+	m_wnd->meshDisplayModel(index);
+}
+
+void CPropertyDelegate::meshColor(int index)
+{
+	//qDebug() << "mesh color = " << index;
+	if (m_nCurrentObject == NONE)
+		return;
+	m_nmeshDisplayColor = index;
+	m_wnd->setMeshColor(index);
+}

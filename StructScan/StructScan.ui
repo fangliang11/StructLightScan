@@ -304,7 +304,7 @@
      <normaloff>:/StructScan/res/images/smallRectangleSelect.png</normaloff>:/StructScan/res/images/smallRectangleSelect.png</iconset>
    </property>
    <property name="text">
-    <string>选择</string>
+    <string>框选</string>
    </property>
   </action>
   <action name="action_pointcloud_delete">

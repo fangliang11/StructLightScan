@@ -168,7 +168,6 @@ void StructScan::onActionProjectOpenCalibrationClicked()
 		m_pcalibwnd->show();
 
 	}
-
 }
 
 void StructScan::onActionSetupSystemClicked()

@@ -27,6 +27,11 @@ public:
 	explicit CPropertyDelegate(QStandardItemModel* _model, QAbstractItemView* _view, QObject *parent = nullptr);
 	~CPropertyDelegate();
 
+	CPointCloudWnd* m_wnd;
+
+	void updateDisplay();
+	void updateModel(int objectCode);
+	void updateItem(QStandardItem * item);
 
 	enum PROPERTY_CODE {
 		OBJECT_NO_PROPERTY = 0,
@@ -49,14 +54,9 @@ public:
 		OBJECT_SMOOTH_PARAM1,
 		OBJECT_SMOOTH_PARAM2,
 		OBJECT_REBUILD_METHOD,
-		OBJECT_REBUILD_NEAREST_K,
+		OBJECT_REBUILD_SEARCH_K,
 		OBJECT_REBUILD_SEARCH_RADIUS,
-		OBJECT_REBUILD_DISTANCE_MU,
-		OBJECT_REBUILD_MAX_NEAREST_NEIGHBOR,
-		OBJECT_REBUILD_MAX_SURFACE_ANGLE,
-		OBJECT_REBUILD_MIN_ANGLE,
-		OBJECT_REBUILD_MAX_ANGLE,
-		OBJECT_REBUILD_NORMAL_CONSISTENCY,
+		OBJECT_REBUILD_MAX_NEIGHBORS,
 		OBJECT_MESH_NAME,
 		OBJECT_MESH_DISPLAY_TYPE,
 		OBJECT_MESH_DISPLAY_COLOR,
@@ -74,27 +74,31 @@ protected:
 	void setEditorData(QWidget *editor, const QModelIndex &index) const override;
 	void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override;
 	void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-
-
-public:
-	CPointCloudWnd* m_wnd;
-
-	void updateDisplay();
-	void updateModel(int objectCode);
-	void updateItem(QStandardItem * item);
-
-
+	   
 private:
 	QStandardItemModel* m_model;
 	QAbstractItemView* m_view;
 	int m_nCurrentObject;
-
-
-	static const char* s_noneString;
-	static const char* s_rgbColor;
-	static const char* s_sfColor;
-	static const char* s_defaultPointSizeString;
-	static const char* s_defaultPolyWidthSizeString;
+	int m_nCloudPointSize;
+	int m_nCloudColor;
+	bool m_bCloudCoordinate;
+	bool m_bFilterEnable;
+	int m_nFilterMethod;
+	float m_fFilterParam1;
+	float m_fFilterParam2;
+	float m_fFilterParam3;
+	bool m_bremoveOutlierEnable;
+	float m_fremoveOutlierParam1;
+	float m_fremoveOutlierParam2;
+	bool m_bsmoothEnable;
+	float m_fsmoothParam1;
+	float m_fsmoothParam2;
+	int m_nrebuildMethod;
+	int m_nmeshSearchK;
+	float m_fmeshSearchRadius;
+	int m_nmeshMaxNeighbors;
+	int m_nmeshDisplayModel;
+	int m_nmeshDisplayColor;
 	   
 	void addSeparator(const QString& title);
 	void appendRow(QStandardItem* leftItem, QStandardItem* rightItem, bool openPersistentEditor/*=false*/);
@@ -133,6 +137,12 @@ private slots:
 	void smoothEnable(bool state);
 	void smoothParam1Changed(double value);
 	void smoothParam2Changed(double value);
+	void meshBuildMethod(int index);
+	void meshSearchKChanged(int value);
+	void meshSearchRadiusChanged(float value);
+	void meshMaxNeighbors(int value);
+	void meshDisplayModel(int index);
+	void meshColor(int index);
 
 };
 

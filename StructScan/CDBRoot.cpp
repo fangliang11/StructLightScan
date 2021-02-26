@@ -112,8 +112,8 @@ void CDBRoot::initOperate()
 void CDBRoot::updateObjectProperty(int objectCode)
 {
 	m_propertiesDelegate->updateModel(objectCode);
-
-
+	m_propertiesDelegate->updateDisplay();
+	update();
 }
 
 
