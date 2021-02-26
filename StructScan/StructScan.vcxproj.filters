@@ -22,6 +22,12 @@
     <ClCompile Include="CPointCloudWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CPropertyDelegate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CDBRoot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -48,6 +54,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="CPointCloudWnd.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CPropertyDelegate.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CDBRoot.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

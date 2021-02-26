@@ -59,6 +59,14 @@
       <AdditionalIncludeDirectories>D:\Software\VSexternalLib\include\GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <AdditionalDependencies>D:\Program Files\VTK-8.2.0\VTK-install\plugins\designer\QVTKWidgetPlugin.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\Software\VSexternalLib\include\GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>Qt_V15_X64</QtInstall>
     <QtModules>core;gui;opengl;widgets</QtModules>
@@ -105,9 +113,11 @@
     <QtUic Include="StructScan.ui" />
     <QtMoc Include="StructScan.h" />
     <ClCompile Include="CCalibrationWnd.cpp" />
+    <ClCompile Include="CDBRoot.cpp" />
     <ClCompile Include="CImageWnd.cpp" />
     <ClCompile Include="CPlotWnd.cpp" />
     <ClCompile Include="CPointCloudWnd.cpp" />
+    <ClCompile Include="CPropertyDelegate.cpp" />
     <ClCompile Include="CRoi.cpp" />
     <ClCompile Include="StructScan.cpp" />
     <ClCompile Include="main.cpp" />
@@ -127,6 +137,8 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CPointCloudWnd.h" />
+    <QtMoc Include="CPropertyDelegate.h" />
+    <QtMoc Include="CDBRoot.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
   </ItemGroup>

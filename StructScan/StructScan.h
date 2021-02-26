@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QMdiArea>
 #include <QMessageBox>
+#include <QTreeView>
 #include <QLabel>
 #include <QTextEdit>
 #include <QStandardItemModel>
@@ -22,7 +23,7 @@ class CImageWnd;
 class CPlotWnd;
 class CPointCloudWnd;
 class CRoi;
-
+class CDBRoot;
 
 class StructScan : public QMainWindow
 {
@@ -41,23 +42,24 @@ private:
 	//QMdiArea *m_mdiArea = nullptr;
 	CPointCloudWnd *m_pCloud = nullptr;
 	CImageWnd *m_pimagewnd = nullptr;
+	CDBRoot *m_dbroot;
 
 	CCalibrationWnd *m_pcalibwnd = nullptr;
 
 	void closeEvent(QCloseEvent *event);
 	void InitialConnection();
-	void CreatePointCloudWnd();
-	void CreateCameraDisplayWnd();
 	void InitialStatusBar();
 	void InitialDockWidget(int width);
-	void InitialTree();
-	
+	void InitialProjectTree();
+	void InitialPropertyTree();
+
 signals:
 	void signalOpenPCL();
 	void signalSelect();
 	void signalDelete();
 	void signalAdd();
-	void signalClear();
+	void signalFilter();
+	void signalMesh();
 	void signalSurfaceRebuild();
 
 private slots:
@@ -74,7 +76,7 @@ private slots:
 	void onActionPointCloudDeleteClicked();
 	void onActionPointCloudAddClicked();
 	void onActionPointCloudFilterClicked();
-	void onActionPointCloudGridClicked();
+	void onActionPointCloudMeshClicked();
 	void onActionViewPlotClicked();
 	void onActionView2DClicked();
 	void onActionView3DClicked();
