@@ -20,6 +20,26 @@ VTK_MODULE_INIT(vtkInteractionStyle);
 VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2);
 VTK_MODULE_INIT(vtkRenderingFreeType);
 
+
+#include <iostream>
+#include <thread>
+
+std::thread *workthread;
+QVTKOpenGLNativeWidget *widget;
+
+void runThread()
+{
+
+	while (1)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+		std::cout << "loop once" << std::endl;
+	}
+
+}
+
+
 int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
@@ -50,6 +70,10 @@ int main(int argc, char* argv[])
 	widget->SetRenderWindow(renderWindow);
 	widget->resize(800, 600);
 	widget->show();
+
+
+
+	workthread = new std::thread(runThread);
 
 	return a.exec();
 }

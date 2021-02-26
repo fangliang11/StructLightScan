@@ -4,6 +4,7 @@
 #include "CImageWnd.h"
 #include "CCalibrationWnd.h"
 #include "CPointCloudWnd.h"
+#include "CDBRoot.h"
 
 
 
@@ -22,7 +23,6 @@ StructScan::StructScan(QWidget *parent)
 	m_pimagewnd->move(305, 80);
 
 
-	//this->setCentralWidget(ui.mdiArea);
 
 
 	//m_mdiArea = new QMdiArea(this);
@@ -47,7 +47,8 @@ StructScan::StructScan(QWidget *parent)
 	InitialConnection();
 	InitialStatusBar();
 	InitialDockWidget(300);
-	
+	InitialProjectTree();
+	InitialPropertyTree();
 }
 
 StructScan::~StructScan()
@@ -56,9 +57,23 @@ StructScan::~StructScan()
 }
 
 
+void StructScan::closeEvent(QCloseEvent *event)
+{
+	m_pCloud->DestroyThisWnd();
+
+
+}
+
+
 void StructScan::InitialConnection()
 {
 	connect(this, &StructScan::signalOpenPCL, m_pCloud, &CPointCloudWnd::signalOpenPCL);
+	connect(this, &StructScan::signalSelect, m_pCloud, &CPointCloudWnd::signalSelect);
+	connect(this, &StructScan::signalDelete, m_pCloud, &CPointCloudWnd::signalDelete);
+	connect(this, &StructScan::signalAdd, m_pCloud, &CPointCloudWnd::signalAdd);
+	connect(this, &StructScan::signalFilter, m_pCloud, &CPointCloudWnd::signalFilter);
+	connect(this, &StructScan::signalMesh, m_pCloud, &CPointCloudWnd::signalMesh);
+	connect(this, &StructScan::signalSurfaceRebuild, m_pCloud, &CPointCloudWnd::signalSurfaceRebuild);
 }
 
 
@@ -85,47 +100,63 @@ void StructScan::InitialDockWidget(int width)
 
 }
 
-void StructScan::InitialTree()
+// 项目树
+void StructScan::InitialProjectTree()
 {
-	//QStandardItemModel* model = new QStandardItemModel(ui.treeView);
-	//QList<QStandardItem*> kind;
-	//QStandardItem *kindname1 = new QStandardItem(QStringLiteral("项目"));
-	//QStandardItem *kindname2 = new QStandardItem(QStringLiteral("结果"));
-	//kind.append(kindname1);
-	//kind.append(kindname2);
-	//model->appendColumn(kind);
+	m_dbroot = new CDBRoot(m_pCloud, ui.treeViewProjects, ui.treeViewProperty, this);
 
-	////设置虚线， 给QTreeView应用model
-	//ui.treeView->setStyle(QStyleFactory::create("windows"));
-	//ui.treeView->setModel(model);
+	QStandardItemModel* model = new QStandardItemModel(ui.treeViewProjects);
+	model->setHorizontalHeaderLabels(QStringList() << QStringLiteral("项目名称") << QStringLiteral("信息"));
+	QStandardItem* itemProject = new QStandardItem(QIcon(QStringLiteral("res/folder_image.ico")), QStringLiteral("三维测量"));
+	model->appendRow(itemProject);
+	QStandardItem *childItem1 = new QStandardItem(QStringLiteral("设备"));
+	//QStandardItem *childItem2 = new QStandardItem(QStringLiteral("图像"));
+	QStandardItem *childItem3 = new QStandardItem(QStringLiteral("点云"));
+	QStandardItem *childItem4 = new QStandardItem(QStringLiteral("网格"));
+	itemProject->appendRow(childItem1);
+	//itemProject->appendRow(childItem2);
+	itemProject->appendRow(childItem3);
+	itemProject->appendRow(childItem4);
+	//QStandardItem *image1 = new QStandardItem(QStringLiteral("图像1"));
+	//QStandardItem *image2 = new QStandardItem(QStringLiteral("图像2"));
+	//QStandardItem *image3 = new QStandardItem(QStringLiteral("图像3"));
+	//QStandardItem *image4 = new QStandardItem(QStringLiteral("图像4"));
+	//QStandardItem *image5 = new QStandardItem(QStringLiteral("图像5"));
+	//childItem2->appendRow(image1);
+	//childItem2->appendRow(image2);
+	//childItem2->appendRow(image3);
+	//childItem2->appendRow(image4);
+	//childItem2->appendRow(image5);
+
+	//设置虚线， 给QTreeView应用model
+	ui.treeViewProjects->setStyle(QStyleFactory::create("windows"));
+	ui.treeViewProjects->setModel(model);
+	ui.treeViewProjects->expandAll();
 }
 
+// 属性
+void StructScan::InitialPropertyTree()
+{
 
-
+}
 
 //************************************SLOTS******************************//
 
 void StructScan::onActionProjectNewClicked()
 {
-	qDebug() << "new clicked";
-
-	//InitialConnection();
-	QImage img("s_logo.png");
+	QImage img("TestImage.bmp");
 	m_pimagewnd->setFrame(QPixmap::fromImage(img));
 
 }
 
 void StructScan::onActionProjectSaveClicked()
 {
-	qDebug() << "save clicked";
-
-	emit signalOpenPCL();
 
 }
 
 void StructScan::onActionProjectOpenFileClicked()
 {
-
+	emit signalOpenPCL();
 }
 
 void StructScan::onActionProjectOpenCalibrationClicked()
@@ -137,7 +168,6 @@ void StructScan::onActionProjectOpenCalibrationClicked()
 		m_pcalibwnd->show();
 
 	}
-
 }
 
 void StructScan::onActionSetupSystemClicked()
@@ -157,7 +187,7 @@ void StructScan::onActionSetupProjectorClicked()
 
 void StructScan::onActionStartClicked()
 {
-
+	//m_dbroot->updateObject();
 }
 
 void StructScan::onActionStopClicked()
@@ -167,22 +197,27 @@ void StructScan::onActionStopClicked()
 
 void StructScan::onActionPointCloudSelectClicked()
 {
-
+	emit signalSelect();
 }
 
 void StructScan::onActionPointCloudDeleteClicked()
 {
+	emit signalDelete();
+}
 
+void StructScan::onActionPointCloudAddClicked()
+{
+	emit signalAdd();
 }
 
 void StructScan::onActionPointCloudFilterClicked()
 {
-
+	emit signalFilter();
 }
 
-void StructScan::onActionPointCloudGridClicked()
+void StructScan::onActionPointCloudMeshClicked()
 {
-
+	emit signalMesh();
 }
 
 void StructScan::onActionViewPlotClicked()
@@ -192,7 +227,7 @@ void StructScan::onActionViewPlotClicked()
 
 void StructScan::onActionView2DClicked()
 {
-
+	emit signalSurfaceRebuild();
 }
 
 void StructScan::onActionView3DClicked()
