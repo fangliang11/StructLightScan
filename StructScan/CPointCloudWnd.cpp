@@ -1022,8 +1022,8 @@ void CPointCloudWnd::onOpenPCL()
 	QString fileName = QFileDialog::getOpenFileName(this, "Open PointCloud", ".",
 		"Open PCD files(*.pcd)");
 	if (!fileName.isEmpty()) {
-		m_pcdPath = fileName.toStdString();
-
+		QByteArray cdata = fileName.toLocal8Bit();
+		m_pcdPath = std::string(cdata);
 		m_actionCode = ACTION_OPEN;
 	}
 }

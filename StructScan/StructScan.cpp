@@ -67,13 +67,13 @@ void StructScan::closeEvent(QCloseEvent *event)
 
 void StructScan::InitialConnection()
 {
-	connect(this, &StructScan::signalOpenPCL, m_pCloud, &CPointCloudWnd::signalOpenPCL);
-	connect(this, &StructScan::signalSelect, m_pCloud, &CPointCloudWnd::signalSelect);
-	connect(this, &StructScan::signalDelete, m_pCloud, &CPointCloudWnd::signalDelete);
-	connect(this, &StructScan::signalAdd, m_pCloud, &CPointCloudWnd::signalAdd);
-	connect(this, &StructScan::signalFilter, m_pCloud, &CPointCloudWnd::signalFilter);
-	connect(this, &StructScan::signalMesh, m_pCloud, &CPointCloudWnd::signalMesh);
-	connect(this, &StructScan::signalSurfaceRebuild, m_pCloud, &CPointCloudWnd::signalSurfaceRebuild);
+	connect(this, &StructScan::signalOpenPCL,         m_pCloud, &CPointCloudWnd::signalOpenPCL);
+	connect(this, &StructScan::signalSelect,          m_pCloud, &CPointCloudWnd::signalSelect);
+	connect(this, &StructScan::signalDelete,          m_pCloud, &CPointCloudWnd::signalDelete);
+	connect(this, &StructScan::signalAdd,             m_pCloud, &CPointCloudWnd::signalAdd);
+	connect(this, &StructScan::signalFilter,          m_pCloud, &CPointCloudWnd::signalFilter);
+	connect(this, &StructScan::signalMesh,            m_pCloud, &CPointCloudWnd::signalMesh);
+	connect(this, &StructScan::signalSurfaceRebuild,  m_pCloud, &CPointCloudWnd::signalSurfaceRebuild);
 }
 
 
