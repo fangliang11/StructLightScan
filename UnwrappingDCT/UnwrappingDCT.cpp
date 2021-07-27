@@ -11,6 +11,7 @@
 
 
 #include <iostream>
+#include <fstream>
 #include <time.h>
 #include <random>
 #include <algorithm>
@@ -74,9 +75,9 @@ int ImageDCT(HalconCpp::HImage* img_in, HalconCpp::HImage* img_out)
 	//    DCT
 	fftw_execute_r2r(plan_dct, input_arry, dct_arry);
 	std::cout << "\nDCT2D:" << std::endl;
-	clock_t start, finish;
+	//clock_t start, finish;
 	double* dct_conv_array = (double *)fftw_malloc(sizeof(double) * rows * columns);
-	start = clock();
+	//start = clock();
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
 			dct_conv_array[i * columns + j] = dct_arry[i * columns + j] / (std::sqrt(N) * std::sqrt(M));
@@ -90,8 +91,8 @@ int ImageDCT(HalconCpp::HImage* img_in, HalconCpp::HImage* img_out)
 				std::cout << "\n";
 		}
 	}
-	finish = clock();
-	std::cout << "DCT total time(s) = " << (double)(finish - start) / 1000.0 << std::endl;
+	//finish = clock();
+	//std::cout << "DCT total time(s) = " << (double)(finish - start) / 1000.0 << std::endl;
 
 	//    IDCT
 	//  解相位
@@ -116,7 +117,7 @@ int ImageDCT(HalconCpp::HImage* img_in, HalconCpp::HImage* img_out)
 	fftw_execute_r2r(plan_idct, dct_arry, idct_arry);
 	std::cout << "\nIDCT2D:" << std::endl;
 	double* idct_conv_array = (double *)fftw_malloc(sizeof(double) * rows * columns);
-	start = clock();
+	//start = clock();
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
 			idct_conv_array[i * columns + j] = idct_arry[i * columns + j] / (N * M);
@@ -126,8 +127,8 @@ int ImageDCT(HalconCpp::HImage* img_in, HalconCpp::HImage* img_out)
 				std::cout << "\n";
 		}
 	}
-	finish = clock();
-	std::cout << "IDCT total time(s) = " << (double)(finish - start) / 1000.0 << std::endl;
+	//finish = clock();
+	//std::cout << "IDCT total time(s) = " << (double)(finish - start) / 1000.0 << std::endl;
 
 
 	// 4.销毁plan
@@ -167,11 +168,11 @@ int ImageDCT(std::vector<double> vecin, std::vector<double> &vecout, int rows, i
 
 	// 3. 执行plan，对于每个plan，应当"一次定义 多次使用"，同一plan的运算速度极快
 	//    DCT
-	clock_t start, finish;
-	start = clock();
+	//clock_t start, finish;
+	//start = clock();
 	fftw_execute_r2r(plan_dct, input_arry, dct_arry);
-	finish = clock();
-	std::cout << "DCT total time(s) = " << (double)(finish - start) / 1000.0 << std::endl;
+	//finish = clock();
+	//std::cout << "DCT total time(s) = " << (double)(finish - start) / 1000.0 << std::endl;
 
 	//    IDCT
 	//  解相位
@@ -189,10 +190,10 @@ int ImageDCT(std::vector<double> vecin, std::vector<double> &vecout, int rows, i
 	}
 	dct_arry[0] = top_left;
 
-	start = clock();
+	//start = clock();
 	fftw_execute_r2r(plan_idct, dct_arry, idct_arry);
-	finish = clock();
-	std::cout << "IDCT total time(s) = " << (double)(finish - start) / 1000.0 << std::endl;
+	//finish = clock();
+	//std::cout << "IDCT total time(s) = " << (double)(finish - start) / 1000.0 << std::endl;
 	// 结果处理
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
@@ -261,7 +262,7 @@ void calWrapPhase(unsigned char * pinput, std::vector<double> &output, int rows,
 				for (int k = 0; k < 23; k++)
 					arry_sub[k] = (double)*(pinput + i * columns + (j - half_cycle) + k);
 			}
-			iiii = ((double)*(pinput + i * columns + j) - average(arry_sub, cycle) - 128.0) / stdeviation(arry_sub, cycle) * kmeans;
+			iiii = ((double)*(pinput + i * columns + j) - average(arry_sub, cycle) - 127.5) / stdeviation(arry_sub, cycle) * kmeans;
 			output.push_back(iiii);
 		}
 	}
@@ -344,22 +345,13 @@ void action()
 {
 	HImage  ho_Image, ho_Source1, ho_Source2, ho_Source3, ho_Source4;
 	HImage  ho_Image1, ho_Image2, ho_Image3, ho_Image4;
-	HTuple  hv_Width, hv_Height, hv_WindowHandle;
-
-	if (HDevWindowStack::IsOpen())
-		CloseWindow(HDevWindowStack::Pop());
+	HTuple  hv_Width, hv_Height;
 
 	std::wstring def_path = L"E:\\检测与装备事业部\\国防科大三维扫描\\算法开发\\秦司益数据右\\def\\";
 	std::wstring ref_path = L"E:\\检测与装备事业部\\国防科大三维扫描\\算法开发\\秦司益数据右\\ref2\\";
 
 	ReadImage(&ho_Image, (HTuple)ref_path.c_str() + "1.bmp");
 	GetImageSize(ho_Image, &hv_Width, &hv_Height);
-	SetWindowAttr("background_color", "black");
-	OpenWindow(0, 0, 0.5*hv_Width, 0.5*hv_Height, 0, "visible", "", &hv_WindowHandle);
-	HDevWindowStack::Push(hv_WindowHandle);
-	if (HDevWindowStack::IsOpen())
-		DispObj(ho_Image, HDevWindowStack::GetActive());
-
 	//参考图像，标定
 	ReadImage(&ho_Source1, (HTuple)ref_path.c_str() + "1.bmp");
 	ReadImage(&ho_Source2, (HTuple)ref_path.c_str() + "2.bmp");
@@ -381,6 +373,8 @@ void action()
 	//std::vector<double> vecSource4(psource4, psource4 + height * wide_step);
 
 	// 计算参考图像相位: phy=arctan(I4-I2 / I1-I3)
+	clock_t start, finish;
+	start = clock();
 	std::vector<double> vecPhaseSource, vecPhaseUnwrapS;
 	std::vector<double> vec_i1, vec_i2, vec_i3, vec_i4;
 	calWrapPhase(static_cast<unsigned char*>(psource1), vec_i1, rows, columns);
@@ -424,6 +418,9 @@ void action()
 	catch (const char* errmsg) {
 		std::cerr << errmsg << std::endl;
 	}
+	finish = clock();
+	std::cout << "sourceImg unwrap time = " << (double)(finish - start) / 1000.0 << std::endl;
+
 
 	//待测图像
 	ReadImage(&ho_Image1, (HTuple)def_path.c_str() + "1.bmp");
@@ -434,76 +431,81 @@ void action()
 	void* pmeature2 = ho_Image2.GetImagePointer1(&hs_type, &hl_width, &hl_height);
 	void* pmeature3 = ho_Image3.GetImagePointer1(&hs_type, &hl_width, &hl_height);
 	void* pmeature4 = ho_Image4.GetImagePointer1(&hs_type, &hl_width, &hl_height);
-	std::vector<double> vecPhaseMeature, vecPhaseUnwrapM;
-	vec_i1.clear();
-	vec_i2.clear();
-	vec_i3.clear();
-	vec_i4.clear();
-	calWrapPhase(static_cast<unsigned char*>(pmeature1), vec_i1, rows, columns);
-	calWrapPhase(static_cast<unsigned char*>(pmeature2), vec_i2, rows, columns);
-	calWrapPhase(static_cast<unsigned char*>(pmeature3), vec_i3, rows, columns);
-	calWrapPhase(static_cast<unsigned char*>(pmeature4), vec_i4, rows, columns);
-	for (int i = 0; i < rows*columns; i++) {
-		i1 = vec_i1.at(i);
-		i2 = vec_i2.at(i);
-		i3 = vec_i3.at(i);
-		i4 = vec_i4.at(i);
-		if (i4 > i2) {
-			if (i1 > i3)
-				vecPhaseMeature.push_back(std::atan((i4 - i2) / (i1 - i3)));
-			else if (i1 < i3)
-				vecPhaseMeature.push_back(std::atan((i4 - i2) / (i1 - i3)) + PI);
-			else
-				vecPhaseMeature.push_back(1 / 2 * PI);
+
+	start = clock();
+
+	for (int index = 0; index < 100; index++) {
+		std::vector<double> vecPhaseMeature, vecPhaseUnwrapM;
+		vec_i1.clear();
+		vec_i2.clear();
+		vec_i3.clear();
+		vec_i4.clear();
+		calWrapPhase(static_cast<unsigned char*>(pmeature1), vec_i1, rows, columns);
+		calWrapPhase(static_cast<unsigned char*>(pmeature2), vec_i2, rows, columns);
+		calWrapPhase(static_cast<unsigned char*>(pmeature3), vec_i3, rows, columns);
+		calWrapPhase(static_cast<unsigned char*>(pmeature4), vec_i4, rows, columns);
+		for (int i = 0; i < rows*columns; i++) {
+			i1 = vec_i1.at(i);
+			i2 = vec_i2.at(i);
+			i3 = vec_i3.at(i);
+			i4 = vec_i4.at(i);
+			if (i4 > i2) {
+				if (i1 > i3)
+					vecPhaseMeature.push_back(std::atan((i4 - i2) / (i1 - i3)));
+				else if (i1 < i3)
+					vecPhaseMeature.push_back(std::atan((i4 - i2) / (i1 - i3)) + PI);
+				else
+					vecPhaseMeature.push_back(1 / 2 * PI);
+			}
+			else if (i4 < i2) {
+				if (i1 > i3)
+					vecPhaseMeature.push_back(std::atan((i4 - i2) / (i1 - i3)) + 2 * PI);
+				else if (i1 < i3)
+					vecPhaseMeature.push_back(std::atan((i4 - i2) / (i1 - i3)) + PI);
+				else
+					vecPhaseMeature.push_back(3 / 2 * PI);
+			}
+			else {
+				if (i1 > i3)
+					vecPhaseMeature.push_back(0.0);
+				else
+					vecPhaseMeature.push_back(PI);
+			}
 		}
-		else if (i4 < i2) {
-			if (i1 > i3)
-				vecPhaseMeature.push_back(std::atan((i4 - i2) / (i1 - i3)) + 2 * PI);
-			else if (i1 < i3)
-				vecPhaseMeature.push_back(std::atan((i4 - i2) / (i1 - i3)) + PI);
-			else
-				vecPhaseMeature.push_back(3 / 2 * PI);
+
+		try {
+			imgUnwrapping(vecPhaseMeature, vecPhaseUnwrapM, rows, columns, PI);
 		}
-		else {
-			if (i1 > i3)
-				vecPhaseMeature.push_back(0.0);
-			else
-				vecPhaseMeature.push_back(PI);
+		catch (const char* errmsg) {
+			std::cerr << errmsg << std::endl;
 		}
-	}
-	
-	try {
-		imgUnwrapping(vecPhaseMeature, vecPhaseUnwrapM, rows, columns, PI);
-	}
-	catch (const char* errmsg) {
-		std::cerr << errmsg << std::endl;
+
 	}
 
-	//计算被测物体相位
-	std::vector<double> vecPhase;
-	//for(auto& phase : vecPhase)
-	for (int i = 0; i < rows*columns; i++) {
-		vecPhase.push_back(vecPhaseUnwrapM.at(i) - vecPhaseUnwrapS.at(i));
-	}
 
-	//double test[256];
-	//for (int i = 0; i < 16; i++) {
-	//	for (int j = 0; j < 16; j++) {
-	//		test[i * 16 + j] = vecPhase.at((i + 280)*columns + j + 900);
-	//	}
-	//}
-	//std::vector<double> vecCut;
+	finish = clock();
+	std::cout << "meatureImg unwrap time = " << (double)(finish - start) / 1000.0 << std::endl;
+
+	////计算被测物体相位
+	//std::ofstream outfile;
+	//outfile.open("test.txt", std::ios::out);
+	//if (!outfile.is_open()) {
+	//	std::cout << "open file failure!\n";
+	//	return;
+	//}		
+	////std::vector<double> vecPhase;
+	//double phaseX = 0.0, phaseY = 0.0, phaseZ = 0.0;
 	//for (int i = 0; i < rows; i++) {
 	//	for (int j = 0; j < columns; j++) {
-	//		if (i > 300 && i < 400) {
-	//			if (j > 660 && j < 760)
-	//				vecCut.push_back(vecPhase.at(i * columns + j));
-	//		}
+	//		phaseZ = vecPhaseUnwrapM.at(i*columns + j) - vecPhaseUnwrapS.at(i*columns + j);
+	//		phaseX = (double)(j + 1)*255.0 / columns;
+	//		phaseY = (double)(i + 1)*255.0 / rows;
+	//		outfile << phaseX << " " << phaseY << " " << phaseZ << "\n";
 	//	}
 	//}
+	//outfile.close();
 
 
-	int pause = 0;
 }
 
 

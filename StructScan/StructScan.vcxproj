@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\vcpkg.D.vcpkg.1.0.0\build\native\vcpkg.D.vcpkg.props" Condition="Exists('..\packages\vcpkg.D.vcpkg.1.0.0\build\native\vcpkg.D.vcpkg.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -37,10 +38,14 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\PCL_1_9_debug.props" />
+    <Import Project="Halcon_18_11_S_debug_x64.props" />
+    <Import Project="DaHen_x64_debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\PCL_1_9_release.props" />
+    <Import Project="Halcon_18_11_S_release_x64.props" />
+    <Import Project="DaHeng_x64_release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -113,12 +118,16 @@
     <QtUic Include="StructScan.ui" />
     <QtMoc Include="StructScan.h" />
     <ClCompile Include="CCalibrationWnd.cpp" />
+    <ClCompile Include="CCameraControl.cpp" />
     <ClCompile Include="CDBRoot.cpp" />
     <ClCompile Include="CImageWnd.cpp" />
+    <ClCompile Include="CPhaseCaculate.cpp" />
     <ClCompile Include="CPlotWnd.cpp" />
     <ClCompile Include="CPointCloudWnd.cpp" />
+    <ClCompile Include="CProjectorControl.cpp" />
     <ClCompile Include="CPropertyDelegate.cpp" />
     <ClCompile Include="CRoi.cpp" />
+    <ClCompile Include="GXBitmap.cpp" />
     <ClCompile Include="StructScan.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="Roi.ui" />
@@ -139,6 +148,10 @@
     <QtMoc Include="CPointCloudWnd.h" />
     <QtMoc Include="CPropertyDelegate.h" />
     <QtMoc Include="CDBRoot.h" />
+    <ClInclude Include="CCameraControl.h" />
+    <ClInclude Include="CPhaseCaculate.h" />
+    <ClInclude Include="CProjectorControl.h" />
+    <ClInclude Include="GXBitmap.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
   </ItemGroup>
@@ -148,9 +161,21 @@
   <ItemGroup>
     <ResourceCompile Include="StructScan.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />
   </ImportGroup>
-  <ImportGroup Label="ExtensionTargets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\vcpkg.D.vcpkg.1.0.0\build\native\vcpkg.D.vcpkg.targets" Condition="Exists('..\packages\vcpkg.D.vcpkg.1.0.0\build\native\vcpkg.D.vcpkg.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\vcpkg.D.vcpkg.1.0.0\build\native\vcpkg.D.vcpkg.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.D.vcpkg.1.0.0\build\native\vcpkg.D.vcpkg.props'))" />
+    <Error Condition="!Exists('..\packages\vcpkg.D.vcpkg.1.0.0\build\native\vcpkg.D.vcpkg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.D.vcpkg.1.0.0\build\native\vcpkg.D.vcpkg.targets'))" />
+  </Target>
 </Project>

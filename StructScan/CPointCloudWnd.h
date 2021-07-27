@@ -29,6 +29,7 @@ VTK_MODULE_INIT(vtkRenderingFreeType);
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
+#include <vtkCoordinate.h>
 #include <vtkPolyVertex.h>
 #include <vtkSphereSource.h>
 #include <vtkPolyDataMapper.h>
@@ -150,6 +151,7 @@ private:
 	void displaySelectPCD();
 	void displaySphereVTK();
 	void displayPCDfile(std::string file_name);
+	void displayPCDfile2(std::string file_name);
 	void clearDisplayCloud();
 	void filteredCloud(int method, pcl::PointCloud<pcl::PointXYZ>::Ptr *cloudIn, 
 		pcl::PointCloud<pcl::PointXYZ>::Ptr *cloudOut,

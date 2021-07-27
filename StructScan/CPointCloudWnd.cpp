@@ -71,20 +71,21 @@ void CPointCloudWnd::initialVtkWidget()
 {
 	//创建vtk渲染对象控制和渲染窗口
 	m_ren = vtkSmartPointer<vtkRenderer>::New();
-	camera = vtkSmartPointer<vtkCamera>::New();        //  相机
-	camera->SetPosition(0, 0, 1);
+	camera = vtkSmartPointer<vtkCamera>::New();        //  相机:默认焦点在世界坐标系原点
+	camera->SetPosition(0, 0, 1);                      //  每次打开软件 Z轴方向显示都不同，不知为何
 	m_ren->SetActiveCamera(camera);
 	light_front = vtkSmartPointer<vtkLight>::New();     //  正面光照
-	light_front->SetColor(0.8, 0.8, 0.8);
+	light_front->SetColor(0.1, 0.35, 0.6);
 	light_front->SetIntensity(2.0);                // 光照强度
 	light_front->SetPosition(0, 0, 1);
 	m_ren->AddLight(light_front);
 	light_back = vtkSmartPointer<vtkLight>::New();      //  背面光照
-	light_back->SetColor(0.5, 0.5, 0);
+	light_back->SetColor(0.3, 0.5, 0.1);
 	light_back->SetIntensity(2.0);
 	light_back->SetPosition(0, 0, -1);
 	m_ren->AddLight(light_back);
 
+	
 	m_renWnd = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
 	m_renWnd->AddRenderer(m_ren);	
 	m_iren = vtkSmartPointer< vtkRenderWindowInteractor>::New();
@@ -93,7 +94,7 @@ void CPointCloudWnd::initialVtkWidget()
 	vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
 	axes->SetTotalLength(0.1, 0.1, 0.1);
 	axes->SetVisibility(true);
-	//m_ren->AddActor(axes);
+
 
 	//  PCL
 	m_sourceCloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
@@ -107,12 +108,12 @@ void CPointCloudWnd::initialVtkWidget()
 	m_viewer->setBackgroundColor(0.01, 0.5, 0.6);
 	//m_viewer->addCoordinateSystem(1);
 	//m_viewer->addSphere(pcl::PointXYZ(0, 0, 0), 0.05, 0.5, 0.5, 0.5, "sphere");   // 原点
-	m_viewer->addPointCloud(m_displayCloud, "cloud");
+	//m_viewer->addPointCloud(m_displayCloud, "cloud");
 	//m_viewer->addPolygonMesh(m_mesh, "mesh");
 	m_viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "cloud");
 	m_viewer->registerAreaPickingCallback(areaPickCallback, this);
 	m_viewer->registerPointPickingCallback(pointPickCallback, this);
-
+	m_viewer->resetCamera();
 
 	//绑定vtk渲染窗口至 ui 控件
 	ui->SetRenderWindow(m_renWnd);
@@ -149,11 +150,16 @@ bool CPointCloudWnd::ResponseSignals(int code)
 	case ACTION_NONE:
 		state = false;
 		break;
-	case ACTION_OPEN:
-		displayPCDfile(m_pcdPath);
+	case ACTION_OPEN: {
+		displayPCDfile2(m_pcdPath);
 		//displaySphere();
+		// 按照z字段进行深度渲染，不同深度不同颜色
+		pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> filledColor(m_displayCloud, "z");
+		m_viewer->addPointCloud(m_displayCloud, filledColor, "cloud");
+		//m_viewer->updatePointCloud(m_displayCloud, filledColor, "cloud");
 		state = true;
 		break;
+	}
 	case ACTION_SELECT:
 		userSelect();
 		break;
@@ -221,7 +227,7 @@ bool CPointCloudWnd::ResponseSignals(int code)
 		m_displayCloud->clear();
 		m_viewer->updatePointCloud(m_displayCloud, "cloud");
 		m_viewer->addPolygonMesh(m_mesh, "mesh");
-		m_viewer->updatePolygonMesh(m_mesh, "mesh");
+		//m_viewer->updatePolygonMesh(m_mesh, "mesh");
 		state = true;
 		break;
 	}
@@ -368,12 +374,20 @@ void CPointCloudWnd::displayPCDfile(std::string file_name)
 	}
 	
 	pcl::copyPointCloud(*m_sourceCloud, *m_displayCloud);
-	// 按照z字段进行深度渲染，不同深度不同颜色
-	pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> filledColor(m_displayCloud, "z");
-	m_viewer->updatePointCloud(m_displayCloud, filledColor, "cloud");
-
 }
 
+
+void CPointCloudWnd::displayPCDfile2(std::string file_name)
+{
+
+	if (pcl::io::loadPCDFile(file_name, *m_sourceCloud) == -1) {
+		qDebug() << "Cannot Open File\n";
+		return;
+	}
+	   
+	pcl::copyPointCloud(*m_sourceCloud, *m_displayCloud);
+
+}
 
 
 
@@ -980,7 +994,10 @@ void CPointCloudWnd::onUpdateCloudWnd()
 		pcl::compute3DCentroid(*m_sourceCloud, centroid); // 计算质心
 		camera->SetFocalPoint(centroid.x(), centroid.y(), centroid.z());
 	}
-	m_renWnd->Render();	
+
+	m_viewer->resetCamera();
+
+	m_renWnd->Render();
 }
 
 // 鼠标事件

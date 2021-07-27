@@ -5,7 +5,9 @@
 #include "CCalibrationWnd.h"
 #include "CPointCloudWnd.h"
 #include "CDBRoot.h"
+#include "CCameraControl.h"
 
+#include "CPhaseCaculate.h"
 
 
 StructScan::StructScan(QWidget *parent)
@@ -17,11 +19,29 @@ StructScan::StructScan(QWidget *parent)
 	if (m_pCloud == nullptr)
 		return;
 
+	// 图像显示窗口
 	m_pimagewnd = new CImageWnd(this);
 	if (m_pimagewnd == nullptr)
 		return;
 	m_pimagewnd->move(305, 80);
 
+	// 相机控制
+	HWND hnd = (HWND)m_pimagewnd->winId();
+	m_pcamera = new CCameraControl(hnd);
+	if (m_pcamera == nullptr)
+		return;
+	if (m_pcamera->initialThisClass() != 0) {
+		QMessageBox msg(QMessageBox::Warning, "Information", "未发现设备!", QMessageBox::Ok);
+
+		//exit(-1);
+	}
+
+
+
+	// 相位计算
+	m_pcaculate = new CPhaseCaculate();
+	if (m_pcaculate == nullptr)
+		return;
 
 
 
@@ -141,11 +161,20 @@ void StructScan::InitialPropertyTree()
 }
 
 //************************************SLOTS******************************//
+void StructScan::systemOnline()
+{
+
+}
+
+void StructScan::systemOffline()
+{
+
+}
 
 void StructScan::onActionProjectNewClicked()
 {
-	QImage img("TestImage.bmp");
-	m_pimagewnd->setFrame(QPixmap::fromImage(img));
+	//QImage img("TestImage.bmp");
+	//m_pimagewnd->setFrame(QPixmap::fromImage(img));
 
 }
 
@@ -177,22 +206,24 @@ void StructScan::onActionSetupSystemClicked()
 
 void StructScan::onActionSetupCameraClicked()
 {
-
+	m_pcamera->openCamera();
+	m_pcamera->setCameraTriggeModel(5.0);
 }
 
 void StructScan::onActionSetupProjectorClicked()
 {
-
+	m_pcamera->closeCamera();
 }
 
 void StructScan::onActionStartClicked()
 {
 	//m_dbroot->updateObject();
+	m_pcamera->acquireImages();
 }
 
 void StructScan::onActionStopClicked()
 {
-
+	m_pcamera->stopAcquireImages();
 }
 
 void StructScan::onActionPointCloudSelectClicked()
@@ -232,7 +263,10 @@ void StructScan::onActionView2DClicked()
 
 void StructScan::onActionView3DClicked()
 {
+	bool statue = false;
+	statue = !m_pcamera->getUserOutputStatue();
 
+	m_pcamera->setUserOutput(0, statue);
 }
 
 void StructScan::onActionViewFrontClicked()

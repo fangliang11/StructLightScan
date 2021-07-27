@@ -24,6 +24,8 @@ class CPlotWnd;
 class CPointCloudWnd;
 class CRoi;
 class CDBRoot;
+class CCameraControl;
+class CPhaseCaculate;
 
 class StructScan : public QMainWindow
 {
@@ -45,6 +47,9 @@ private:
 	CDBRoot *m_dbroot;
 
 	CCalibrationWnd *m_pcalibwnd = nullptr;
+	
+	CCameraControl* m_pcamera = nullptr;
+	CPhaseCaculate* m_pcaculate = nullptr;
 
 	void closeEvent(QCloseEvent *event);
 	void InitialConnection();
@@ -63,6 +68,8 @@ signals:
 	void signalSurfaceRebuild();
 
 private slots:
+	void systemOnline();
+	void systemOffline();
 	void onActionProjectNewClicked();
 	void onActionProjectSaveClicked();
 	void onActionProjectOpenFileClicked();
