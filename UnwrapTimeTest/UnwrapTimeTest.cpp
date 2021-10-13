@@ -18,6 +18,7 @@
 #include <cmath>
 #include <vector>
 
+#include "spdlog/spdlog.h"
 #include "fftw3.h"
 #include "HalconCpp.h"
 #include "HDevThread.h"
@@ -377,6 +378,11 @@ int action(double* img1, double* img2, double* img3, double* img4,
 
 int main(int argc, char *argv[])
 {
+	spdlog::info("enter program");
+	spdlog::error("some error msg with arg:{}", 1);
+	spdlog::warn("Easy padding in numbers like {:08d}", 12);
+
+
 	int ret = 0;
 
 	try

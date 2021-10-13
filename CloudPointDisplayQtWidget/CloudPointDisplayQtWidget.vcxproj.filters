@@ -27,9 +27,6 @@
     <QtRcc Include="CloudPointDisplayQtWidget.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtUic Include="CloudPointDisplayQtWidget.ui">
-      <Filter>Resource Files</Filter>
-    </QtUic>
     <QtMoc Include="CloudPointDisplayQtWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -41,5 +38,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="CloudPointDisplayQtWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

@@ -9,7 +9,6 @@
 
 #include "CPhaseCaculate.h"
 
-
 StructScan::StructScan(QWidget *parent)
     : QMainWindow(parent)
 {
