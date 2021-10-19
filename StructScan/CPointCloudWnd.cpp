@@ -50,7 +50,6 @@ void CPointCloudWnd::DestroyThisWnd()
 
 void CPointCloudWnd::UpdateThisWnd()
 {
-	emit signalUpdateCloudWnd();
 }
 
 
