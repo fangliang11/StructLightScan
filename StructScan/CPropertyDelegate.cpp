@@ -38,6 +38,8 @@ CPropertyDelegate::CPropertyDelegate(QStandardItemModel* _model, QAbstractItemVi
 {
 	assert(m_model && m_view);
 
+	m_qstrImgPath = "";
+
 	m_nCurrentObject = NONE;
 	m_nCloudPointSize = 0;
 	m_nCloudColor = 0;
@@ -59,6 +61,7 @@ CPropertyDelegate::CPropertyDelegate(QStandardItemModel* _model, QAbstractItemVi
 	m_nmeshMaxNeighbors = 100;
 	m_nmeshDisplayModel = 0;
 	m_nmeshDisplayColor = 0;
+	m_nImgIndex = 0;
 
 	connect(this, &CPropertyDelegate::signalObjectVisibleState, this, &CPropertyDelegate::objectVisible);
 	connect(this, &CPropertyDelegate::signalCloudCoordinateDisplayState, this, &CPropertyDelegate::cloudCoordinateDisplay);
@@ -510,6 +513,13 @@ void CPropertyDelegate::updateModel(int objectCode)
 	fillModel();
 }
 
+// 更新图片属性
+void CPropertyDelegate::updateImgIndex(int imgIndex)
+{
+	//qDebug() << "img index = " << imgIndex;
+	m_nImgIndex = imgIndex;
+}
+
 
 void CPropertyDelegate::addSeparator(const QString& title)
 {
@@ -577,6 +587,9 @@ void CPropertyDelegate::fillModel()
 	case MESH:
 		fillModelWithRebuild();
 		fillModelWithMesh();
+		break;
+	case IMAGE:
+		fileModelWithImageInfo(m_nImgIndex);
 		break;
 	default:break;
 	}
@@ -679,6 +692,21 @@ void CPropertyDelegate::fillModelWithMesh()
 
 }
 
+void CPropertyDelegate::fileModelWithImageInfo(int index)
+{
+	assert(m_model);
+
+	addSeparator(QStringLiteral("图像参数"));
+	
+	//QString path = QStringLiteral("路径/XXXXXX/");
+	QString name = QString::number(index) + ".bmp";
+	appendRow(ITEM(tr("FileName")), ITEM(m_qstrImgPath + name));
+	QImage img;
+	img.load(m_qstrImgPath + name);
+	//appendRow(ITEM(tr("Resolution")), ITEM(tr("1280 * 960")));
+	appendRow(ITEM(tr("Resolution")), ITEM(QString::number(img.width()) + " , " + QString::number(img.height())));
+	
+}
 //*****************************************************SLOT******************************//
 void CPropertyDelegate::objectVisible(bool state)
 {

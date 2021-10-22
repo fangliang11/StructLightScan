@@ -20,8 +20,11 @@ public:
 
 	~CDBRoot() override;
 
+	QString m_qstrImgPath;
+	QString m_qstrImgName;
 
 	void updateObjectProperty(int objectCode);
+	void updateObjectProperty(int objectCode, int imgIndex);
 	void redrawObject();
 
 private:
@@ -37,6 +40,8 @@ private:
 	QStandardItemModel* m_propertiesModel;
 	CPropertyDelegate* m_propertiesDelegate;
 
+signals:
+	void signalRefrushImgWnd();
 
 private slots:
 	void slotDBselected(QModelIndex modelIndex);

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>三维扫描仪</string>
+   <string>多相机全景成像</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="autoFillBackground">

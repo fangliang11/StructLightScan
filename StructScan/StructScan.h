@@ -93,8 +93,7 @@ private slots:
 	void onActionViewRightClicked();
 	void onActionViewTopClicked();
 	void onActionViewBottomClicked();
-
-
+	void onRootClickedRefrushImgWnd();
 
 
 };

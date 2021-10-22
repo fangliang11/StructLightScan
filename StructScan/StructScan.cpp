@@ -63,11 +63,12 @@ StructScan::StructScan(QWidget *parent)
 	//pHBox->addWidget(m_pimagewnd2);
 	//centralWidget()->setLayout(pHBox);
 	
-	InitialConnection();
 	InitialStatusBar();
 	InitialDockWidget(300);
 	InitialProjectTree();
 	InitialPropertyTree();
+	InitialConnection();
+
 }
 
 StructScan::~StructScan()
@@ -93,6 +94,8 @@ void StructScan::InitialConnection()
 	connect(this, &StructScan::signalFilter,          m_pCloud, &CPointCloudWnd::signalFilter);
 	connect(this, &StructScan::signalMesh,            m_pCloud, &CPointCloudWnd::signalMesh);
 	connect(this, &StructScan::signalSurfaceRebuild,  m_pCloud, &CPointCloudWnd::signalSurfaceRebuild);
+	connect(m_dbroot, &CDBRoot::signalRefrushImgWnd, this, &StructScan::onRootClickedRefrushImgWnd);
+
 }
 
 
@@ -126,26 +129,30 @@ void StructScan::InitialProjectTree()
 
 	QStandardItemModel* model = new QStandardItemModel(ui.treeViewProjects);
 	model->setHorizontalHeaderLabels(QStringList() << QStringLiteral("ÏîÄ¿Ãû³Æ") << QStringLiteral("ÐÅÏ¢"));
-	QStandardItem* itemProject = new QStandardItem(QIcon(QStringLiteral("res/folder_image.ico")), QStringLiteral("ÈýÎ¬²âÁ¿"));
+	QStandardItem* itemProject = new QStandardItem(QIcon(QStringLiteral("res/folder_image.ico")), QStringLiteral("È«¾°³ÉÏñ"));
 	model->appendRow(itemProject);
 	QStandardItem *childItem1 = new QStandardItem(QStringLiteral("Éè±¸"));
-	//QStandardItem *childItem2 = new QStandardItem(QStringLiteral("Í¼Ïñ"));
+	QStandardItem *childItem2 = new QStandardItem(QStringLiteral("Í¼Ïñ"));
 	QStandardItem *childItem3 = new QStandardItem(QStringLiteral("µãÔÆ"));
 	QStandardItem *childItem4 = new QStandardItem(QStringLiteral("Íø¸ñ"));
 	itemProject->appendRow(childItem1);
-	//itemProject->appendRow(childItem2);
+	itemProject->appendRow(childItem2);
 	itemProject->appendRow(childItem3);
 	itemProject->appendRow(childItem4);
-	//QStandardItem *image1 = new QStandardItem(QStringLiteral("Í¼Ïñ1"));
-	//QStandardItem *image2 = new QStandardItem(QStringLiteral("Í¼Ïñ2"));
-	//QStandardItem *image3 = new QStandardItem(QStringLiteral("Í¼Ïñ3"));
-	//QStandardItem *image4 = new QStandardItem(QStringLiteral("Í¼Ïñ4"));
-	//QStandardItem *image5 = new QStandardItem(QStringLiteral("Í¼Ïñ5"));
-	//childItem2->appendRow(image1);
-	//childItem2->appendRow(image2);
-	//childItem2->appendRow(image3);
-	//childItem2->appendRow(image4);
-	//childItem2->appendRow(image5);
+	QStandardItem *image1 = new QStandardItem(QStringLiteral("Í¼Ïñ1"));
+	QStandardItem *image2 = new QStandardItem(QStringLiteral("Í¼Ïñ2"));
+	QStandardItem *image3 = new QStandardItem(QStringLiteral("Í¼Ïñ3"));
+	QStandardItem *image4 = new QStandardItem(QStringLiteral("Í¼Ïñ4"));
+	QStandardItem *image5 = new QStandardItem(QStringLiteral("Í¼Ïñ5"));
+	QStandardItem *image6 = new QStandardItem(QStringLiteral("Í¼Ïñ6"));
+	QStandardItem *image7 = new QStandardItem(QStringLiteral("Í¼Ïñ7"));
+	childItem2->appendRow(image1);
+	childItem2->appendRow(image2);
+	childItem2->appendRow(image3);
+	childItem2->appendRow(image4);
+	childItem2->appendRow(image5);
+	childItem2->appendRow(image6);
+	childItem2->appendRow(image7);
 
 	//ÉèÖÃÐéÏß£¬ ¸øQTreeViewÓ¦ÓÃmodel
 	ui.treeViewProjects->setStyle(QStyleFactory::create("windows"));
@@ -172,8 +179,6 @@ void StructScan::systemOffline()
 
 void StructScan::onActionProjectNewClicked()
 {
-	//QImage img("TestImage.bmp");
-	//m_pimagewnd->setFrame(QPixmap::fromImage(img));
 
 }
 
@@ -205,8 +210,18 @@ void StructScan::onActionSetupSystemClicked()
 
 void StructScan::onActionSetupCameraClicked()
 {
-	m_pcamera->openCamera();
-	m_pcamera->setCameraTriggeModel(5.0);
+	//m_pcamera->openCamera();
+	//m_pcamera->setCameraTriggeModel(5.0);
+
+	QString imgPath = QFileDialog::getExistingDirectory(this, QStringLiteral("Ñ¡ÔñÍ¼ÏñÄ¿Â¼"), "./");
+	if (!imgPath.isEmpty()) {
+		m_dbroot->m_qstrImgPath = imgPath + "/";
+
+		//QByteArray cdata = imgPath.toLocal8Bit();
+		//m_pcdPath = std::string(cdata);
+		//m_actionCode = ACTION_OPEN;
+	}
+
 }
 
 void StructScan::onActionSetupProjectorClicked()
@@ -298,3 +313,12 @@ void StructScan::onActionViewBottomClicked()
 
 }
 
+void StructScan::onRootClickedRefrushImgWnd()
+{
+	//qDebug() << m_dbroot->m_qstrImgPath + m_dbroot->m_qstrImgName;
+	QString filename = m_dbroot->m_qstrImgPath + m_dbroot->m_qstrImgName;
+	QImage img;
+	img.load(filename);
+	m_pimagewnd->setFrame(QPixmap::fromImage(img));
+
+}

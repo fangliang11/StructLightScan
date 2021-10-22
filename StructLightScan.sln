@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnwrapTimeTest", "UnwrapTim
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FourTurnFourSteps", "FourTurnFourSteps\FourTurnFourSteps.vcxproj", "{63C49C5E-3542-494F-A965-D0604CA0F0F2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImportPCD", "ImportPCD\ImportPCD.vcxproj", "{977621E3-FAEA-43CF-AB77-AFFD693A7137}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -93,6 +95,14 @@ Global
 		{63C49C5E-3542-494F-A965-D0604CA0F0F2}.Release|x64.Build.0 = Release|x64
 		{63C49C5E-3542-494F-A965-D0604CA0F0F2}.Release|x86.ActiveCfg = Release|Win32
 		{63C49C5E-3542-494F-A965-D0604CA0F0F2}.Release|x86.Build.0 = Release|Win32
+		{977621E3-FAEA-43CF-AB77-AFFD693A7137}.Debug|x64.ActiveCfg = Debug|x64
+		{977621E3-FAEA-43CF-AB77-AFFD693A7137}.Debug|x64.Build.0 = Debug|x64
+		{977621E3-FAEA-43CF-AB77-AFFD693A7137}.Debug|x86.ActiveCfg = Debug|Win32
+		{977621E3-FAEA-43CF-AB77-AFFD693A7137}.Debug|x86.Build.0 = Debug|Win32
+		{977621E3-FAEA-43CF-AB77-AFFD693A7137}.Release|x64.ActiveCfg = Release|x64
+		{977621E3-FAEA-43CF-AB77-AFFD693A7137}.Release|x64.Build.0 = Release|x64
+		{977621E3-FAEA-43CF-AB77-AFFD693A7137}.Release|x86.ActiveCfg = Release|Win32
+		{977621E3-FAEA-43CF-AB77-AFFD693A7137}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

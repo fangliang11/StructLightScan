@@ -98,6 +98,7 @@ void CPointCloudWnd::initialVtkWidget()
 	//  PCL
 	m_sourceCloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
 	m_displayCloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+	m_displayColorCloud.reset(new pcl::PointCloud<pcl::PointXYZRGB>);
 	m_filteredCloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
 	m_removeOutlieredCloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
 	m_smoothedCloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
@@ -113,6 +114,7 @@ void CPointCloudWnd::initialVtkWidget()
 	m_viewer->registerAreaPickingCallback(areaPickCallback, this);
 	m_viewer->registerPointPickingCallback(pointPickCallback, this);
 	m_viewer->resetCamera();
+	//m_viewer->setCameraPosition(557.0, 557.0, 557.0, 0, 0, 1, 0);
 
 	//绑定vtk渲染窗口至 ui 控件
 	ui->SetRenderWindow(m_renWnd);
@@ -136,6 +138,7 @@ void CPointCloudWnd::WorkingOnPointCloud()
 		//所有耗时操作都置于此循环
 		if (ResponseSignals(m_actionCode)) {
 			UpdateThisWnd();
+			emit signalUpdateCloudWnd();
 		}
 	}
 }
@@ -150,12 +153,19 @@ bool CPointCloudWnd::ResponseSignals(int code)
 		state = false;
 		break;
 	case ACTION_OPEN: {
+		/*
 		displayPCDfile2(m_pcdPath);
 		//displaySphere();
 		// 按照z字段进行深度渲染，不同深度不同颜色
 		pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> filledColor(m_displayCloud, "z");
 		m_viewer->addPointCloud(m_displayCloud, filledColor, "cloud");
 		//m_viewer->updatePointCloud(m_displayCloud, filledColor, "cloud");
+		*/
+		displayColorPCDfile(m_pcdPath);
+		//pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZRGB> color;
+		pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB> color(m_displayColorCloud);
+		m_viewer->addPointCloud(m_displayColorCloud, color, "cloud");
+
 		state = true;
 		break;
 	}
@@ -270,8 +280,11 @@ void CPointCloudWnd::savePointCloudFile()
 {
 	std::string filename("test_save.pcd");
 	pcl::PCDWriter writer;
-	if(!m_displayCloud->empty())
-		writer.write(filename, *m_displayCloud);
+	if (!m_displayColorCloud->empty()) {
+		//writer.write(filename, *m_displayCloud);
+		pcl::io::savePCDFileBinaryCompressed(filename, *m_displayColorCloud);
+
+	}
 }
 
 
@@ -388,6 +401,54 @@ void CPointCloudWnd::displayPCDfile2(std::string file_name)
 
 }
 
+
+void CPointCloudWnd::displayColorPCDfile(std::string file_name)
+{
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud;                 //pcl单色点云数据指针
+	cloud.reset(new pcl::PointCloud<pcl::PointXYZRGB>);
+
+	m_sourceCloud->clear();
+	//sensor_msgs::PointCloud2 cloud2;
+	pcl::PCLPointCloud2 cloud2;
+	//pcl::PointCloud<Eigen::MatrixXf> cloud2;
+	Eigen::Vector4f origin;
+	Eigen::Quaternionf orientation;
+	int pcd_version;
+	int data_type;
+	unsigned int data_idx;
+	int offset = 0;
+	pcl::PCDReader rd;
+	rd.readHeader(file_name, cloud2, origin, orientation, pcd_version, data_type, data_idx);
+	if (data_type == 0)
+		pcl::io::loadPCDFile(file_name, *cloud);
+	else if (data_type == 2) {
+		pcl::PCDReader reader;
+		reader.read<pcl::PointXYZRGB>(file_name, *cloud);
+	}
+
+	//pcl::VoxelGrid<pcl::PointXYZRGB> sor;       //体素化网格滤波，实现下采样
+	//sor.setInputCloud(cloud);
+	//sor.setLeafSize(1.0, 1.0, 1.0);    //设置体素大小:单位（米）
+	//sor.filter(*m_displayColorCloud);
+
+	//高斯滤波
+	//pcl::filters::GaussianKernel<pcl::PointXYZRGB, pcl::PointXYZRGB> kernel;
+	//kernel.setSigma(4);
+	//kernel.setThresholdRelativeToSigma(4);
+	////pcl::search::KdTree<pcl::PointXYZRGB> kdtree;
+	//pcl::search::KdTree<pcl::PointXYZRGB>::Ptr kdtree(new pcl::search::KdTree<pcl::PointXYZRGB>);
+	//kdtree->setInputCloud(cloud);
+	//pcl::filters::Convolution3D<pcl::PointXYZRGB, pcl::PointXYZRGB, pcl::filters::GaussianKernel<pcl::PointXYZRGB, pcl::PointXYZRGB>> convolution;
+	//convolution.setKernel(kernel);
+	//convolution.setInputCloud(cloud);
+	//convolution.setSearchMethod(kdtree);
+	//convolution.setRadiusSearch(1.5);
+	//convolution.setNumberOfThreads(10);
+	//convolution.convolve(*m_displayColorCloud);
+
+	pcl::copyPointCloud(*cloud, *m_displayColorCloud);
+	//savePointCloudFile();
+}
 
 
 void CPointCloudWnd::clearDisplayCloud()
@@ -995,7 +1056,8 @@ void CPointCloudWnd::onUpdateCloudWnd()
 	}
 
 	m_viewer->resetCamera();
-
+	m_viewer->addSphere(pcl::PointXYZ(557, 557, 557), 5.0, 0.5, 0.5, 0.5, "sphere");   // 原点
+	m_viewer->setCameraPosition(557.0, 557.0, 557.0, 0, 0, 1, 0);                      // 设置相机位置和方向
 	m_renWnd->Render();
 }
 

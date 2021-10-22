@@ -44,7 +44,7 @@ void CDBRoot::slotDBselected(QModelIndex modelIndex)
 {
 	m_dbTreeWidget->resizeColumnToContents(modelIndex.row());
 	QString selectedRowTxt = m_dbTreeWidget->model()->itemData(modelIndex).values()[0].toString();
-	//qDebug() << "pressed result = " << selectedRowTxt;
+	//qDebug() << "pressed result = " << selectedRowTxt << ", index = " << modelIndex.row();
 
 	if (selectedRowTxt.compare(QStringLiteral("ÈýÎ¬²âÁ¿")) == 0) {
 		updateObjectProperty(0);
@@ -58,8 +58,19 @@ void CDBRoot::slotDBselected(QModelIndex modelIndex)
 	else if (selectedRowTxt.compare(QStringLiteral("Íø¸ñ")) == 0) {
 		updateObjectProperty(3);
 	}
+	else if (selectedRowTxt.contains(QStringLiteral("Í¼Ïñ"))) {
+		//qDebug() << "image child index = " << modelIndex.row() << ",parent= " << modelIndex.child(0,0).row();
+		if (!m_qstrImgPath.isEmpty())
+			m_propertiesDelegate->m_qstrImgPath = m_qstrImgPath + "/";
 
-
+		if (modelIndex.child(0, 0).row() == -1) {
+			m_qstrImgName = QString::number(modelIndex.row()) + ".bmp";
+			//qDebug() << m_qstrImgPath + m_qstrImgName;		
+			updateObjectProperty(4, modelIndex.row());
+			
+			emit signalRefrushImgWnd();
+		}
+	}
 }
 
 void CDBRoot::initModel()
@@ -111,6 +122,16 @@ void CDBRoot::initOperate()
 
 void CDBRoot::updateObjectProperty(int objectCode)
 {
+	m_propertiesDelegate->updateModel(objectCode);
+	m_propertiesDelegate->updateDisplay();
+	update();
+}
+
+
+void CDBRoot::updateObjectProperty(int objectCode, int imgIndex)
+{
+	m_propertiesDelegate->updateImgIndex(imgIndex);
+
 	m_propertiesDelegate->updateModel(objectCode);
 	m_propertiesDelegate->updateDisplay();
 	update();

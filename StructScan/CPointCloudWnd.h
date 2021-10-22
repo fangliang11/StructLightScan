@@ -65,6 +65,7 @@ VTK_MODULE_INIT(vtkRenderingFreeType);
 #include <pcl/filters/extract_indices.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/filters/project_inliers.h>
+#include <pcl/filters/convolution_3d.h>
 #include <pcl/segmentation/extract_clusters.h>
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/search/kdtree.h>
@@ -112,6 +113,7 @@ private:
 	pcl::PolygonMesh m_mesh;                                           //存储最终三角化的网格模型
 	pcl::PointCloud<pcl::PointXYZ>::Ptr m_sourceCloud;                 //pcl单色点云数据指针
 	pcl::PointCloud<pcl::PointXYZ>::Ptr m_displayCloud;
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr m_displayColorCloud;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr m_filteredCloud;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr m_removeOutlieredCloud;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr m_smoothedCloud;
@@ -152,6 +154,7 @@ private:
 	void displaySphereVTK();
 	void displayPCDfile(std::string file_name);
 	void displayPCDfile2(std::string file_name);
+	void displayColorPCDfile(std::string file_name);
 	void clearDisplayCloud();
 	void filteredCloud(int method, pcl::PointCloud<pcl::PointXYZ>::Ptr *cloudIn, 
 		pcl::PointCloud<pcl::PointXYZ>::Ptr *cloudOut,

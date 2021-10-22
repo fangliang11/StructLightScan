@@ -28,9 +28,11 @@ public:
 	~CPropertyDelegate();
 
 	CPointCloudWnd* m_wnd;
+	QString m_qstrImgPath;
 
 	void updateDisplay();
 	void updateModel(int objectCode);
+	void updateImgIndex(int imgIndex);
 	void updateItem(QStandardItem * item);
 
 	enum PROPERTY_CODE {
@@ -63,7 +65,7 @@ public:
 		TREE_VIEW_HEADER,
 	};
 
-	enum OBJECT_CODE{NONE = 0, DEVICE, CLOUD, MESH};
+	enum OBJECT_CODE{NONE = 0, DEVICE, CLOUD, MESH, IMAGE};
 
 protected:
 	//渲染相关的接口
@@ -99,6 +101,7 @@ private:
 	int m_nmeshMaxNeighbors;
 	int m_nmeshDisplayModel;
 	int m_nmeshDisplayColor;
+	int m_nImgIndex;
 	   
 	void addSeparator(const QString& title);
 	void appendRow(QStandardItem* leftItem, QStandardItem* rightItem, bool openPersistentEditor/*=false*/);
@@ -111,6 +114,7 @@ private:
 	void fillModelWithCloudSmooth();
 	void fillModelWithRebuild();
 	void fillModelWithMesh();
+	void fileModelWithImageInfo(int index);
 
 signals:
 	void signalObjectPropertiesChanged() const;
