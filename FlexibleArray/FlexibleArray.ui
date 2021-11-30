@@ -1,0 +1,831 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FlexibleArrayClass</class>
+ <widget class="QMainWindow" name="FlexibleArrayClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1063</width>
+    <height>724</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>多相机全景成像</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="FlexibleArray.qrc">
+    <normaloff>:/StructScan/video3d.ico</normaloff>:/StructScan/video3d.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0" colspan="2">
+        <widget class="QVTKOpenGLNativeWidget" name="vtkOpenGLWidget"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1063</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_project">
+    <property name="title">
+     <string>项目</string>
+    </property>
+    <addaction name="action_new"/>
+    <addaction name="action_save"/>
+    <addaction name="action_open_file"/>
+    <addaction name="action_open_calibration"/>
+    <addaction name="action_exit"/>
+   </widget>
+   <widget class="QMenu" name="menu_edit">
+    <property name="title">
+     <string>配置</string>
+    </property>
+    <addaction name="action_setup_system"/>
+    <addaction name="separator"/>
+    <addaction name="action_setup_camera"/>
+    <addaction name="action_setup_projector"/>
+   </widget>
+   <widget class="QMenu" name="menu_rebuild">
+    <property name="title">
+     <string>重建</string>
+    </property>
+    <addaction name="action_start"/>
+    <addaction name="action_stop"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menu_pointcloud">
+    <property name="title">
+     <string>点云处理</string>
+    </property>
+    <addaction name="action_pointcloud_select"/>
+    <addaction name="action_pointcloud_delete"/>
+    <addaction name="action_pointcloud_add"/>
+    <addaction name="action_pointcloud_filter"/>
+    <addaction name="separator"/>
+    <addaction name="action_pointcloud_mesh"/>
+   </widget>
+   <widget class="QMenu" name="menu_view">
+    <property name="title">
+     <string>视图</string>
+    </property>
+    <addaction name="action_view_plot"/>
+    <addaction name="action_view_2D"/>
+    <addaction name="action_view_3D"/>
+    <addaction name="separator"/>
+    <addaction name="action_view_front"/>
+    <addaction name="action_view_back"/>
+    <addaction name="action_view_left"/>
+    <addaction name="action_view_right"/>
+    <addaction name="action_view_top"/>
+    <addaction name="action_view_bottom"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menu_help">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="action_help_help"/>
+    <addaction name="separator"/>
+    <addaction name="action_help_about"/>
+   </widget>
+   <addaction name="menu_project"/>
+   <addaction name="menu_edit"/>
+   <addaction name="menu_rebuild"/>
+   <addaction name="menu_pointcloud"/>
+   <addaction name="menu_view"/>
+   <addaction name="menu_help"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_new"/>
+   <addaction name="action_save"/>
+   <addaction name="action_open_file"/>
+   <addaction name="action_open_calibration"/>
+   <addaction name="separator"/>
+   <addaction name="action_setup_system"/>
+   <addaction name="action_setup_camera"/>
+   <addaction name="action_setup_projector"/>
+   <addaction name="separator"/>
+   <addaction name="action_start"/>
+   <addaction name="action_stop"/>
+   <addaction name="separator"/>
+   <addaction name="action_pointcloud_select"/>
+   <addaction name="action_pointcloud_delete"/>
+   <addaction name="action_pointcloud_add"/>
+   <addaction name="action_pointcloud_filter"/>
+   <addaction name="action_pointcloud_mesh"/>
+   <addaction name="separator"/>
+   <addaction name="action_view_plot"/>
+   <addaction name="action_view_2D"/>
+   <addaction name="action_view_3D"/>
+   <addaction name="separator"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockProjectList">
+   <property name="accessibleName">
+    <string/>
+   </property>
+   <property name="windowTitle">
+    <string>项目</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QTreeView" name="treeViewProjects">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="dockWidgetProperty">
+   <property name="windowTitle">
+    <string>属性</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QTreeView" name="treeViewProperty"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="action_view_plot">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccPencil.png</normaloff>:/StructScan/res/images/ccPencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>绘图</string>
+   </property>
+  </action>
+  <action name="action_view_2D">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/2D.ico</normaloff>:/StructScan/res/2D.ico</iconset>
+   </property>
+   <property name="text">
+    <string>2D</string>
+   </property>
+  </action>
+  <action name="action_view_3D">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/3D.ico</normaloff>:/StructScan/res/3D.ico</iconset>
+   </property>
+   <property name="text">
+    <string>3D</string>
+   </property>
+  </action>
+  <action name="action_open_calibration">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/dbMaterialSymbol.png</normaloff>:/StructScan/res/images/dbMaterialSymbol.png</iconset>
+   </property>
+   <property name="text">
+    <string>打开标定文件</string>
+   </property>
+  </action>
+  <action name="action_exit">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/close.ico</normaloff>:/StructScan/res/close.ico</iconset>
+   </property>
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="action_setup_system">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/action.ico</normaloff>:/StructScan/res/action.ico</iconset>
+   </property>
+   <property name="text">
+    <string>系统设置</string>
+   </property>
+  </action>
+  <action name="action_new">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccConsole.png</normaloff>:/StructScan/res/images/ccConsole.png</iconset>
+   </property>
+   <property name="text">
+    <string>新建</string>
+   </property>
+  </action>
+  <action name="action_save">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccSave.png</normaloff>:/StructScan/res/images/ccSave.png</iconset>
+   </property>
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
+  <action name="action_open_file">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccOpen.png</normaloff>:/StructScan/res/images/ccOpen.png</iconset>
+   </property>
+   <property name="text">
+    <string>打开文件</string>
+   </property>
+  </action>
+  <action name="action_setup_camera">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/dbCalibratedImageSymbol.png</normaloff>:/StructScan/res/images/dbCalibratedImageSymbol.png</iconset>
+   </property>
+   <property name="text">
+    <string>相机配置</string>
+   </property>
+  </action>
+  <action name="action_setup_projector">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccFullScreen.png</normaloff>:/StructScan/res/images/ccFullScreen.png</iconset>
+   </property>
+   <property name="text">
+    <string>投影配置</string>
+   </property>
+  </action>
+  <action name="action_start">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/snap_off.png</normaloff>:/StructScan/res/snap_off.png</iconset>
+   </property>
+   <property name="text">
+    <string>开始</string>
+   </property>
+  </action>
+  <action name="action_stop">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/snap_on_hover.png</normaloff>:/StructScan/res/snap_on_hover.png</iconset>
+   </property>
+   <property name="text">
+    <string>停止</string>
+   </property>
+  </action>
+  <action name="action_pointcloud_select">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/smallRectangleSelect.png</normaloff>:/StructScan/res/images/smallRectangleSelect.png</iconset>
+   </property>
+   <property name="text">
+    <string>框选</string>
+   </property>
+  </action>
+  <action name="action_pointcloud_delete">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccDelete.png</normaloff>:/StructScan/res/images/ccDelete.png</iconset>
+   </property>
+   <property name="text">
+    <string>删除</string>
+   </property>
+  </action>
+  <action name="action_pointcloud_filter">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccFilterByValue.png</normaloff>:/StructScan/res/images/ccFilterByValue.png</iconset>
+   </property>
+   <property name="text">
+    <string>滤波</string>
+   </property>
+  </action>
+  <action name="action_pointcloud_mesh">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/dbMeshSymbol.png</normaloff>:/StructScan/res/images/dbMeshSymbol.png</iconset>
+   </property>
+   <property name="text">
+    <string>网格</string>
+   </property>
+  </action>
+  <action name="action_view_front">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccViewYpos.png</normaloff>:/StructScan/res/images/ccViewYpos.png</iconset>
+   </property>
+   <property name="text">
+    <string>正视图</string>
+   </property>
+  </action>
+  <action name="action_view_back">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccViewYneg.png</normaloff>:/StructScan/res/images/ccViewYneg.png</iconset>
+   </property>
+   <property name="text">
+    <string>后视图</string>
+   </property>
+  </action>
+  <action name="action_view_left">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccViewXpos.png</normaloff>:/StructScan/res/images/ccViewXpos.png</iconset>
+   </property>
+   <property name="text">
+    <string>左视图</string>
+   </property>
+  </action>
+  <action name="action_view_right">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccViewXneg.png</normaloff>:/StructScan/res/images/ccViewXneg.png</iconset>
+   </property>
+   <property name="text">
+    <string>右视图</string>
+   </property>
+  </action>
+  <action name="action_view_top">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccViewZpos.png</normaloff>:/StructScan/res/images/ccViewZpos.png</iconset>
+   </property>
+   <property name="text">
+    <string>顶视图</string>
+   </property>
+  </action>
+  <action name="action_view_bottom">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccViewZneg.png</normaloff>:/StructScan/res/images/ccViewZneg.png</iconset>
+   </property>
+   <property name="text">
+    <string>底视图</string>
+   </property>
+  </action>
+  <action name="action_help_help">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/search.svg</normaloff>:/StructScan/res/images/search.svg</iconset>
+   </property>
+   <property name="text">
+    <string>帮助</string>
+   </property>
+  </action>
+  <action name="action_help_about">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccLightParams.png</normaloff>:/StructScan/res/images/ccLightParams.png</iconset>
+   </property>
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="action_pointcloud_add">
+   <property name="icon">
+    <iconset resource="FlexibleArray.qrc">
+     <normaloff>:/StructScan/res/images/ccPlus.png</normaloff>:/StructScan/res/images/ccPlus.png</iconset>
+   </property>
+   <property name="text">
+    <string>添加</string>
+   </property>
+  </action>
+  <zorder>dockProjectList</zorder>
+  <zorder>dockWidgetProperty</zorder>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QVTKOpenGLNativeWidget</class>
+   <extends>QOpenGLWidget</extends>
+   <header location="global">qvtkopenglnativewidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="FlexibleArray.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>action_new</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionProjectNewClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_save</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionProjectSaveClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_view_bottom</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionViewBottomClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_view_top</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionViewTopClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_view_right</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionViewRightClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_view_left</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionViewLeftClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_view_back</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionViewBackClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_view_front</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionViewFrontClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_view_2D</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionView2DClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_view_plot</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionViewPlotClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_pointcloud_mesh</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionPointCloudMeshClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_pointcloud_filter</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionPointCloudFilterClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_pointcloud_delete</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionPointCloudDeleteClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_pointcloud_select</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionPointCloudSelectClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_stop</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionStopClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_start</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionStartClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_setup_projector</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionSetupProjectorClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_setup_camera</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionSetupCameraClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_setup_system</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionSetupSystemClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_open_calibration</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionProjectOpenCalibrationClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_open_file</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionProjectOpenFileClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_view_3D</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionView3DClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_pointcloud_add</sender>
+   <signal>triggered()</signal>
+   <receiver>FlexibleArrayClass</receiver>
+   <slot>onActionPointCloudAddClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>531</x>
+     <y>361</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>onActionProjectNewClicked()</slot>
+  <slot>onActionProjectSaveClicked()</slot>
+  <slot>onActionProjectOpenFileClicked()</slot>
+  <slot>onActionProjectOpenCalibrationClicked()</slot>
+  <slot>onActionSetupSystemClicked()</slot>
+  <slot>onActionSetupCameraClicked()</slot>
+  <slot>onActionSetupProjectorClicked()</slot>
+  <slot>onActionStartClicked()</slot>
+  <slot>onActionStopClicked()</slot>
+  <slot>onActionPointCloudSelectClicked()</slot>
+  <slot>onActionPointCloudDeleteClicked()</slot>
+  <slot>onActionPointCloudFilterClicked()</slot>
+  <slot>onActionPointCloudMeshClicked()</slot>
+  <slot>onActionViewPlotClicked()</slot>
+  <slot>onActionView2DClicked()</slot>
+  <slot>onActionView3DClicked()</slot>
+  <slot>onActionViewFrontClicked()</slot>
+  <slot>onActionViewBackClicked()</slot>
+  <slot>onActionViewLeftClicked()</slot>
+  <slot>onActionViewRightClicked()</slot>
+  <slot>onActionViewTopClicked()</slot>
+  <slot>onActionViewBottomClicked()</slot>
+  <slot>onActionPointCloudAddClicked()</slot>
+ </slots>
+</ui>
