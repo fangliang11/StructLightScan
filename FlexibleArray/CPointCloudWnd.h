@@ -53,6 +53,7 @@ VTK_MODULE_INIT(vtkRenderingFreeType);
 #include <pcl/console/parse.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
+#include <pcl/common/transforms.h>
 #include <pcl/common/io.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>
@@ -79,6 +80,11 @@ VTK_MODULE_INIT(vtkRenderingFreeType);
 #include <pcl/segmentation/sac_segmentation.h>
 
 
+
+
+typedef pcl::PointXYZRGB PointType;
+
+
 class CPointCloudWnd : public QWidget
 {
 	Q_OBJECT
@@ -94,6 +100,7 @@ private:
 	//  接收到的指令
 	enum {
 		ACTION_NONE = 0,
+		ACTION_DISPLAY,
 		ACTION_OPEN,
 		ACTION_SELECT,
 		ACTION_DELETE,
@@ -155,6 +162,7 @@ private:
 	void displayPCDfile(std::string file_name);
 	void displayPCDfile2(std::string file_name);
 	void displayColorPCDfile(std::string file_name);
+	void displayPointCloud(pcl::PointCloud<PointType>::Ptr cloud);
 	void clearDisplayCloud();
 	void filteredCloud(int method, pcl::PointCloud<pcl::PointXYZ>::Ptr *cloudIn, 
 		pcl::PointCloud<pcl::PointXYZ>::Ptr *cloudOut,
@@ -201,6 +209,7 @@ public:
 
 signals:
 	void signalUpdateCloudWnd();
+	void signalDisplay(pcl::PointCloud<PointType>::Ptr cloud);
 	void signalOpenPCL();
 	void signalSelect();
 	void signalDelete();
@@ -212,6 +221,7 @@ signals:
 private slots:
 	void onUpdateCloudWnd();
 	void onVtkOpenGLNativeWidgetMouseEvent(QMouseEvent *event);
+	void onDisplay(pcl::PointCloud<PointType>::Ptr cloud);
 	void onOpenPCL();
 	void onSelect();
 	void onDelete();

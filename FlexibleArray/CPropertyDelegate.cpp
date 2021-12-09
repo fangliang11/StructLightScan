@@ -62,6 +62,12 @@ CPropertyDelegate::CPropertyDelegate(QStandardItemModel* _model, QAbstractItemVi
 	m_nmeshDisplayModel = 0;
 	m_nmeshDisplayColor = 0;
 	m_nImgIndex = 0;
+	m_nOpeningAngle = 0;
+	m_fSphereRadius = 610.72;
+	m_fFactorCenterRound = 596.7 / 610.72;
+	m_nOpeningAngle_public = 30;
+	m_fSphereRadius_public = m_fSphereRadius;
+	m_fFactorCenterRound_public = m_fFactorCenterRound;
 
 	connect(this, &CPropertyDelegate::signalObjectVisibleState, this, &CPropertyDelegate::objectVisible);
 	connect(this, &CPropertyDelegate::signalCloudCoordinateDisplayState, this, &CPropertyDelegate::cloudCoordinateDisplay);
@@ -268,6 +274,38 @@ QWidget *CPropertyDelegate::createEditor(QWidget *parent, const QStyleOptionView
 		outputWidget = comboBox;
 		break;
 	}
+	case OBJECT_STITCH_OPENING_ANGLE: {
+		QComboBox *comboBox = new QComboBox(parent);
+		comboBox->addItem(QString("30"));
+		comboBox->addItem(QString("40"));
+		comboBox->addItem(QString("49"));
+		comboBox->addItem(QString("55"));
+		connect(comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &CPropertyDelegate::stitchOpeningAngleChanged);
+		outputWidget = comboBox;
+
+		break;
+	}
+	case OBJECT_STITCH_SPHERE_RADIUS: {
+		QDoubleSpinBox *spinBox = new QDoubleSpinBox(parent);
+		spinBox->setDecimals(2);
+		spinBox->setRange(1.0, 10000.0);
+		spinBox->setSingleStep(0.01);
+		connect(spinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &CPropertyDelegate::stitchSphereRadiusChanged);
+		outputWidget = spinBox;
+		break;
+	}
+	case OBJECT_STITCH_FACTOR_CENTER_ROUND: {
+		QDoubleSpinBox *spinBox = new QDoubleSpinBox(parent);
+		spinBox->setDecimals(2);
+		spinBox->setRange(0.01, 10.0);
+		spinBox->setSingleStep(0.01);
+		connect(spinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &CPropertyDelegate::stitchFactorCenterRoundChanged);
+		outputWidget = spinBox;
+		break;
+	}
 	case TREE_VIEW_HEADER: {
 		QLabel* headerLabel = new QLabel(parent);
 		headerLabel->setStyleSheet(SEPARATOR_STYLESHEET);
@@ -380,6 +418,15 @@ void CPropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index)
 		break;
 	case OBJECT_MESH_DISPLAY_COLOR:
 		SetComboBoxIndex(editor, static_cast<int>(m_nmeshDisplayColor));
+		break;
+	case OBJECT_STITCH_OPENING_ANGLE:
+		SetComboBoxIndex(editor, static_cast<int>(m_nOpeningAngle));
+		break;
+	case OBJECT_STITCH_SPHERE_RADIUS:
+		SetDoubleSpinBoxValue(editor, static_cast<double>(m_fSphereRadius));
+		break;
+	case OBJECT_STITCH_FACTOR_CENTER_ROUND:
+		SetDoubleSpinBoxValue(editor, static_cast<double>(m_fFactorCenterRound));
 		break;
 	case TREE_VIEW_HEADER: {
 		QLabel* label = qobject_cast<QLabel*>(editor);
@@ -577,6 +624,7 @@ void CPropertyDelegate::fillModel()
 		break;
 	case DEVICE:
 		fillModelWithObject();
+		fileModelWithImageStitching();
 		break;
 	case CLOUD:
 		fillModelWithCloud();
@@ -707,6 +755,17 @@ void CPropertyDelegate::fileModelWithImageInfo(int index)
 	appendRow(ITEM(tr("Resolution")), ITEM(QString::number(img.width()) + " , " + QString::number(img.height())));
 	
 }
+
+void CPropertyDelegate::fileModelWithImageStitching()
+{
+	assert(m_model);
+
+	addSeparator(QStringLiteral("Æ´½Ó²ÎÊý"));
+	appendRow(ITEM(tr("OpeningAngle")), PERSISTENT_EDITOR(OBJECT_STITCH_OPENING_ANGLE), true);
+	appendRow(ITEM(tr("SphereRadius")), PERSISTENT_EDITOR(OBJECT_STITCH_SPHERE_RADIUS), true);
+	appendRow(ITEM(tr("FactorCenterRound")), PERSISTENT_EDITOR(OBJECT_STITCH_FACTOR_CENTER_ROUND), true);
+}
+
 //*****************************************************SLOT******************************//
 void CPropertyDelegate::objectVisible(bool state)
 {
@@ -924,3 +983,46 @@ void CPropertyDelegate::meshColor(int index)
 	m_nmeshDisplayColor = index;
 	m_wnd->setMeshColor(index);
 }
+
+void CPropertyDelegate::stitchOpeningAngleChanged(int index)
+{
+	if (m_nCurrentObject == NONE)
+		return;
+
+	m_nOpeningAngle = index;
+	switch (index)
+	{
+	case 0:
+		m_nOpeningAngle_public = 30;
+		break;
+	case 1:
+		m_nOpeningAngle_public = 40;
+		break;
+	case 2:
+		m_nOpeningAngle_public = 49;
+		break;
+	case 3:
+		m_nOpeningAngle_public = 55;
+		break;
+	}
+	//qDebug("public angle = %d", m_nOpeningAngle_public);
+}
+
+void CPropertyDelegate::stitchSphereRadiusChanged(double value)
+{
+	if (m_nCurrentObject == NONE)
+		return;
+	m_fSphereRadius = value;
+	m_fSphereRadius_public = m_fSphereRadius;
+
+}
+
+void CPropertyDelegate::stitchFactorCenterRoundChanged(double value)
+{
+	if (m_nCurrentObject == NONE)
+		return;
+	m_fFactorCenterRound = value;
+	m_fFactorCenterRound_public = m_fFactorCenterRound;
+
+}
+

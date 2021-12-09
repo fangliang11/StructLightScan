@@ -64,9 +64,9 @@ void CDBRoot::slotDBselected(QModelIndex modelIndex)
 			m_propertiesDelegate->m_qstrImgPath = m_qstrImgPath + "/";
 
 		if (modelIndex.child(0, 0).row() == -1) {
-			m_qstrImgName = QString::number(modelIndex.row()) + ".bmp";
+			m_qstrImgName = QString::number(modelIndex.row() + 1) + ".bmp";
 			//qDebug() << m_qstrImgPath + m_qstrImgName;		
-			updateObjectProperty(4, modelIndex.row());
+			updateObjectProperty(4, modelIndex.row() + 1);
 			
 			emit signalRefrushImgWnd();
 		}
@@ -93,6 +93,11 @@ void CDBRoot::initDelegate()
 	m_propertiesDelegate = new CPropertyDelegate(m_propertiesModel, m_propertiesTreeWidget);
 	m_propertiesDelegate->m_wnd = this->m_wnd;
 	m_propertiesTreeWidget->setItemDelegate(m_propertiesDelegate);
+
+	m_pOpeningAngle = &m_propertiesDelegate->m_nOpeningAngle_public;
+	m_pSphereRadius = &m_propertiesDelegate->m_fSphereRadius_public;
+	m_pFactorCenterRound = &m_propertiesDelegate->m_fFactorCenterRound_public;
+
 
 	//connect(m_propertiesDelegate, &CPropertyDelegate::signalObjectPropertiesChanged, this, &CDBRoot::updateObject);
 	//connect(m_propertiesDelegate, &CPropertyDelegate::signalObjectAppearanceChanged, this, &CDBRoot::redrawObject);

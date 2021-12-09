@@ -63,7 +63,7 @@ int main()
 	std::cout << "point 10 color r|g|b = " << int(cloud.points[9].r)
 		<< "  " << int(cloud.points[9].g)
 		<< "  " << int(cloud.points[9].b) << std::endl;
-	std::string strout("C:\\Users\\fang\\Desktop\\柔电院全景\\source_binary.pcd");
+	std::string strout = "C:\\Users\\fang\\Desktop\\柔电院全景\\source_binary.pcd";
 	pcl::PCDWriter writer;
 	if (!cloud.empty()) {
 		//writer.write(strout, *cloud);

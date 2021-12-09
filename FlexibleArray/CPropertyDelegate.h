@@ -29,6 +29,9 @@ public:
 
 	CPointCloudWnd* m_wnd;
 	QString m_qstrImgPath;
+	int m_nOpeningAngle_public;
+	float m_fSphereRadius_public;
+	float m_fFactorCenterRound_public;
 
 	void updateDisplay();
 	void updateModel(int objectCode);
@@ -62,6 +65,9 @@ public:
 		OBJECT_MESH_NAME,
 		OBJECT_MESH_DISPLAY_TYPE,
 		OBJECT_MESH_DISPLAY_COLOR,
+		OBJECT_STITCH_OPENING_ANGLE,
+		OBJECT_STITCH_SPHERE_RADIUS,
+		OBJECT_STITCH_FACTOR_CENTER_ROUND,
 		TREE_VIEW_HEADER,
 	};
 
@@ -102,6 +108,9 @@ private:
 	int m_nmeshDisplayModel;
 	int m_nmeshDisplayColor;
 	int m_nImgIndex;
+	int m_nOpeningAngle;
+	float m_fSphereRadius;
+	float m_fFactorCenterRound;
 	   
 	void addSeparator(const QString& title);
 	void appendRow(QStandardItem* leftItem, QStandardItem* rightItem, bool openPersistentEditor/*=false*/);
@@ -115,6 +124,7 @@ private:
 	void fillModelWithRebuild();
 	void fillModelWithMesh();
 	void fileModelWithImageInfo(int index);
+	void fileModelWithImageStitching();
 
 signals:
 	void signalObjectPropertiesChanged() const;
@@ -147,6 +157,9 @@ private slots:
 	void meshMaxNeighbors(int value);
 	void meshDisplayModel(int index);
 	void meshColor(int index);
+	void stitchOpeningAngleChanged(int index);
+	void stitchSphereRadiusChanged(double value);
+	void stitchFactorCenterRoundChanged(double value);
 
 };
 

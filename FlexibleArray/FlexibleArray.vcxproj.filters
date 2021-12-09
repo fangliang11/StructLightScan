@@ -40,6 +40,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CPanoramaStitching.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCameraControl.h">
@@ -60,6 +61,7 @@
     <ClInclude Include="resource1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CPanoramaStitching.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CCalibrationWnd.h">

@@ -25,6 +25,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImportPCD", "ImportPCD\Impo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlexibleArray", "FlexibleArray\FlexibleArray.vcxproj", "{7F262AE1-9949-4DFC-9880-D18FA184AF7E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GetCloudFromImage", "GetCloudFromImage\GetCloudFromImage.vcxproj", "{895F9E0B-E2DD-450B-B741-674FC0CB66BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -111,6 +113,14 @@ Global
 		{7F262AE1-9949-4DFC-9880-D18FA184AF7E}.Release|x64.ActiveCfg = Release|x64
 		{7F262AE1-9949-4DFC-9880-D18FA184AF7E}.Release|x64.Build.0 = Release|x64
 		{7F262AE1-9949-4DFC-9880-D18FA184AF7E}.Release|x86.ActiveCfg = Release|x64
+		{895F9E0B-E2DD-450B-B741-674FC0CB66BA}.Debug|x64.ActiveCfg = Debug|x64
+		{895F9E0B-E2DD-450B-B741-674FC0CB66BA}.Debug|x64.Build.0 = Debug|x64
+		{895F9E0B-E2DD-450B-B741-674FC0CB66BA}.Debug|x86.ActiveCfg = Debug|Win32
+		{895F9E0B-E2DD-450B-B741-674FC0CB66BA}.Debug|x86.Build.0 = Debug|Win32
+		{895F9E0B-E2DD-450B-B741-674FC0CB66BA}.Release|x64.ActiveCfg = Release|x64
+		{895F9E0B-E2DD-450B-B741-674FC0CB66BA}.Release|x64.Build.0 = Release|x64
+		{895F9E0B-E2DD-450B-B741-674FC0CB66BA}.Release|x86.ActiveCfg = Release|Win32
+		{895F9E0B-E2DD-450B-B741-674FC0CB66BA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

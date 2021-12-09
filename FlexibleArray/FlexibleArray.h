@@ -14,18 +14,32 @@
 #include <QStyleFactory>
 #include <QDebug>
 #include <QCloseEvent>
+#include <QDateTime>
+#include <QTimer>
+
+
+#include "CPointCloudWnd.h"
+#include "CImageWnd.h"
+#include "CCalibrationWnd.h"
+#include "CPointCloudWnd.h"
+#include "CDBRoot.h"
+#include "CCameraControl.h"
+#include "CPhaseCaculate.h"
+#include "CPanoramaStitching.h"
 
 #include "ui_FlexibleArray.h"
 
 
-class CCalibrationWnd;
-class CImageWnd;
-class CPlotWnd;
-class CPointCloudWnd;
-class CRoi;
-class CDBRoot;
-class CCameraControl;
-class CPhaseCaculate;
+//class CCalibrationWnd;
+//class CImageWnd;
+//class CPlotWnd;
+////class CPointCloudWnd;
+//class CRoi;
+//class CDBRoot;
+//class CCameraControl;
+//class CPhaseCaculate;
+//class CPanoramaStitching;
+
 
 class FlexibleArray : public QMainWindow
 {
@@ -40,6 +54,7 @@ public:
 private:
     Ui::FlexibleArrayClass ui;
 	QLabel *m_img;
+	QString m_qstrImgPath;
 
 	//QMdiArea *m_mdiArea = nullptr;
 	CPointCloudWnd *m_pCloud = nullptr;
@@ -51,14 +66,22 @@ private:
 	CCameraControl* m_pcamera = nullptr;
 	CPhaseCaculate* m_pcaculate = nullptr;
 
+	CPanoramaStitching* m_pStitch = nullptr;
+
 	void closeEvent(QCloseEvent *event);
 	void InitialConnection();
 	void InitialStatusBar();
 	void InitialDockWidget(int width);
 	void InitialProjectTree();
 	void InitialPropertyTree();
+	void UpdateStatusBar();
+
+private:
+	QTimer* m_timerUpdate = nullptr;
+	QLabel* m_labelTime = nullptr;
 
 signals:
+	void signalDisplay(pcl::PointCloud<PointType>::Ptr cloud);
 	void signalOpenPCL();
 	void signalSelect();
 	void signalDelete();
@@ -68,6 +91,7 @@ signals:
 	void signalSurfaceRebuild();
 
 private slots:
+	void onTimerUpdata();
 	void systemOnline();
 	void systemOffline();
 	void onActionProjectNewClicked();

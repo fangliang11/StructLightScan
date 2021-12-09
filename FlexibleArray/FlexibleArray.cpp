@@ -1,18 +1,16 @@
 
 
 #include "FlexibleArray.h"
-#include "CImageWnd.h"
-#include "CCalibrationWnd.h"
-#include "CPointCloudWnd.h"
-#include "CDBRoot.h"
-#include "CCameraControl.h"
 
-#include "CPhaseCaculate.h"
 
 FlexibleArray::FlexibleArray(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+
+	m_timerUpdate = new QTimer(this);
+	m_timerUpdate->stop();
+	m_timerUpdate->setInterval(1000);    //  定时 1 秒
 
 	m_pCloud = new CPointCloudWnd(ui.vtkOpenGLWidget, this);
 	if (m_pCloud == nullptr)
@@ -42,6 +40,10 @@ FlexibleArray::FlexibleArray(QWidget *parent)
 	if (m_pcaculate == nullptr)
 		return;
 
+	// 图像拼接成点云
+	m_pStitch = new CPanoramaStitching();
+	if (m_pStitch == nullptr)
+		return;
 
 
 	//m_mdiArea = new QMdiArea(this);
@@ -69,6 +71,7 @@ FlexibleArray::FlexibleArray(QWidget *parent)
 	InitialPropertyTree();
 	InitialConnection();
 
+	m_timerUpdate->start();
 }
 
 FlexibleArray::~FlexibleArray()
@@ -87,6 +90,9 @@ void FlexibleArray::closeEvent(QCloseEvent *event)
 
 void FlexibleArray::InitialConnection()
 {
+	connect(m_timerUpdate, SIGNAL(timeout()), this, SLOT(onTimerUpdata()));
+
+	connect(this, SIGNAL(signalDisplay(pcl::PointCloud<PointType>::Ptr)), m_pCloud, SIGNAL(signalDisplay(pcl::PointCloud<PointType>::Ptr)));
 	connect(this, &FlexibleArray::signalOpenPCL,         m_pCloud, &CPointCloudWnd::signalOpenPCL);
 	connect(this, &FlexibleArray::signalSelect,          m_pCloud, &CPointCloudWnd::signalSelect);
 	connect(this, &FlexibleArray::signalDelete,          m_pCloud, &CPointCloudWnd::signalDelete);
@@ -101,15 +107,26 @@ void FlexibleArray::InitialConnection()
 
 void FlexibleArray::InitialStatusBar()
 {
-	QLabel* label1 = new QLabel(tr("Label1"), this);
-	QLabel* label2 = new QLabel(tr("Label2"), this);
-	QLabel* label3 = new QLabel(tr("Label3"), this);
-	QLabel* label4 = new QLabel(tr("Label4"), this);
+	QLabel* label1 = new QLabel(QString::fromLocal8Bit("柔性阵列成像系统演示软件"), this);
+	QLabel* label2 = new QLabel(QString::fromLocal8Bit("浙江清华柔性电子技术研究院"), this);
+	QLabel* label3 = new QLabel(QString::fromLocal8Bit("国防科技大学"), this);
+	m_labelTime = new QLabel(QString::fromLocal8Bit(""), this);
+
 	ui.statusBar->addWidget(label1, 1);
 	ui.statusBar->addWidget(label2, 1);
 	ui.statusBar->addWidget(label3, 1);
-	ui.statusBar->addWidget(label4, 1);
+	ui.statusBar->addWidget(m_labelTime, 1);
 	
+}
+
+
+void FlexibleArray::UpdateStatusBar()
+{
+	QDateTime current_date_time = QDateTime::currentDateTime();
+	//QString current_date = current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz ddd");
+	QString current_date = current_date_time.toString(QString::fromLocal8Bit("yyyy年MM月dd日  hh时mm分ss秒"));
+
+	m_labelTime->setText(current_date);
 }
 
 
@@ -139,13 +156,13 @@ void FlexibleArray::InitialProjectTree()
 	itemProject->appendRow(childItem2);
 	itemProject->appendRow(childItem3);
 	itemProject->appendRow(childItem4);
-	QStandardItem *image1 = new QStandardItem(QStringLiteral("图像1"));
-	QStandardItem *image2 = new QStandardItem(QStringLiteral("图像2"));
-	QStandardItem *image3 = new QStandardItem(QStringLiteral("图像3"));
-	QStandardItem *image4 = new QStandardItem(QStringLiteral("图像4"));
-	QStandardItem *image5 = new QStandardItem(QStringLiteral("图像5"));
-	QStandardItem *image6 = new QStandardItem(QStringLiteral("图像6"));
-	QStandardItem *image7 = new QStandardItem(QStringLiteral("图像7"));
+	QStandardItem *image1 = new QStandardItem(QStringLiteral("图像0"));
+	QStandardItem *image2 = new QStandardItem(QStringLiteral("图像1"));
+	QStandardItem *image3 = new QStandardItem(QStringLiteral("图像2"));
+	QStandardItem *image4 = new QStandardItem(QStringLiteral("图像3"));
+	QStandardItem *image5 = new QStandardItem(QStringLiteral("图像4"));
+	QStandardItem *image6 = new QStandardItem(QStringLiteral("图像5"));
+	QStandardItem *image7 = new QStandardItem(QStringLiteral("图像6"));
 	childItem2->appendRow(image1);
 	childItem2->appendRow(image2);
 	childItem2->appendRow(image3);
@@ -167,6 +184,14 @@ void FlexibleArray::InitialPropertyTree()
 }
 
 //************************************SLOTS******************************//
+void FlexibleArray::onTimerUpdata()
+{
+	UpdateStatusBar();
+
+}
+
+
+
 void FlexibleArray::systemOnline()
 {
 
@@ -184,12 +209,31 @@ void FlexibleArray::onActionProjectNewClicked()
 
 void FlexibleArray::onActionProjectSaveClicked()
 {
+	qDebug("Save clicked");
+	if (!m_pStitch->m_pcloud_stitch->empty()) {
+		QString filename = m_qstrImgPath + QString::number(m_pStitch->m_nOpenAngleSelect) + ".pcd";
+		QByteArray byName = filename.toLocal8Bit();
+		m_pStitch->SaveCloudFile(byName.data());
+
+		QMessageBox::information(nullptr, "Information", "point_cloud Save Successfully!");
+	}
 
 }
 
 void FlexibleArray::onActionProjectOpenFileClicked()
 {
-	emit signalOpenPCL();
+	//emit signalOpenPCL();
+
+	QString imgPath = QFileDialog::getExistingDirectory(this, QStringLiteral("选择图像目录"), "./");
+	if (!imgPath.isEmpty()) {
+		m_qstrImgPath = imgPath + "/";
+		m_dbroot->m_qstrImgPath = imgPath + "/";
+
+
+		//QByteArray cdata = imgPath.toLocal8Bit();
+		//m_pcdPath = std::string(cdata);
+		//m_actionCode = ACTION_OPEN;
+	}
 }
 
 void FlexibleArray::onActionProjectOpenCalibrationClicked()
@@ -213,74 +257,80 @@ void FlexibleArray::onActionSetupCameraClicked()
 	//m_pcamera->openCamera();
 	//m_pcamera->setCameraTriggeModel(5.0);
 
-	QString imgPath = QFileDialog::getExistingDirectory(this, QStringLiteral("选择图像目录"), "./");
-	if (!imgPath.isEmpty()) {
-		m_dbroot->m_qstrImgPath = imgPath + "/";
-
-		//QByteArray cdata = imgPath.toLocal8Bit();
-		//m_pcdPath = std::string(cdata);
-		//m_actionCode = ACTION_OPEN;
-	}
 
 }
 
 void FlexibleArray::onActionSetupProjectorClicked()
 {
-	m_pcamera->closeCamera();
+	//m_pcamera->closeCamera();
 }
 
 void FlexibleArray::onActionStartClicked()
 {
 	//m_dbroot->updateObject();
-	m_pcamera->acquireImages();
+	//m_pcamera->acquireImages();
+
+	qDebug("Start clicked");
+
+	QByteArray byPath = m_qstrImgPath.toLocal8Bit();
+
+	if (m_dbroot->m_pOpeningAngle != nullptr) {
+		int angle = *m_dbroot->m_pOpeningAngle;
+		m_pStitch->ImageStitchUseRotateMatrix(byPath.data(), angle);
+		qDebug("angle = %d", angle);
+
+		emit signalDisplay(m_pStitch->m_pcloud_stitch);
+	}
 }
 
 void FlexibleArray::onActionStopClicked()
 {
-	m_pcamera->stopAcquireImages();
+	//m_pcamera->stopAcquireImages();
 }
 
 void FlexibleArray::onActionPointCloudSelectClicked()
 {
-	emit signalSelect();
+	//emit signalSelect();
 }
 
 void FlexibleArray::onActionPointCloudDeleteClicked()
 {
-	emit signalDelete();
+	//emit signalDelete();
 }
 
 void FlexibleArray::onActionPointCloudAddClicked()
 {
-	emit signalAdd();
+	//emit signalAdd();
 }
 
 void FlexibleArray::onActionPointCloudFilterClicked()
 {
-	emit signalFilter();
+	//emit signalFilter();
 }
 
 void FlexibleArray::onActionPointCloudMeshClicked()
 {
-	emit signalMesh();
+	//emit signalMesh();
 }
 
 void FlexibleArray::onActionViewPlotClicked()
 {
+	qDebug("view plot clicked");
+
 
 }
 
 void FlexibleArray::onActionView2DClicked()
 {
-	emit signalSurfaceRebuild();
+	//emit signalSurfaceRebuild();
 }
 
 void FlexibleArray::onActionView3DClicked()
 {
-	bool statue = false;
-	statue = !m_pcamera->getUserOutputStatue();
+	//bool statue = false;
+	//statue = !m_pcamera->getUserOutputStatue();
 
-	m_pcamera->setUserOutput(0, statue);
+	//m_pcamera->setUserOutput(0, statue);
 }
 
 void FlexibleArray::onActionViewFrontClicked()

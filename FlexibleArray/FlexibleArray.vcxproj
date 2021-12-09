@@ -40,12 +40,14 @@
     <Import Project="..\PCL_1_9_debug.props" />
     <Import Project="Halcon_18_11_S_debug_x64.props" />
     <Import Project="DaHen_x64_debug.props" />
+    <Import Project="..\Opencv_3_4_1_x64_debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\PCL_1_9_release.props" />
     <Import Project="Halcon_18_11_S_release_x64.props" />
     <Import Project="DaHeng_x64_release.props" />
+    <Import Project="..\Opencv_3_4_1_x64_release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -125,6 +127,7 @@
     <ClCompile Include="CCameraControl.cpp" />
     <ClCompile Include="CDBRoot.cpp" />
     <ClCompile Include="CImageWnd.cpp" />
+    <ClCompile Include="CPanoramaStitching.cpp" />
     <ClCompile Include="CPhaseCaculate.cpp" />
     <ClCompile Include="CPlotWnd.cpp" />
     <ClCompile Include="CPointCloudWnd.cpp" />
@@ -153,6 +156,7 @@
     <QtMoc Include="CPropertyDelegate.h" />
     <QtMoc Include="CDBRoot.h" />
     <ClInclude Include="CCameraControl.h" />
+    <ClInclude Include="CPanoramaStitching.h" />
     <ClInclude Include="CPhaseCaculate.h" />
     <ClInclude Include="CProjectorControl.h" />
     <ClInclude Include="GXBitmap.h" />

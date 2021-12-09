@@ -27,6 +27,7 @@ CPointCloudWnd::CPointCloudWnd(QVTKOpenGLNativeWidget *wnd, QWidget *parent)
 
 	connect(ui, &QVTKOpenGLNativeWidget::mouseEvent, this, &CPointCloudWnd::onVtkOpenGLNativeWidgetMouseEvent);
 	connect(this, &CPointCloudWnd::signalUpdateCloudWnd, this, &CPointCloudWnd::onUpdateCloudWnd);
+	connect(this, SIGNAL(signalDisplay(pcl::PointCloud<PointType>::Ptr)), this, SLOT(onDisplay(pcl::PointCloud<PointType>::Ptr)));
 	connect(this, &CPointCloudWnd::signalOpenPCL, this, &CPointCloudWnd::onOpenPCL);
 	connect(this, &CPointCloudWnd::signalSelect, this, &CPointCloudWnd::onSelect);
 	connect(this, &CPointCloudWnd::signalDelete, this, &CPointCloudWnd::onDelete);
@@ -152,6 +153,12 @@ bool CPointCloudWnd::ResponseSignals(int code)
 	case ACTION_NONE:
 		state = false;
 		break;
+	case ACTION_DISPLAY: {
+		pcl::visualization::PointCloudColorHandlerRGBField<PointType> color(m_displayColorCloud);
+		m_viewer->addPointCloud(m_displayColorCloud, color, "cloud");
+		state = true;
+		break;
+	}
 	case ACTION_OPEN: {
 		/*
 		displayPCDfile2(m_pcdPath);
@@ -165,7 +172,6 @@ bool CPointCloudWnd::ResponseSignals(int code)
 		//pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZRGB> color;
 		pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB> color(m_displayColorCloud);
 		m_viewer->addPointCloud(m_displayColorCloud, color, "cloud");
-
 		state = true;
 		break;
 	}
@@ -448,6 +454,15 @@ void CPointCloudWnd::displayColorPCDfile(std::string file_name)
 
 	pcl::copyPointCloud(*cloud, *m_displayColorCloud);
 	//savePointCloudFile();
+}
+
+
+void CPointCloudWnd::displayPointCloud(pcl::PointCloud<PointType>::Ptr cloud)
+{
+	m_displayColorCloud->clear();
+
+	pcl::copyPointCloud(*cloud, *m_displayColorCloud);
+
 }
 
 
@@ -1092,6 +1107,16 @@ void CPointCloudWnd::onVtkOpenGLNativeWidgetMouseEvent(QMouseEvent *event)
 			qDebug() << "mouse double clicked";
 		}
 	}
+}
+
+
+void CPointCloudWnd::onDisplay(pcl::PointCloud<PointType>::Ptr cloud)
+{
+
+	displayPointCloud(cloud);
+
+	m_actionCode = ACTION_DISPLAY;
+
 }
 
 

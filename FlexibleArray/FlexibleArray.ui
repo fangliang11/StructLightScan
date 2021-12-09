@@ -188,7 +188,7 @@
   <action name="action_view_plot">
    <property name="icon">
     <iconset resource="FlexibleArray.qrc">
-     <normaloff>:/StructScan/res/images/ccPencil.png</normaloff>:/StructScan/res/images/ccPencil.png</iconset>
+     <normaloff>:/StructScan/res/images/typeXCoordinate.png</normaloff>:/StructScan/res/images/typeXCoordinate.png</iconset>
    </property>
    <property name="text">
     <string>绘图</string>
@@ -197,7 +197,7 @@
   <action name="action_view_2D">
    <property name="icon">
     <iconset resource="FlexibleArray.qrc">
-     <normaloff>:/StructScan/res/2D.ico</normaloff>:/StructScan/res/2D.ico</iconset>
+     <normaloff>:/StructScan/res/images/typeYCoordinate.png</normaloff>:/StructScan/res/images/typeYCoordinate.png</iconset>
    </property>
    <property name="text">
     <string>2D</string>
@@ -206,7 +206,7 @@
   <action name="action_view_3D">
    <property name="icon">
     <iconset resource="FlexibleArray.qrc">
-     <normaloff>:/StructScan/res/3D.ico</normaloff>:/StructScan/res/3D.ico</iconset>
+     <normaloff>:/StructScan/res/images/typeZCoordinate.png</normaloff>:/StructScan/res/images/typeZCoordinate.png</iconset>
    </property>
    <property name="text">
     <string>3D</string>
@@ -233,7 +233,7 @@
   <action name="action_setup_system">
    <property name="icon">
     <iconset resource="FlexibleArray.qrc">
-     <normaloff>:/StructScan/res/action.ico</normaloff>:/StructScan/res/action.ico</iconset>
+     <normaloff>:/StructScan/res/images/ccPointListPicking.png</normaloff>:/StructScan/res/images/ccPointListPicking.png</iconset>
    </property>
    <property name="text">
     <string>系统设置</string>
@@ -296,7 +296,7 @@
   <action name="action_stop">
    <property name="icon">
     <iconset resource="FlexibleArray.qrc">
-     <normaloff>:/StructScan/res/snap_on_hover.png</normaloff>:/StructScan/res/snap_on_hover.png</iconset>
+     <normaloff>:/StructScan/res/images/smallPause.png</normaloff>:/StructScan/res/images/smallPause.png</iconset>
    </property>
    <property name="text">
     <string>停止</string>
@@ -305,7 +305,7 @@
   <action name="action_pointcloud_select">
    <property name="icon">
     <iconset resource="FlexibleArray.qrc">
-     <normaloff>:/StructScan/res/images/smallRectangleSelect.png</normaloff>:/StructScan/res/images/smallRectangleSelect.png</iconset>
+     <normaloff>:/StructScan/res/images/ccPencil.png</normaloff>:/StructScan/res/images/ccPencil.png</iconset>
    </property>
    <property name="text">
     <string>框选</string>
@@ -314,7 +314,7 @@
   <action name="action_pointcloud_delete">
    <property name="icon">
     <iconset resource="FlexibleArray.qrc">
-     <normaloff>:/StructScan/res/images/ccDelete.png</normaloff>:/StructScan/res/images/ccDelete.png</iconset>
+     <normaloff>:/StructScan/res/images/ccMinus.png</normaloff>:/StructScan/res/images/ccMinus.png</iconset>
    </property>
    <property name="text">
     <string>删除</string>
@@ -332,7 +332,7 @@
   <action name="action_pointcloud_mesh">
    <property name="icon">
     <iconset resource="FlexibleArray.qrc">
-     <normaloff>:/StructScan/res/images/dbMeshSymbol.png</normaloff>:/StructScan/res/images/dbMeshSymbol.png</iconset>
+     <normaloff>:/StructScan/res/images/dbSubMeshSymbol.png</normaloff>:/StructScan/res/images/dbSubMeshSymbol.png</iconset>
    </property>
    <property name="text">
     <string>网格</string>
