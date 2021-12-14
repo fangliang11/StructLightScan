@@ -62,6 +62,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CPanoramaStitching.h" />
+    <ClInclude Include="resource2.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CCalibrationWnd.h">
@@ -121,11 +122,15 @@
     <Image Include="video3d.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="bitbug_favicon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="FlexibleArray.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlexibleArray.qrc">

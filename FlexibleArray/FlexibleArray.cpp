@@ -156,13 +156,13 @@ void FlexibleArray::InitialProjectTree()
 	itemProject->appendRow(childItem2);
 	itemProject->appendRow(childItem3);
 	itemProject->appendRow(childItem4);
-	QStandardItem *image1 = new QStandardItem(QStringLiteral("Í¼Ïñ0"));
-	QStandardItem *image2 = new QStandardItem(QStringLiteral("Í¼Ïñ1"));
-	QStandardItem *image3 = new QStandardItem(QStringLiteral("Í¼Ïñ2"));
-	QStandardItem *image4 = new QStandardItem(QStringLiteral("Í¼Ïñ3"));
-	QStandardItem *image5 = new QStandardItem(QStringLiteral("Í¼Ïñ4"));
-	QStandardItem *image6 = new QStandardItem(QStringLiteral("Í¼Ïñ5"));
-	QStandardItem *image7 = new QStandardItem(QStringLiteral("Í¼Ïñ6"));
+	QStandardItem *image1 = new QStandardItem(QStringLiteral("Í¼Ïñ1"));
+	QStandardItem *image2 = new QStandardItem(QStringLiteral("Í¼Ïñ2"));
+	QStandardItem *image3 = new QStandardItem(QStringLiteral("Í¼Ïñ3"));
+	QStandardItem *image4 = new QStandardItem(QStringLiteral("Í¼Ïñ4"));
+	QStandardItem *image5 = new QStandardItem(QStringLiteral("Í¼Ïñ5"));
+	QStandardItem *image6 = new QStandardItem(QStringLiteral("Í¼Ïñ6"));
+	QStandardItem *image7 = new QStandardItem(QStringLiteral("Í¼Ïñ7"));
 	childItem2->appendRow(image1);
 	childItem2->appendRow(image2);
 	childItem2->appendRow(image3);
@@ -270,14 +270,15 @@ void FlexibleArray::onActionStartClicked()
 	//m_dbroot->updateObject();
 	//m_pcamera->acquireImages();
 
-	qDebug("Start clicked");
+	//qDebug("Start clicked");
 
 	QByteArray byPath = m_qstrImgPath.toLocal8Bit();
 
-	if (m_dbroot->m_pOpeningAngle != nullptr) {
+	if (m_dbroot->m_pOpeningAngle != nullptr && m_dbroot->m_pSerialIndex != nullptr) {
 		int angle = *m_dbroot->m_pOpeningAngle;
-		m_pStitch->ImageStitchUseRotateMatrix(byPath.data(), angle);
-		qDebug("angle = %d", angle);
+		int serialindex = *m_dbroot->m_pSerialIndex;
+		m_pStitch->ImageStitchUseRotateMatrix(byPath.data(), serialindex, angle);
+		qDebug("angle = %d, serialindex = %d", angle, serialindex);
 
 		emit signalDisplay(m_pStitch->m_pcloud_stitch);
 	}
@@ -369,6 +370,11 @@ void FlexibleArray::onRootClickedRefrushImgWnd()
 	QString filename = m_dbroot->m_qstrImgPath + m_dbroot->m_qstrImgName;
 	QImage img;
 	img.load(filename);
+	//if (img.load(filename)) {
+	//	QMessageBox::critical(this, "Error", "Read Image Error!");
+	//	return;
+	//}
 	m_pimagewnd->setFrame(QPixmap::fromImage(img));
 
+	qDebug("%s", filename);
 }

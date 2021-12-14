@@ -22,6 +22,7 @@ public:
 
 	QString m_qstrImgPath;
 	QString m_qstrImgName;
+	int *m_pSerialIndex = nullptr;
 	int *m_pOpeningAngle = nullptr;
 	float *m_pSphereRadius = nullptr;
 	float *m_pFactorCenterRound = nullptr;

@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="FlexibleArray.qrc">
-    <normaloff>:/StructScan/video3d.ico</normaloff>:/StructScan/video3d.ico</iconset>
+    <normaloff>:/StructScan/bitbug_favicon.ico</normaloff>:/StructScan/bitbug_favicon.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="autoFillBackground">

@@ -40,14 +40,12 @@
     <Import Project="..\PCL_1_9_debug.props" />
     <Import Project="Halcon_18_11_S_debug_x64.props" />
     <Import Project="DaHen_x64_debug.props" />
-    <Import Project="..\Opencv_3_4_1_x64_debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\PCL_1_9_release.props" />
     <Import Project="Halcon_18_11_S_release_x64.props" />
     <Import Project="DaHeng_x64_release.props" />
-    <Import Project="..\Opencv_3_4_1_x64_release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -152,6 +150,7 @@
     <QtMoc Include="CRoi.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource2.h" />
     <QtMoc Include="CPointCloudWnd.h" />
     <QtMoc Include="CPropertyDelegate.h" />
     <QtMoc Include="CDBRoot.h" />
@@ -164,10 +163,12 @@
     <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="bitbug_favicon.ico" />
     <Image Include="video3d.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="FlexibleArray.rc" />
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

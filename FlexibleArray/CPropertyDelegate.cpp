@@ -62,10 +62,12 @@ CPropertyDelegate::CPropertyDelegate(QStandardItemModel* _model, QAbstractItemVi
 	m_nmeshDisplayModel = 0;
 	m_nmeshDisplayColor = 0;
 	m_nImgIndex = 0;
+	m_nSerialIndex = 1;
 	m_nOpeningAngle = 0;
 	m_fSphereRadius = 610.72;
 	m_fFactorCenterRound = 596.7 / 610.72;
 	m_nOpeningAngle_public = 30;
+	m_nSerialIndex_public = 1;
 	m_fSphereRadius_public = m_fSphereRadius;
 	m_fFactorCenterRound_public = m_fFactorCenterRound;
 
@@ -274,6 +276,16 @@ QWidget *CPropertyDelegate::createEditor(QWidget *parent, const QStyleOptionView
 		outputWidget = comboBox;
 		break;
 	}
+	case OBJECT_STITCH_SERIAL_INDEX: {
+		QDoubleSpinBox *spinBox = new QDoubleSpinBox(parent);
+		spinBox->setDecimals(0);
+		spinBox->setRange(1.0, 100.0);
+		spinBox->setSingleStep(1.0);
+		connect(spinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+			this, &CPropertyDelegate::stitchSerialIndexChanged);
+		outputWidget = spinBox;
+		break;
+	}
 	case OBJECT_STITCH_OPENING_ANGLE: {
 		QComboBox *comboBox = new QComboBox(parent);
 		comboBox->addItem(QString("30"));
@@ -418,6 +430,9 @@ void CPropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index)
 		break;
 	case OBJECT_MESH_DISPLAY_COLOR:
 		SetComboBoxIndex(editor, static_cast<int>(m_nmeshDisplayColor));
+		break;
+	case OBJECT_STITCH_SERIAL_INDEX:
+		SetDoubleSpinBoxValue(editor, static_cast<double>(m_nSerialIndex));
 		break;
 	case OBJECT_STITCH_OPENING_ANGLE:
 		SetComboBoxIndex(editor, static_cast<int>(m_nOpeningAngle));
@@ -747,8 +762,10 @@ void CPropertyDelegate::fileModelWithImageInfo(int index)
 	addSeparator(QStringLiteral("图像参数"));
 	
 	//QString path = QStringLiteral("路径/XXXXXX/");
-	QString name = QString::number(index) + ".bmp";
-	appendRow(ITEM(tr("FileName")), ITEM(m_qstrImgPath + name));
+	QString name = QString::number(index) + "_" + QString::number(m_nSerialIndex) + ".bmp";
+	//appendRow(ITEM(tr("FileName")), ITEM(m_qstrImgPath + name));
+	appendRow(ITEM(tr("ImagePath")), ITEM(m_qstrImgPath));
+	appendRow(ITEM(tr("FileName")), ITEM(name));
 	QImage img;
 	img.load(m_qstrImgPath + name);
 	//appendRow(ITEM(tr("Resolution")), ITEM(tr("1280 * 960")));
@@ -761,6 +778,7 @@ void CPropertyDelegate::fileModelWithImageStitching()
 	assert(m_model);
 
 	addSeparator(QStringLiteral("拼接参数"));
+	appendRow(ITEM(tr("SerialIndex")), PERSISTENT_EDITOR(OBJECT_STITCH_SERIAL_INDEX), true);
 	appendRow(ITEM(tr("OpeningAngle")), PERSISTENT_EDITOR(OBJECT_STITCH_OPENING_ANGLE), true);
 	appendRow(ITEM(tr("SphereRadius")), PERSISTENT_EDITOR(OBJECT_STITCH_SPHERE_RADIUS), true);
 	appendRow(ITEM(tr("FactorCenterRound")), PERSISTENT_EDITOR(OBJECT_STITCH_FACTOR_CENTER_ROUND), true);
@@ -983,6 +1001,19 @@ void CPropertyDelegate::meshColor(int index)
 	m_nmeshDisplayColor = index;
 	m_wnd->setMeshColor(index);
 }
+
+
+void CPropertyDelegate::stitchSerialIndexChanged(int value)
+{
+	if (m_nCurrentObject == NONE)
+		return;
+
+	m_nSerialIndex = value;
+	m_nSerialIndex_public = m_nSerialIndex;
+
+	//qDebug("serial index = %d", m_nSerialIndex);
+}
+
 
 void CPropertyDelegate::stitchOpeningAngleChanged(int index)
 {

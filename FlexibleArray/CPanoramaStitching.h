@@ -63,7 +63,7 @@ public:
 	void rotateMatrixInitial55();
 	void ImageStitch(const char* imgpath);
 	void ImageStitchUseRotateMatrix(const char* imgpath, int angle);
-	void ImageStitchUseRotateMatrix2(const char* imgpath, int angle);
+	void ImageStitchUseRotateMatrix(const char* imgpath, int serialindex, int angle);
 	void SaveCloudFile(const char* cloudname);
 	void SaveCloudFile(const char* cloudname, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
 	void SetOpeningAngle(float opening_angle);

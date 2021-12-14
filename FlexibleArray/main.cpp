@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 	FlexibleArray mainwnd;
-	mainwnd.setWindowIcon(QIcon("video3d.ico"));
+	mainwnd.setWindowIcon(QIcon("bitbug_favicon.ico"));
 	mainwnd.resize(1280, 720);
 
 

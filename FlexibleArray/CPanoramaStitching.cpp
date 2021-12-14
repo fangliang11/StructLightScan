@@ -501,11 +501,77 @@ void CPanoramaStitching::ImageStitchUseRotateMatrix(const char* imgpath, int ang
 }
 
 
+void CPanoramaStitching::ImageStitchUseRotateMatrix(const char* imgpath, int serialindex, int angle)
+{
+	m_nOpenAngleSelect = angle;
+
+	loadRotateMatrix(angle);
+
+	float angleX, angleY, angleZ, x, y, z;
+	for (int index = 0; index <= 6; ++index) {
+		pcl::PointCloud<PointType>::Ptr cloud;
+		cloud.reset(new pcl::PointCloud<PointType>);
+
+		//  1. 读图，矫正畸变，转换为点云坐标
+		std::string strimg = 
+			std::string(imgpath) + 
+			std::to_string(m_FILE_INDEX[index]) + 
+			"_" + 
+			std::to_string(serialindex) + 
+			".bmp";
+		
+		OpencvImgReadUndistort(index, strimg.c_str(), cloud);
+		//qDebug("%d before rotate: x = %f, y = %f, z = %f", index, cloud->points.at(0).x, cloud->points.at(0).y, cloud->points.at(0).z);
+
+		// 所有点云均首先变换至1#初始位置
+		if (index != 0) {
+			Eigen::Affine3f initial_transform = Eigen::Affine3f::Identity();
+			initial_transform.rotate(Eigen::AngleAxisf(-(M_PI_2 + (M_PI / 3.0) * (index - 1)), Eigen::Vector3f::UnitZ()));
+			pcl::transformPointCloud(*cloud, *cloud, initial_transform);
+		}
+
+		//  2.投影至球面
+		SphereProject(cloud, cloud, m_fRadius18);
+
+		//  3.乘以旋转矩阵
+		for (int i = 0; i < cloud->points.size(); ++i) {
+			float nx = cloud->points.at(i).x;
+			float ny = cloud->points.at(i).y;
+			float nz = cloud->points.at(i).z;
+			if (index == 0) {
+				// 图像尺寸的统一
+				float factor = m_fRadius20 / m_fRadius18;
+				cloud->points[i].x = nx * factor;
+				cloud->points[i].y = -ny * factor;
+				cloud->points[i].z = nz * factor;
+			}
+			else {
+				cloud->points[i].x =
+					pvecRotation->at(index - 1)[0][0] * nx +
+					pvecRotation->at(index - 1)[0][1] * ny +
+					pvecRotation->at(index - 1)[0][2] * nz;
+				cloud->points[i].y = -(
+					pvecRotation->at(index - 1)[1][0] * nx +
+					pvecRotation->at(index - 1)[1][1] * ny +
+					pvecRotation->at(index - 1)[1][2] * nz);
+				cloud->points[i].z =
+					pvecRotation->at(index - 1)[2][0] * nx +
+					pvecRotation->at(index - 1)[2][1] * ny +
+					pvecRotation->at(index - 1)[2][2] * nz;
+			}
+		}
+
+		*m_pcloud_stitch += *cloud;
+		qDebug("load image %d finished", index);
+	}
+}
+
+
 int CPanoramaStitching::OpencvImgReadUndistort(int index, const char* imgname, pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud)
 {
 	cv::Mat src = cv::imread(imgname, CV_8UC1);
 	if (src.empty()) {
-		qDebug("image path is empty\n");
+		qDebug("Read Image Error!");
 		return -1;
 	}
 	cv::Mat undistor;
@@ -527,14 +593,16 @@ int CPanoramaStitching::OpencvImgReadUndistort(int index, const char* imgname, p
 			point.x = -(float)(j + 1) + center.y;
 			if (index == 0) {
 				point.z = m_fRadius20;
-				if (pdata[i] < 255)
-					pdata[i] = pdata[i] * 0.7;
+				pdata[i] = pdata[i];
+				//if (pdata[i] < 255)
+				//	pdata[i] = pdata[i];
 			}
 			else {
 				point.z = m_fRadius18;
 				if (index == 6) {
-					if (pdata[i] < 255)
-						pdata[i] = pdata[i] * 0.9;
+					pdata[i] = pdata[i];
+					//if (pdata[i] < 255)
+					//	pdata[i] = pdata[i];
 				}
 			}
 

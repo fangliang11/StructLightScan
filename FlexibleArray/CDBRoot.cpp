@@ -64,7 +64,11 @@ void CDBRoot::slotDBselected(QModelIndex modelIndex)
 			m_propertiesDelegate->m_qstrImgPath = m_qstrImgPath + "/";
 
 		if (modelIndex.child(0, 0).row() == -1) {
-			m_qstrImgName = QString::number(modelIndex.row() + 1) + ".bmp";
+			m_qstrImgName = 
+				QString::number(modelIndex.row() + 1) + 
+				"_" + 
+				QString::number(m_propertiesDelegate->m_nSerialIndex_public) + 
+				".bmp";
 			//qDebug() << m_qstrImgPath + m_qstrImgName;		
 			updateObjectProperty(4, modelIndex.row() + 1);
 			
@@ -94,6 +98,7 @@ void CDBRoot::initDelegate()
 	m_propertiesDelegate->m_wnd = this->m_wnd;
 	m_propertiesTreeWidget->setItemDelegate(m_propertiesDelegate);
 
+	m_pSerialIndex = &m_propertiesDelegate->m_nSerialIndex_public;
 	m_pOpeningAngle = &m_propertiesDelegate->m_nOpeningAngle_public;
 	m_pSphereRadius = &m_propertiesDelegate->m_fSphereRadius_public;
 	m_pFactorCenterRound = &m_propertiesDelegate->m_fFactorCenterRound_public;

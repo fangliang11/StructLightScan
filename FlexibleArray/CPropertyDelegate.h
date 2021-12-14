@@ -29,6 +29,7 @@ public:
 
 	CPointCloudWnd* m_wnd;
 	QString m_qstrImgPath;
+	int m_nSerialIndex_public;
 	int m_nOpeningAngle_public;
 	float m_fSphereRadius_public;
 	float m_fFactorCenterRound_public;
@@ -65,6 +66,7 @@ public:
 		OBJECT_MESH_NAME,
 		OBJECT_MESH_DISPLAY_TYPE,
 		OBJECT_MESH_DISPLAY_COLOR,
+		OBJECT_STITCH_SERIAL_INDEX,
 		OBJECT_STITCH_OPENING_ANGLE,
 		OBJECT_STITCH_SPHERE_RADIUS,
 		OBJECT_STITCH_FACTOR_CENTER_ROUND,
@@ -108,6 +110,7 @@ private:
 	int m_nmeshDisplayModel;
 	int m_nmeshDisplayColor;
 	int m_nImgIndex;
+	int m_nSerialIndex;
 	int m_nOpeningAngle;
 	float m_fSphereRadius;
 	float m_fFactorCenterRound;
@@ -157,6 +160,7 @@ private slots:
 	void meshMaxNeighbors(int value);
 	void meshDisplayModel(int index);
 	void meshColor(int index);
+	void stitchSerialIndexChanged(int value);
 	void stitchOpeningAngleChanged(int index);
 	void stitchSphereRadiusChanged(double value);
 	void stitchFactorCenterRoundChanged(double value);

@@ -165,5 +165,6 @@
         <file>res/snap_on_disable.png</file>
         <file>res/snap_on_hover.png</file>
         <file>video3d.ico</file>
+        <file>bitbug_favicon.ico</file>
     </qresource>
 </RCC>
