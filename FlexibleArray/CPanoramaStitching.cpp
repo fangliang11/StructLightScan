@@ -331,15 +331,15 @@ void CPanoramaStitching::rotateMatrixInitial55()
 	vecRotation55[1][2][1] = -0.4478;
 	vecRotation55[1][2][2] = 0.4242;
 
-	vecRotation55[2][0][0] = -0.1110;
-	vecRotation55[2][0][1] = 0.6584;
-	vecRotation55[2][0][2] = 0.7679;
-	vecRotation55[2][1][0] = 0.6527;
-	vecRotation55[2][1][1] = 0.6469;
-	vecRotation55[2][1][2] = -0.4253;
-	vecRotation55[2][2][0] = 0.7475;
-	vecRotation55[2][2][1] = -0.4531;
-	vecRotation55[2][2][2] = 0.4841;
+	vecRotation55[2][0][0] = 0.6371;
+	vecRotation55[2][0][1] = 0.2274;
+	vecRotation55[2][0][2] = 0.7735;
+	vecRotation55[2][1][0] = 0.2303;
+	vecRotation55[2][1][1] = 0.8973;
+	vecRotation55[2][1][2] = -0.4283;
+	vecRotation55[2][2][0] = -0.7709;
+	vecRotation55[2][2][1] = 0.4226;
+	vecRotation55[2][2][2] = 0.4819;
 
 	vecRotation55[3][0][0] = 0.9973;
 	vecRotation55[3][0][1] = -0.0181;
